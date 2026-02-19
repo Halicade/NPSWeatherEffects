@@ -2,31 +2,10 @@
 
 <Defs>
 
-
-    <GenStepDef>
-        <defName>NPS_Oasis</defName>
-        <order>355</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_Oasis">
-            <deepWaterTerrain>TKKN_ColdSpringsWaterDeep</deepWaterTerrain>
-            <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
-            <soilTerrain>Riverbank</soilTerrain>
-        </genStep>
-    </GenStepDef>
-
-    <!--Needs to run after initial plant generation-->
-    <GenStepDef>
-        <defName>NPS_PostOasisPlants</defName>
-        <order>907</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_PostOasis">
-            <soilTerrain>Riverbank</soilTerrain>
-        </genStep>
-    </GenStepDef>
-
-
     <GenStepDef>
         <defName>NPS_HotSpring</defName>
         <order>224</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_SpringTerrain">
+        <genStep Class="NPSWeather.GenSteps.GenStep_SpringTerrain">
             <waterTerrain>TKKN_HotSpringsWater</waterTerrain>
             <soilTerrain>Riverbank</soilTerrain>
         </genStep>
@@ -35,7 +14,7 @@
     <GenStepDef>
         <defName>NPS_ColdSpring</defName>
         <order>224</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_SpringTerrain">
+        <genStep Class="NPSWeather.GenSteps.GenStep_SpringTerrain">
             <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
             <soilTerrain>Riverbank</soilTerrain>
         </genStep>
@@ -45,39 +24,8 @@
     <GenStepDef>
         <defName>NPS_PostSpringPlants</defName>
         <order>906</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_PostSpringPlants" />
+        <genStep Class="NPSWeather.GenSteps.GenStep_PostSpringPlants" />
     </GenStepDef>
-
-
-    <!--Needs to run after FindPlayerStartSpot-->
-    <GenStepDef>
-        <defName>NPS_LavaLanding</defName>
-        <order>851</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_PostLava">
-            <terrainOverwrite>TKKN_LavaRock_RoughHewn</terrainOverwrite>
-        </genStep>
-    </GenStepDef>
-
-    <!--Needs to run after FindPlayerStartSpot-->
-    <GenStepDef>
-        <defName>NPS_LavaPathing</defName>
-        <order>224</order>
-        <genStep Class="TKKN_NPS.GenSteps.GenStep_LavaPathing">
-        </genStep>
-    </GenStepDef>
-
-    <GenStepDef>
-        <defName>NPS_SpawnDeadRedwoods</defName>
-        <order>751</order> <!-- after quarry (mutator final) -->
-        <genStep Class="GenStep_ScatterThings">
-            <terrainValidationRadius>1</terrainValidationRadius>
-            <countPer10kCellsRange>0~2</countPer10kCellsRange>
-            <thingDef>TKKN_RedwoodDead</thingDef>
-            <terrainValidationDisallowed>
-                <li>NaturalRock</li>
-            </terrainValidationDisallowed>
-        </genStep>
-    </GenStepDef>
-
+    
 
 </Defs>

@@ -125,7 +125,7 @@
     </ambientSounds>
     <overlayClasses>
       <li>WeatherOverlay_Fog</li>
-      <li>TKKN_NPS.WeatherOverlay_ThickFog</li>
+      <li>NPSWeather.WeatherOverlay_ThickFog</li>
     </overlayClasses>
     <commonalityRainfallFactor>
       <points>
@@ -170,7 +170,7 @@
       <li>Ambient_Wind_Fog</li>
     </ambientSounds>
     <overlayClasses>
-      <li>TKKN_NPS.WeatherOverlay_LavaSmoke</li>
+      <li>NPSWeather.WeatherOverlay_LavaSmoke</li>
     </overlayClasses>
     <commonalityRainfallFactor>
       <points>
@@ -219,8 +219,8 @@
       <li>Ambient_Wind_Storm</li>
     </ambientSounds>
     <overlayClasses>
-      <li>TKKN_NPS.WeatherOverlay_DustStorm</li>
-      <li>TKKN_NPS.WeatherOverlay_DustStormHeavy</li>
+      <li>NPSWeather.WeatherOverlay_DustStorm</li>
+      <li>NPSWeather.WeatherOverlay_DustStormHeavy</li>
     </overlayClasses>
     <commonalityRainfallFactor>
       <points>
@@ -269,7 +269,7 @@
       <li>Ambient_Wind_Storm</li>
     </ambientSounds>
     <overlayClasses>
-      <li>TKKN_NPS.WeatherOverlay_DustStorm</li>
+      <li>NPSWeather.WeatherOverlay_DustStorm</li>
     </overlayClasses>
     <commonalityRainfallFactor>
       <points>

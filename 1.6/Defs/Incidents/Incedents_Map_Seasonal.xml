@@ -8,7 +8,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.IncidentWorker_WildFlowerBloom</workerClass>
+    <workerClass>NPSWeather.IncidentWorker_WildFlowerBloom</workerClass>
     <gameCondition>TKKN_WildFlowerBloom</gameCondition>
     <letterLabel>TKKN_NPS_WildFlowerBloomLbl</letterLabel>
     <letterText>TKKN_NPS_WildFlowerBloomTxt</letterText>
@@ -28,7 +28,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.IncidentWorker_Superbloom</workerClass>
+    <workerClass>NPSWeather.IncidentWorker_Superbloom</workerClass>
     <gameCondition>TKKN_Superbloom</gameCondition>
     <letterLabel>TKKN_NPS_SuperbloomLbl</letterLabel>
     <letterText>TKKN_NPS_SuperbloomTxt</letterText>
@@ -49,7 +49,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.TKKN_SpecialHerdMigration</workerClass>
+    <workerClass>NPSWeather.TKKN_SpecialHerdMigration</workerClass>
     <baseChance>0</baseChance>
     <letterLabel>Animal migration: {0}</letterLabel>
     <letterText>A group of {0} is passing through the area.\n\nThey won't attack unless provoked.</letterText>

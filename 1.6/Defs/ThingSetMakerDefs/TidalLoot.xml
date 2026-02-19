@@ -78,9 +78,8 @@
         <root Class="ThingSetMaker_RandomOption">
             <options>
 
-                <!-- Survival meal -->
                 <li>
-                    <weight>1</weight>
+                    <weight>2</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -90,6 +89,19 @@
                                     <li>TKKN_FilthPuddle</li>
                                     <li>TKKN_FilthSeaweed</li>
                                     <li>TKKN_FilthDriftwood</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>1</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+
+                <li>
+                    <weight>0.3</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
                                     <li>TKKN_Sculpture_Shell</li>
                                 </thingDefs>
                             </filter>
@@ -98,7 +110,6 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Medicine -->
                 <li>
                     <weight>1</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -113,7 +124,7 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Luciferium -->
+
                 <li>
                     <weight>1</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -129,7 +140,6 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Joywire -->
                 <li>
                     <weight>0.15</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -144,6 +154,7 @@
                                     <li>Neutroamine</li>
                                     <li>Chemfuel</li>
                                     <li>Pemmican</li>
+                                    <li MayRequire="dankpyon.medieval.overhaul">DankPyon_IronIngot</li>
                                 </thingDefs>
                             </filter>
                             <countRange>25~74</countRange>
@@ -153,7 +164,7 @@
 
                 <!-- Silver -->
                 <li>
-                    <weight>1</weight>
+                    <weight>0.15</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -169,7 +180,7 @@
 
                 <!-- Chemfuel -->
                 <li>
-                    <weight>1</weight>
+                    <weight>0.3</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -184,7 +195,7 @@
 
                 <!-- Uranium -->
                 <li>
-                    <weight>1</weight>
+                    <weight>0.3</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -201,9 +212,8 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Hyperweave & plasteel -->
                 <li>
-                    <weight>1</weight>
+                    <weight>0.05</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -219,7 +229,6 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Advanced components -->
                 <li>
                     <weight>0.15</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -234,9 +243,8 @@
                     </thingSetMaker>
                 </li>
 
-                <!-- Ultratech meds -->
                 <li>
-                    <weight>0.15</weight>
+                    <weight>0.05</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -274,12 +282,11 @@
                                     <li>MedicineUltratech</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>2~8</countRange>
+                            <countRange>1~6</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
 
-                <!-- Techprint -->
                 <li>
                     <weight>0.05</weight>
                     <thingSetMaker Class="ThingSetMaker_Techprints">

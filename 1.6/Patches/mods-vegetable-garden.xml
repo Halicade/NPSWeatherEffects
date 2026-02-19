@@ -86,7 +86,7 @@
       <li Class="PatchOperationAddModExtension">
         <xpath>Defs/TerrainDef[defName = "PlowSoil"]</xpath>
         <value>
-          <li Class="TKKN_NPS.TerrainWeatherReactions">
+          <li Class="NPSWeather.TerrainWeatherReactions">
             <alertOnLoad>True</alertOnLoad>
             <tideTerrain />
             <floodTerrain />
@@ -101,7 +101,7 @@
       <li Class="PatchOperationAddModExtension">
         <xpath>Defs/TerrainDef[defName = "VG_SoilTilled"]</xpath>
         <value>
-          <li Class="TKKN_NPS.TerrainWeatherReactions">
+          <li Class="NPSWeather.TerrainWeatherReactions">
             <alertOnLoad>True</alertOnLoad>
             <tideTerrain />
             <floodTerrain />

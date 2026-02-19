@@ -2,7 +2,7 @@
 <Defs>
   <JobDef>
     <defName>TKKN_RelaxSpring</defName>
-    <driverClass>TKKN_NPS.JobDriver_RelaxInSpring</driverClass>
+    <driverClass>NPSWeather.JobDriver_RelaxInSpring</driverClass>
     <reportString>relaxing in a spring.</reportString>
     <joyDuration>4000</joyDuration>
     <joyGainRate>1</joyGainRate>
@@ -12,7 +12,7 @@
   These apparently never worked. Not going to fix them
   <JobDef>
     <defName>TKKN_GoSwimming</defName>
-    <driverClass>TKKN_NPS.JobGiver_GoSwimming</driverClass>
+    <driverClass>NPSWeather.JobGiver_GoSwimming</driverClass>
     <reportString>going swimming.</reportString>
     <joyDuration>4000</joyDuration>
     <joyGainRate>1</joyGainRate>
@@ -20,7 +20,7 @@
   </JobDef>
   <JobDef>
     <defName>TKKN_DryOff</defName>
-    <driverClass>TKKN_NPS.JobGiver_Dryoff</driverClass>
+    <driverClass>NPSWeather.JobGiver_Dryoff</driverClass>
     <reportString>drying off.</reportString>
     <joyDuration>4000</joyDuration>
   </JobDef>-->

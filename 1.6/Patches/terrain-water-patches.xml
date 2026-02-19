@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Patch>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterDeep"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-        </freezeTerrain>
-        <temperatureAdjust>-5</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterMovingChestDeep"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-          <freezeAt>-1</freezeAt>
-        </freezeTerrain>
-        <temperatureAdjust>-5</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterShallow"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-        </freezeTerrain>
-        <temperatureAdjust>-5</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterMovingShallow"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain><freezeAt>-1</freezeAt>
-        </freezeTerrain>
-        <temperatureAdjust>-5</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <!--Operation Class="PatchOperationAddModExtension">
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterDeep"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                </freezeTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterMovingChestDeep"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                    <freezeAt>-1</freezeAt>
+                </freezeTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                </freezeTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain><freezeAt>-1</freezeAt>
+                </freezeTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <!--Operation Class="PatchOperationAddModExtension">
       <xpath>Defs/TerrainDef[defName = "WaterMovingDeep"]</xpath>
       <value>
-         <li Class="TKKN_NPS.TerrainWeatherReactions">
+         <li Class="NPSWeather.TerrainWeatherReactions">
             <tideTerrain />
             <floodTerrain />
             <wetTerrain />
@@ -60,80 +65,88 @@
          </li>
       </value>
    </Operation -->
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "TKKN_ColdSpringsWater"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-        </freezeTerrain>
-        <temperatureAdjust>-10</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-    <xpath>Defs/TerrainDef[defName = "TKKN_ColdSpringsWaterDeep"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-        </freezeTerrain>
-        <temperatureAdjust>-10</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "TKKN_HotSpringsWater"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <freezeTerrain>
-          <terrain>TKKN_Ice</terrain>
-          <freezeAt>-4</freezeAt>
-        </freezeTerrain>
-        <temperatureAdjust>10</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterOceanShallow"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <tideTerrain>TKKN_SandBeachWetSalt</tideTerrain>
-        <isSalty>True</isSalty>
-        <temperatureAdjust>-5</temperatureAdjust>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterOceanDeep"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <isSalty>True</isSalty>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAddModExtension">
-    <xpath>Defs/TerrainDef[defName = "Marsh"]</xpath>
-    <value>
-      <li Class="TKKN_NPS.TerrainWeatherReactions">
-        <floodTerrain>WaterShallow</floodTerrain>
-        <freezeTerrain>
-          <terrain>TKKN_MuddyIce</terrain>
-        </freezeTerrain>
-      </li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAdd">
-      <xpath>Defs/TerrainDef[@Name = "WaterBase"]/tags</xpath>
-    <value>
-      <li>TKKN_Wet</li>
-      <li>TKKN_Swim</li>
-    </value>
-  </Operation>
-  <Operation Class="PatchOperationAdd">
-      <xpath>Defs/TerrainDef[defName = "Marsh"]/tags</xpath>
-    <value>
-      <li>TKKN_Wet</li>
-    </value>
-  </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_ColdSpringsWater"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                </freezeTerrain>
+                <temperatureAdjust>-10</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_ColdSpringsWaterDeep"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                </freezeTerrain>
+                <temperatureAdjust>-10</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_HotSpringsWater"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <freezeTerrain>
+                    <terrain>TKKN_Ice</terrain>
+                    <freezeAt>-4</freezeAt>
+                </freezeTerrain>
+                <temperatureAdjust>10</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>TKKN_SandBeachWetSalt</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "WaterOceanDeep"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "Marsh"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <floodTerrain>WaterShallow</floodTerrain>
+                <freezeTerrain>
+                    <terrain>TKKN_MuddyIce</terrain>
+                </freezeTerrain>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[@Name = "WaterBase"]/tags</xpath>
+        <value>
+            <li>TKKN_Wet</li>
+            <li>TKKN_Swim</li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName = "Marsh"]/tags</xpath>
+        <value>
+            <li>TKKN_Wet</li>
+        </value>
+    </Operation>
+    
 </Patch>

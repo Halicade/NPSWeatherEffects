@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
     <!-- @formatter:off -->
-    <NPS_WeatherEffects>NPS: Weather Effects</NPS_WeatherEffects>
+    <NPS_WeatherEffects>NPSWeatherEffects: Weather Effects</NPS_WeatherEffects>
 
     <!--General text-->
     <TKKN_NPS_LavaHasEruptedNearby>Lava Eruption!</TKKN_NPS_LavaHasEruptedNearby>
@@ -33,8 +33,10 @@
     <TKKN_doFloods_text>Rivers will rise and fall due to season or weather.</TKKN_doFloods_text>
     <TKKN_doIce_title>Ground / water freezes</TKKN_doIce_title>
     <TKKN_doIce_text>Terrain will freeze at cold temperatures</TKKN_doIce_text>
-    <TKKN_leaveStuff_title>Washup things</TKKN_leaveStuff_title>
-    <TKKN_leaveStuff_text>After floods, items can washup on land</TKKN_leaveStuff_text>
+    <NPS_leaveLoot_title>Washup things</NPS_leaveLoot_title>
+    <NPS_leaveLoot_text>After floods, items can washup on land</NPS_leaveLoot_text>
+    <NPS_forbidLoot_title>Loot spawns forbidden</NPS_forbidLoot_title>
+    <NPS_forbidLoot_text>Loot that spawns from tide will be forbidden by default.</NPS_forbidLoot_text>
     <TKKN_doDirtPath_title>Generate paths</TKKN_doDirtPath_title>
     <TKKN_doDirtPath_text>Pawns will create natural paths when walking</TKKN_doDirtPath_text>
 

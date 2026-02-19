@@ -2,7 +2,7 @@
 
 <LanguageData>
     <!-- @formatter:off -->
-    <NPS_Biomes>NPS: Biomes</NPS_Biomes>
+    <NPS_Biomes>NPSWeatherEffects: Biomes</NPS_Biomes>
     <!-- Error Messages -->
     <TKKN_NPS_MustPlaceOnSteamVent>You must place this on a steam vent</TKKN_NPS_MustPlaceOnSteamVent>
     <NPS_AllowBiomes_Text>Allow {0} to spawn during world generation</NPS_AllowBiomes_Text>

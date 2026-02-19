@@ -40,7 +40,7 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "GlacialPlain"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.8</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>

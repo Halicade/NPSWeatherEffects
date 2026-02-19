@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ModMetaData>
-    <name>Nature's Pretty Sweet (Rework)</name>
-    <packageId>Hali.NaturesPrettySweet</packageId>
+    <name>Nature's Pretty Sweet: Weather Effects</name>
+    <packageId>Hali.NPSWeatherEffects</packageId>
     <author>tkkntkkn, mlie, halicade</author>
     <url>https://github.com/emipa606/NaturesPrettySweet</url>
+    <modVersion IgnoreIfNoMatchingField="True">1.00</modVersion>
     <supportedVersions>
         <li>1.6</li>
     </supportedVersions>
@@ -170,5 +171,4 @@
 
         [url=https://steamcommunity.com/sharedfiles/filedetails/changelog/3542949511][img]https://img.shields.io/github/v/release/emipa606/NaturesPrettySweet?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url] | tags: environment,  weather,  biomes
     </description>
-    <modVersion IgnoreIfNoMatchingField="True">1.6.6</modVersion>
 </ModMetaData>

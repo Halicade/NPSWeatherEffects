@@ -1,0 +1,123 @@
+﻿using HarmonyLib;
+using UnityEngine;
+using Verse;
+
+namespace NPSWeather;
+
+[HarmonyPatch(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI))]
+internal class MouseoverReadout_MouseoverReadoutOnGUI
+{
+    private static Map cachedMap;
+    private static FrostGrid cachedFrostGrid;
+    private static Watcher watcher;
+
+    public static void Postfix() {
+        if (!EffectSettings.showDevReadout || Event.current.type != EventType.Repaint || Find.MainTabsRoot.OpenTab != null) {
+            return;
+        }
+
+        var c = UI.MouseCell();
+        var map = Find.CurrentMap;
+        if (!c.InBounds(map)) {
+            return;
+        }
+
+        if (cachedMap != map) {
+            cachedMap = map;
+            cachedFrostGrid = map.GetComponent<FrostGrid>();
+            watcher= map.GetComponent<Watcher>();
+        }
+
+        Rect rect;
+        var botLeft = new Vector2(15f, 65f);
+        var num = 38f;
+        var zone = c.GetZone(map);
+        if (zone != null) {
+            num += 19f;
+        }
+
+        var depth = map.snowGrid.GetDepth(c);
+        if (depth > 0.03f) {
+            num += 19f;
+        }
+
+        var thingList = c.GetThingList(map);
+        foreach (var thing in thingList) {
+            if (thing.def.category != ThingCategory.Mote) {
+                num += 19f;
+            }
+        }
+
+        var roof = c.GetRoof(map);
+        if (roof != null) {
+            num += 19f;
+        }
+
+
+        rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+        var label3 = $"C: x-{c.x} y-{c.y} z-{c.z}";
+        Widgets.Label(rect, label3);
+        num += 19f;
+
+        if (watcher.cellWeatherAffects.TryGetValue(c, out var cell)) {
+            var currentTerrain = cell.currentTerrain;
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var label2 = $"Temperature: {cell.temperature}";
+            Widgets.Label(rect, label2);
+            num += 19f;
+            
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var labelFloodLevel = $"Current Flood height: {watcher.GetRiverLevel().ToString()} | Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
+            Widgets.Label(rect, labelFloodLevel);
+            num += 19f;
+
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var label4 =
+                $"Cell Info: Current Terrain: {c.GetTerrain(map)} | Current Terrain cached {currentTerrain}";
+            Widgets.Label(rect, label4);
+            num += 19f;
+
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var cellStatus = $"Wet {cell.isWet} | Flooded {cell.isFlooded} | Frozen {cell.isFrozen}";
+            Widgets.Label(rect, cellStatus);
+            num += 19f;
+
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var label6 =
+                $"TKKN_Wet {TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)}TKKN_Swim {TerrainTagUtil.TKKN_Swim.Contains(currentTerrain)}";
+            Widgets.Label(rect, label6);
+            num += 19f;
+
+
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var label5 =
+                $"Cell Info: howWet {cell.howWet} | How Wet (Plants) {cell.howWetPlants} | How Packed {cell.howPacked}";
+            var weatherExt = cell.Weather;
+            if (weatherExt != null) {
+                if (weatherExt.wetTerrain != null) {
+                    label5 += $" | T Wet {weatherExt.wetTerrain}";
+                }
+
+                if (weatherExt.freezeTerrain?.terrain != null) {
+                    label5 += $" | T Freeze {weatherExt.freezeTerrain.terrain}";
+                }
+            }
+
+            Widgets.Label(rect, label5);
+        }
+
+        num += 19f;
+
+
+        depth = cachedFrostGrid.GetDepth(c);
+        if (!(depth > 0.01f)) {
+            return;
+        }
+
+        rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+        var frostCategory = FrostUtility.GetFrostCategory(depth);
+        var label = FrostUtility.GetDescription(frostCategory);
+        Widgets.Label(rect, label);
+        //	Widgets.Label(rect, unused + " " + depth.ToString());
+    }
+}

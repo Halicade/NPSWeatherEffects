@@ -42,7 +42,7 @@ Winter: wet.
 	<Operation Class="PatchOperationAddModExtension">
 		<xpath>Defs/BiomeDef[defName = "Glowforest"]</xpath>
 		<value>
-			<li Class="TKKN_NPS.BiomeSeasonalSettings">
+			<li Class="NPSWeather.BiomeSeasonalSettings">
 				
 				<maxSprings>0</maxSprings>
 				<springSpawnChance>0</springSpawnChance>

@@ -10,10 +10,10 @@
     <filth>
       <cleaningWorkToReduceThickness>35</cleaningWorkToReduceThickness>
       <canFilthAttach>true</canFilthAttach>
-      <placementMask>
-        <li>Natural</li>
-      </placementMask>
     </filth>
+    <statBases>
+      <Beauty>1</Beauty>
+    </statBases>
   </ThingDef>
   <ThingDef ParentName="BaseFilth">
     <defName>TKKN_FilthShells</defName>
@@ -24,10 +24,10 @@
     <filth>
       <cleaningWorkToReduceThickness>10</cleaningWorkToReduceThickness>
       <canFilthAttach>false</canFilthAttach>
-      <placementMask>
-        <li>Natural</li>
-      </placementMask>
     </filth>
+    <statBases>
+      <Beauty>0</Beauty>
+    </statBases>
   </ThingDef>
   <ThingDef ParentName="BaseFilth">
     <defName>TKKN_FilthSeaweed</defName>
@@ -38,10 +38,10 @@
     <filth>
       <cleaningWorkToReduceThickness>10</cleaningWorkToReduceThickness>
       <canFilthAttach>false</canFilthAttach>
-      <placementMask>
-        <li>Natural</li>
-      </placementMask>
     </filth>
+    <statBases>
+      <Beauty>0</Beauty>
+    </statBases>
   </ThingDef>
   <ThingDef ParentName="BaseFilth">
     <defName>TKKN_FilthDriftwood</defName>

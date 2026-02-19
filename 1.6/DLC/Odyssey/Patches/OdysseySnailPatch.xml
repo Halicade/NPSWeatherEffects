@@ -12,7 +12,7 @@
   <Operation Class="PatchOperationAdd">
     <xpath>Defs/ThingDef[defName="LavaSnail"]/comps</xpath>
     <value>
-      <li Class="TKKN_NPS.CompProperties_DeadlySalt"/>
+      <li Class="NPSWeather.CompProperties_DeadlySalt"/>
     </value>
   </Operation>
 </Patch>

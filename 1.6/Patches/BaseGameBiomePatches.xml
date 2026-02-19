@@ -41,22 +41,22 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "AridShrubland"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.1</springSpawnChance>
                 <wetPlantStart>30</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.5</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad>.4</TKKN_PlantLilypad>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.5</TKKN_PlantCatTails>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.4</TKKN_PlantLilypad>
                 </specialPlants>
                 <bloomPlants>
                     <li>Plant_Agave</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Dandelion</li>
-                    <li>TKKN_PlantSunflower</li>
-                    <li>TKKN_PlantCactusPricklyPear</li>
-                    <li>TKKN_PlantWildCorn</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantSunflower</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantCactusPricklyPear</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildCorn</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>.8</TKKN_WildFlowerBloom>
@@ -232,18 +232,18 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "ExtremeDesert"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>1</maxSprings>
                 <springSpawnChance>0.1</springSpawnChance>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.2</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad>.2</TKKN_PlantLilypad>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.2</TKKN_PlantCatTails>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.2</TKKN_PlantLilypad>
                 </specialPlants>
                 <wetPlantStart>30</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_Agave</li>
                     <li>Plant_Dandelion</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_Superbloom>1</TKKN_Superbloom>
@@ -345,14 +345,14 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "Desert"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>1</maxSprings>
                 <springSpawnChance>0.5</springSpawnChance>
                 <wetPlantStart>30</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.2</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad>.4</TKKN_PlantLilypad>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.2</TKKN_PlantCatTails>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.4</TKKN_PlantLilypad>
                 </specialPlants>	
                 <bloomPlants>
                     <li>Plant_PincushionCactus</li>
@@ -414,21 +414,21 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "TropicalRainforest"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>4</maxSprings>
                 <springSpawnChance>.8</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.7</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad>.10</TKKN_PlantLilypad>
-                    <TKKN_PlantWildRice>.7</TKKN_PlantWildRice>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.7</TKKN_PlantCatTails>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.10</TKKN_PlantLilypad>
+                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.7</TKKN_PlantWildRice>
                 </specialPlants>	
                 <bloomPlants>
                     <li>Plant_Healroot</li>
                     <li>Plant_Berry</li>
-                    <li>TKKN_PlantCatTails</li>
-                    <li>TKKN_PlantWildRice</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantCatTails</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildRice</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>.5</TKKN_WildFlowerBloom>
@@ -680,21 +680,21 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "TropicalSwamp"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>5</maxSprings>
                 <springSpawnChance>.8</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.7</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad>.10</TKKN_PlantLilypad>
-                    <TKKN_PlantWildRice>.7</TKKN_PlantWildRice>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.7</TKKN_PlantCatTails>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.10</TKKN_PlantLilypad>
+                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.7</TKKN_PlantWildRice>
                 </specialPlants>		
                 <bloomPlants>
                     <li>Plant_Healroot</li>
                     <li>Plant_Berry</li>
-                    <li>TKKN_PlantCatTails</li>
-                    <li>TKKN_PlantWildRice</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantCatTails</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildRice</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>.2</TKKN_WildFlowerBloom>
@@ -948,24 +948,24 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "TemperateForest"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>3</maxSprings>
                 <springSpawnChance>.8</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.5</TKKN_PlantCatTails>
-                    <TKKN_PlantWildRice>.3</TKKN_PlantWildRice>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.5</TKKN_PlantCatTails>
+                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.3</TKKN_PlantWildRice>
                 </specialPlants>			
                 <bloomPlants>
                     <li>Plant_Grass</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Healroot</li>
                     <li>Plant_Dandelion</li>
-                    <li>TKKN_PlantCatTails</li>
-                    <li>TKKN_PlantWildRice</li>
-                    <li>TKKN_PlantSunflower</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantCatTails</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildRice</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantSunflower</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>1</TKKN_WildFlowerBloom>
@@ -1195,23 +1195,23 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "TemperateSwamp"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>4</maxSprings>
                 <springSpawnChance>0.8</springSpawnChance>
                 <wetPlantStart>70</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.5</TKKN_PlantCatTails>
-                    <TKKN_PlantWildRice>.3</TKKN_PlantWildRice>
-                    <TKKN_PlantLilypad>.5</TKKN_PlantLilypad>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.5</TKKN_PlantCatTails>
+                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.3</TKKN_PlantWildRice>
+                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.5</TKKN_PlantLilypad>
                 </specialPlants>		
                 <bloomPlants>
                     <li>Plant_Chokevine</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Healroot</li>
-                    <li>TKKN_PlantCatTails</li>
-                    <li>TKKN_PlantWildRice</li>
-                    <li>TKKN_PlantWatercress</li>
+                    <li MayRequire="Hali.NPSBiomes">TKKN_PlantCatTails</li>
+                    <li MayRequire="Hali.NPSBiomes">TKKN_PlantWildRice</li>
+                    <li MayRequire="Hali.NPSBiomes">TKKN_PlantWatercress</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>1</TKKN_WildFlowerBloom>
@@ -1436,20 +1436,20 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "BorealForest"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>3</maxSprings>
                 <springSpawnChance>0.8</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.7</TKKN_PlantCatTails>
-                    <TKKN_PlantWatercress>.4</TKKN_PlantWatercress>
+                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.7</TKKN_PlantCatTails>
+                    <TKKN_PlantWatercress MayRequire="hali.NPSBiomes">.4</TKKN_PlantWatercress>
                 </specialPlants>
                 <bloomPlants>
                     <li>Plant_Moss</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Healroot</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <specialHerds>
                     <li>Caribou</li>
@@ -1664,21 +1664,21 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "Tundra"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.5</springSpawnChance>
                 <wetPlantStart>50</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.1</TKKN_PlantCatTails>
-                    <TKKN_PlantWatercress>.1</TKKN_PlantWatercress>
+                    <TKKN_PlantCatTails MayRequire="Hali.NPSBiomes">.1</TKKN_PlantCatTails>
+                    <TKKN_PlantWatercress MayRequire="Hali.NPSBiomes">.1</TKKN_PlantWatercress>
                 </specialPlants>
                 <bloomPlants>
                     <li>Plant_HealrootWild</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Astragalus</li>
                     <li>Plant_Dandelion</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <specialHerds>
                     <li>Caribou</li>
@@ -1914,22 +1914,22 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "ColdBog"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>4</maxSprings>
                 <springSpawnChance>0.8</springSpawnChance>
                 <wetPlantStart>70</wetPlantStart>
                 <specialPlants>
-                    <TKKN_PlantCatTails>.5</TKKN_PlantCatTails>
-                    <TKKN_PlantWatercress>.2</TKKN_PlantWatercress>
+                    <TKKN_PlantCatTails MayRequire="Hali.NPSBiomes">.5</TKKN_PlantCatTails>
+                    <TKKN_PlantWatercress MayRequire="Hali.NPSBiomes">.2</TKKN_PlantWatercress>
                 </specialPlants>
                 <bloomPlants>
                     <li>Plant_Moss</li>
                     <li>Plant_Berry</li>
                     <li>Plant_Astragalus</li>
                     <li>Plant_Dandelion</li>
-                    <li>TKKN_PlantWatercress</li>
-                    <li>TKKN_PlantWildflowers</li>
+                    <li MayRequire="Hali.NPSBiomes">TKKN_PlantWatercress</li>
+                    <li MayRequire="hali.NPSBiomes">TKKN_PlantWildflowers</li>
                 </bloomPlants>
                 <springEvents>
                     <TKKN_WildFlowerBloom>.8</TKKN_WildFlowerBloom>
@@ -2155,7 +2155,7 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "IceSheet"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.5</springSpawnChance>
@@ -2374,7 +2374,7 @@ Winter: wet.
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/BiomeDef[defName = "SeaIce"]</xpath>
         <value>
-            <li Class="TKKN_NPS.BiomeSeasonalSettings">
+            <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>0</maxSprings>
                 <springSpawnChance>0</springSpawnChance>
                 <springEvents>

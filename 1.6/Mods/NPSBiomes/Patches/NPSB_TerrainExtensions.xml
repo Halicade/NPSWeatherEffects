@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_SaltField"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <holdFrost>True</holdFrost>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_Lava"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <wetAt>2</wetAt>
+                <temperatureAdjust>50</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "TKKN_LavaDeep"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <temperatureAdjust>50</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+</Patch>

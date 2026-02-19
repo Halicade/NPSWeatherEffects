@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+    <Operation Class="PatchOperationReplace">
+        <xpath>Defs/GenStepDef[defName = "NPS_Oasis"]/genStep</xpath>
+        <value>
+            <genStep Class="NPSBiomes.GenSteps.GenStep_Oasis">
+                <deepWaterTerrain>TKKN_ColdSpringsWaterDeep</deepWaterTerrain>
+                <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
+                <soilTerrain>Riverbank</soilTerrain>
+            </genStep>
+        </value>
+    </Operation>
+    
+</Patch>

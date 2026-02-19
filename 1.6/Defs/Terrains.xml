@@ -1,574 +1,327 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Defs>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SandPath</defName>
-    <label>sand path</label>
-    <texturePath>TKKN_NPS/Terrain/PackedSand</texturePath>
-    <layerable>true</layerable>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>2</pathCost>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>Diggable</li>
-    </affordances>
-    <statBases>
-      <Beauty>0</Beauty>
-      <Cleanliness>0</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <generatedFilth />
-    <fertility>0</fertility>
-    <holdSnowOrSand>true</holdSnowOrSand>
-    <takeFootprints>False</takeFootprints>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_DirtPath</defName>
-    <label>dirt path</label>
-    <layerable>true</layerable>
-    <texturePath>TKKN_NPS/Terrain/PackedDirt</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>1</pathCost>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>Diggable</li>
-    </affordances>
-    <statBases>
-      <Beauty>0</Beauty>
-      <Cleanliness>0</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <generatedFilth />
-    <fertility>0</fertility>
-    <holdSnowOrSand>true</holdSnowOrSand>
-    <takeFootprints>False</takeFootprints>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SaltField</defName>
-    <label>salt field</label>
-    <texturePath>TKKN_NPS/Terrain/saltField</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>375</renderPrecedence>
-    <pathCost>12</pathCost>
-    <scatterType>Rocky</scatterType>
-    <statBases>
-      <Beauty>+1</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <generatedFilth>Filth_Dirt</generatedFilth>
-    <filthAcceptanceMask />
-    <fertility>0.1</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>true</avoidWander>
-    <extraNonDraftedPerceivedPathCost>80</extraNonDraftedPerceivedPathCost>
-    <extraDraftedPerceivedPathCost>8</extraDraftedPerceivedPathCost>
-    <tags>
-      <li>Salt</li>
-    </tags>
-  </TerrainDef>
-  <TerrainDef>
-    <defName>TKKN_Lava</defName>
-    <label>lava</label>
-    <texturePath>TKKN_NPS/Terrain/Lava</texturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <edgeType>Water</edgeType>
-    <renderPrecedence>398</renderPrecedence>
-    <passability>Standable</passability>
-    <pathCost>2000</pathCost>
-    <filthAcceptanceMask />
-    <fertility>0</fertility>
-    <avoidWander>true</avoidWander>
-    <dangerous>true</dangerous>
-    <changeable>false</changeable>
-    <holdSnowOrSand>false</holdSnowOrSand>
-    <takeSplashes>false</takeSplashes>
-    <gravshipReplacementTerrain>TKKN_LavaRock_RoughHewn</gravshipReplacementTerrain>
-    <meltSnowRadius>4</meltSnowRadius>
-    <glowRadius>4</glowRadius>
-    <glowColor>(239,143,1,0)</glowColor>
-    <statBases>
-      <Beauty>+2</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <tags>
-      <li>Lava</li>
-      <li>TKKN_Lava</li>
-    </tags>
-    <heatPerTick>0.25</heatPerTick>
-    <throwFleckChance>0.06</throwFleckChance>
-    <fleckData>
-      <fleck>Smoke</fleck>
-      <scaleRange>3~5</scaleRange>
-      <velocityAngleRange>-30~40</velocityAngleRange>
-      <velocitySpeedRange>0.5~0.7</velocitySpeedRange>
-      <rotationSpeedRange>-30~30</rotationSpeedRange>
-    </fleckData>
-    <extraNonDraftedPerceivedPathCost>200</extraNonDraftedPerceivedPathCost>
-    <extraDraftedPerceivedPathCost>30</extraDraftedPerceivedPathCost>
-  </TerrainDef>
-  <TerrainDef>
-    <defName>TKKN_LavaDeep</defName>
-    <label>deep lava</label>
-    <texturePath>TKKN_NPS/Terrain/Lava</texturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <edgeType>Water</edgeType>
-    <renderPrecedence>398</renderPrecedence>
-    <passability>Impassable</passability>
-    <pathCost>2000</pathCost>
-    <filthAcceptanceMask />
-    <fertility>0</fertility>
-    <avoidWander>true</avoidWander>
-    <dangerous>true</dangerous>
-    <changeable>false</changeable>
-    <holdSnowOrSand>false</holdSnowOrSand>
-    <takeSplashes>false</takeSplashes>
-    <gravshipReplacementTerrain>TKKN_LavaRock_RoughHewn</gravshipReplacementTerrain>
-    <meltSnowRadius>4</meltSnowRadius>
-    <glowRadius>5</glowRadius>
-    <glowColor>(239,143,1,0)</glowColor>
-    <statBases>
-      <Beauty>+2</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <tags>
-      <li>Lava</li>
-      <li>TKKN_Lava</li>
-    </tags>
-    <heatPerTick>0.25</heatPerTick>
-    <throwFleckChance>0.03</throwFleckChance>
-    <fleckData>
-      <fleck>Smoke</fleck>
-      <scaleRange>3~5</scaleRange>
-      <velocityAngleRange>-30~40</velocityAngleRange>
-      <velocitySpeedRange>0.5~0.7</velocitySpeedRange>
-      <rotationSpeedRange>-30~30</rotationSpeedRange>
-    </fleckData>
-  </TerrainDef>
-  <TerrainDef ParentName="WaterShallowBase">
-    <defName>TKKN_ColdSpringsWater</defName>
-    <label>cold spring</label>
-    <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <renderPrecedence>394</renderPrecedence>
-    <driesTo>Gravel</driesTo>
-    <waterBodyType>Other</waterBodyType>
-    <statBases>
-      <Beauty>+2</Beauty>
-    </statBases>
-    <tags>
-      <li>ColdSpring</li>
-    </tags>
-    <fertility>0.001</fertility>
-  </TerrainDef>
-  <TerrainDef ParentName="WaterChestDeepBase">
-    <defName>TKKN_ColdSpringsWaterDeep</defName>
-    <label>chest-deep cold spring</label>
-    <texturePath>TKKN_NPS/Terrain/springWaterDeep</texturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <renderPrecedence>395</renderPrecedence>
-    <driesTo>Gravel</driesTo>
-    <waterBodyType>Other</waterBodyType>
-    <statBases>
-      <Beauty>+2</Beauty>
-    </statBases>
-    <tags>
-      <li>Spring</li>
-    </tags>
-  </TerrainDef>
-  <TerrainDef ParentName="WaterShallowBase">
-    <defName>TKKN_HotSpringsWater</defName>
-    <label>hot spring</label>
-    <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <renderPrecedence>394</renderPrecedence>
-    <driesTo>Gravel</driesTo>
-    <waterBodyType>Other</waterBodyType>
-    <statBases>
-      <Beauty>+2</Beauty>
-    </statBases>
-    <tags>
-      <li>Spring</li>
-    </tags>
-    <fertility>0.001</fertility>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SoilWet</defName>
-    <label>wet Soil</label>
-    <texturePath>TKKN_NPS/Terrain/wetSoil</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>375</renderPrecedence>
-    <pathCost>12</pathCost>
-    <scatterType>Rocky</scatterType>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>GrowSoil</li>
-      <li>Diggable</li>
-    </affordances>
-    <tags>
-      <li>WetRain</li>
-    </tags>
-    <statBases>
-      <Beauty>+1</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <generatedFilth>Filth_Dirt</generatedFilth>
-    <filthAcceptanceMask />
-      <fertility>1.25</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>True</avoidWander>
-    <driesTo>Soil</driesTo>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SoilWetRich</defName>
-    <label>wet rich soil</label>
-    <texturePath>TKKN_NPS/Terrain/wetSoilRich</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>375</renderPrecedence>
-    <pathCost>12</pathCost>
-    <scatterType>Rocky</scatterType>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>GrowSoil</li>
-      <li>Diggable</li>
-    </affordances>
-    <tags>
-      <li>WetRain</li>
-    </tags>
-    <statBases>
-      <Beauty>+1</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <generatedFilth>Filth_Dirt</generatedFilth>
-    <filthAcceptanceMask />
-      <fertility>1.5</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>True</avoidWander>
-    <driesTo>SoilRich</driesTo>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SandWet</defName>
-    <label>wet sand</label>
-    <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>375</renderPrecedence>
-    <pathCost>12</pathCost>
-    <scatterType>Rocky</scatterType>
-    <statBases>
-      <Beauty>+1</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>GrowSoil</li>
-      <li>Diggable</li>
-    </affordances>
-    <tags>
-      <li>Wet</li>
-      <li>WetRain</li>
-    </tags>
-    <generatedFilth>Filth_Sand</generatedFilth>
-    <filthAcceptanceMask />
-      <fertility>.10</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>True</avoidWander>
-    <driesTo>Sand</driesTo>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_SandBeachWetSalt</defName>
-    <label>wet sand</label>
-    <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>375</renderPrecedence>
-    <pathCost>12</pathCost>
-    <scatterType>Rocky</scatterType>
-    <statBases>
-      <Beauty>+1</Beauty>
-      <Cleanliness>-2</Cleanliness>
-    </statBases>
-    <tags>
-      <li>Beach</li>
-      <li>Wet</li>
-      <li>WetRain</li>
-      <li>Salt</li>
-    </tags>
-    <affordances>
-      <li>Light</li>
-      <li>Diggable</li>
-    </affordances>
-    <generatedFilth>Filth_Sand</generatedFilth>
-    <filthAcceptanceMask />
-    <fertility>.1</fertility>
-    <takeFootprints>True</takeFootprints>
-    <driesTo>Sand</driesTo>
-  </TerrainDef>
-  <TerrainDef>
-    <defName>TKKN_Ice</defName>
-    <label>ice</label>
-    <texturePath>TKKN_NPS/Terrain/ice</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>4</pathCost>
-    <temporary>true</temporary>
-    <statBases> 
-      <Beauty>-1</Beauty>
-      <Cleanliness>-1</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <generatedFilth />
-    <fertility>0</fertility>
-    <holdSnowOrSand>false</holdSnowOrSand>
-    <takeFootprints>False</takeFootprints>
-    <tags>
-      <li>Frozen</li>
-    </tags>
-  </TerrainDef>
-  <TerrainDef>
-    <defName>TKKN_MuddyIce</defName>
-    <label>ice</label>
-    <texturePath>TKKN_NPS/Terrain/muddyIce</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>4</pathCost>
-    <temporary>true</temporary>
-    <statBases>
-      <Beauty>-1</Beauty>
-      <Cleanliness>-1</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <generatedFilth />
-    <fertility>0</fertility>
-    <takeFootprints>False</takeFootprints>
-    <tags>
-      <li>Frozen</li>
-    </tags>
-  </TerrainDef>
-  
-  <TerrainDef ParentName="WaterShallowBase">
-    <defName>NPS_WaterOceanTide</defName>
-    <label>tidal water</label>
-    <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
-    <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <renderPrecedence>396</renderPrecedence>
-    <driesTo/>
-    <canFreeze>false</canFreeze>
-    <waterBodyType>Saltwater</waterBodyType>
-    <temporary>true</temporary>
-    <tempTerrain>
-      <replaceableByBridge>true</replaceableByBridge>
-    </tempTerrain>
-    <tags>
-      <li>Ocean</li>
-    </tags>
-  </TerrainDef>
-  
-  <TerrainDef ParentName="WaterShallowBase">
-    <defName>NPS_WaterRiverFlood</defName>
-    <label>tidal water</label>
-    <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
-    <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
-    <waterDepthShader>Map/WaterDepth</waterDepthShader>
-    <renderPrecedence>396</renderPrecedence>
-    <driesTo/>
-    <canFreeze>false</canFreeze>
-    <waterBodyType>Other</waterBodyType>
-    <temporary>true</temporary>
-    <tempTerrain>
-      <replaceableByBridge>true</replaceableByBridge>
-    </tempTerrain>
-    <tags>
-      
-    </tags>
-  </TerrainDef>
-  
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_WetMossyTerrain</defName>
-    <label>wet lichen-covered dirt</label>
-    <texturePath>TKKN_NPS/Terrain/wetMossy</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>4</pathCost>
-    <statBases>
-      <Beauty>-1</Beauty>
-      <Cleanliness>-1</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <tags>
-      <li>Wet</li>
-    </tags>
-    <affordances>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>Heavy</li>
-      <li>GrowSoil</li>
-      <li>Diggable</li>
-    </affordances>
-    <generatedFilth>Filth_Dirt</generatedFilth>
-    <filthAcceptanceMask />
-      <fertility>1.35</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>true</avoidWander>
-    <driesTo>MossyTerrain</driesTo>
-  </TerrainDef>
-  <TerrainDef ParentName="NaturalTerrainBase">
-    <defName>TKKN_RiverDeposit</defName>
-    <label>river deposit</label>
-    <texturePath>Terrain/Surfaces/SoilRich</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>350</renderPrecedence>
-    <pathCost>4</pathCost>
-    <statBases>
-      <Beauty>-1</Beauty>
-      <Cleanliness>-1</Cleanliness>
-    </statBases>
-    <scatterType>SoftDry</scatterType>
-    <tags>
-      <li>Wet</li>
-      <li>WetFlood</li>
-        <li>Riverbank</li>
-    </tags>
-    <affordances>
-      <li>Bridgeable</li>
-      <li>Light</li>
-      <li>Medium</li>
-      <li>GrowSoil</li>
-      <li>Diggable</li>
-    </affordances>
-    <generatedFilth>Filth_Dirt</generatedFilth>
-    <filthAcceptanceMask />
-      <fertility>1.3</fertility>
-    <takeFootprints>True</takeFootprints>
-    <avoidWander>true</avoidWander>
-    <driesTo>SoilRich</driesTo>
-  </TerrainDef>
-  <!-- FLOORS -->
-  <TerrainDef ParentName="FlagstoneBase">
-    <defName>TKKN_FlagstoneBasalt</defName>
-    <label>basalt flagstone</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>4</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef ParentName="TileStoneBase">
-    <defName>TKKN_TileBasalt</defName>
-    <label>basalt tile</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>4</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef MayRequire="Ludeon.RimWorld.Ideology" ParentName="SpikecoreStoneTile">
-    <defName>TKKN_Tile_SpikecoreBasalt</defName>
-    <label>basalt spikecore tile</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>20</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef MayRequire="Ludeon.RimWorld.Ideology" ParentName="TotemicStoneTile">
-    <defName>TKKN_Tile_TotemicBasalt</defName>
-    <label>totemic basalt tile</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>20</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef MayRequire="Ludeon.RimWorld.Ideology" ParentName="MorbidStoneTile">
-    <defName>TKKN_Tile_MorbidBasalt</defName>
-    <label>morbid basalt tile</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>20</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef ParentName="FineTileStoneBase" MayRequire="Ludeon.Rimworld.Royalty">
-    <defName>TKKN_FineTileBasalt</defName>
-    <label>fine basalt tile</label>
-    <color>(50,50,50)</color>
-    <costList>
-      <TKKN_BlockLava>20</TKKN_BlockLava>
-    </costList>
-  </TerrainDef>
-  <TerrainDef Abstract="True" ParentName="FloorBase" Name="SpecialPlankBase">
-    <renderPrecedence>220</renderPrecedence>
-    <description>Carefully-cut and fit fancy planks. They are pretty to look at, but they take a long time to lay.</description>
-    <texturePath>Terrain/Surfaces/WoodFloor</texturePath>
-    <statBases>
-      <WorkToBuild>1100</WorkToBuild>
-      <Beauty>1</Beauty>
-    </statBases>
-    <designatorDropdown>NPS_Floor_Special_Plank</designatorDropdown>
-    <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
-  </TerrainDef>
-  <TerrainDef ParentName="SpecialPlankBase">
-    <defName>TKKN_FloorRedWood</defName>
-    <label>red wood floor</label>
-    <texturePath>Terrain/Surfaces/WoodFloor</texturePath>
-    <color>(102,41,20)</color>
-    <statBases>
-      <Flammability>0.22</Flammability>
-    </statBases>
-    <costList>
-      <RedWoodLog>4</RedWoodLog>
-    </costList>
-  </TerrainDef>
-  <!--
-  <TerrainDef ParentName="SpecialPlankBase">
-    <defName>TKKN_FloorPertrifiedWood</defName>
-    <label>petrified wood floor</label>
-    <color>(66,44,4)</color>
-    <costList>
-      <TKKN_PetrifiedWood>4</TKKN_PetrifiedWood>
-    </costList>
-  </TerrainDef>
-  -->
-  <TerrainDef ParentName="TileMetalBase">
-    <defName>TKKN_FloorAmber</defName>
-    <label>amber tile floor</label>
-    <description>Floor tiles made using ancient tree sap.</description>
-    <texturePath>Terrain/Surfaces/GenericFloorTile</texturePath>
-    <color>(224,147,4)</color>
-    <statBases>
-      <WorkToBuild>1100</WorkToBuild>
-      <Beauty>2</Beauty>
-    </statBases>
-    <costList>
-      <TKKN_Amber>6</TKKN_Amber>
-    </costList>
-    <tags>
-      <li>FineFloor</li>
-    </tags>
-  </TerrainDef>
-  <TerrainDef ParentName="FloorBase">
-    <defName>TKKN_Salted_Earth</defName>
-    <label>salted earth</label>
-    <description>Dirt with salt mixed in. Nothing will grow here for a long time.</description>
-    <texturePath>TKKN_NPS/Terrain/Saltedearth</texturePath>
-    <edgeType>FadeRough</edgeType>
-    <renderPrecedence>70</renderPrecedence>
-    <holdSnowOrSand>false</holdSnowOrSand>
-    <statBases>
-      <Beauty>-1</Beauty>
-      <WorkToBuild>100</WorkToBuild>
-    </statBases>
-    <costList>
-      <TKKN_Salt>2</TKKN_Salt>
-    </costList>
-    <designationHotKey>Misc6</designationHotKey>
-    <tags>
-      <li>salt</li>
-    </tags>
-  </TerrainDef>
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SandPath</defName>
+        <label>sand path</label>
+        <texturePath>TKKN_NPS/Terrain/PackedSand</texturePath>
+        <layerable>true</layerable>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>2</pathCost>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>Diggable</li>
+        </affordances>
+        <statBases>
+            <Beauty>0</Beauty>
+            <Cleanliness>0</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>true</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_DirtPath</defName>
+        <label>dirt path</label>
+        <layerable>true</layerable>
+        <texturePath>TKKN_NPS/Terrain/PackedDirt</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>1</pathCost>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>Diggable</li>
+        </affordances>
+        <statBases>
+            <Beauty>0</Beauty>
+            <Cleanliness>0</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>true</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>TKKN_ColdSpringsWater</defName>
+        <label>cold spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>394</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>+2</Beauty>
+        </statBases>
+        <tags>
+            <li>ColdSpring</li>
+        </tags>
+        <fertility>0.001</fertility>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterChestDeepBase">
+        <defName>TKKN_ColdSpringsWaterDeep</defName>
+        <label>chest-deep cold spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWaterDeep</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>395</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>+2</Beauty>
+        </statBases>
+        <tags>
+            <li>Spring</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>TKKN_HotSpringsWater</defName>
+        <label>hot spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>394</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>+2</Beauty>
+        </statBases>
+        <tags>
+            <li>Spring</li>
+        </tags>
+        <fertility>0.001</fertility>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SoilWet</defName>
+        <label>wet Soil</label>
+        <texturePath>TKKN_NPS/Terrain/wetSoil</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <tags>
+            <li>WetRain</li>
+        </tags>
+        <statBases>
+            <Beauty>+1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <generatedFilth>Filth_Dirt</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>1.25</fertility>
+        <takeFootprints>True</takeFootprints>
+        <avoidWander>True</avoidWander>
+        <driesTo>Soil</driesTo>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SoilWetRich</defName>
+        <label>wet rich soil</label>
+        <texturePath>TKKN_NPS/Terrain/wetSoilRich</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <tags>
+            <li>WetRain</li>
+        </tags>
+        <statBases>
+            <Beauty>+1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <generatedFilth>Filth_Dirt</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>1.5</fertility>
+        <takeFootprints>True</takeFootprints>
+        <avoidWander>True</avoidWander>
+        <driesTo>SoilRich</driesTo>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SandWet</defName>
+        <label>wet sand</label>
+        <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <statBases>
+            <Beauty>+1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <tags>
+            <li>Wet</li>
+            <li>WetRain</li>
+        </tags>
+        <generatedFilth>Filth_Sand</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>.10</fertility>
+        <takeFootprints>True</takeFootprints>
+        <avoidWander>True</avoidWander>
+        <driesTo>Sand</driesTo>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SandBeachWetSalt</defName>
+        <label>wet sand</label>
+        <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <statBases>
+            <Beauty>+1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <tags>
+            <li>Beach</li>
+            <li>Wet</li>
+            <li>WetRain</li>
+            <li>Salt</li>
+        </tags>
+        <affordances>
+            <li>Light</li>
+            <li>Diggable</li>
+            <li>Bridgeable</li>
+        </affordances>
+        <generatedFilth>Filth_Sand</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>.1</fertility>
+        <takeFootprints>True</takeFootprints>
+        <driesTo>Sand</driesTo>
+    </TerrainDef>
+
+    <TerrainDef>
+        <defName>TKKN_Ice</defName>
+        <label>ice</label>
+        <texturePath>TKKN_NPS/Terrain/ice</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>4</pathCost>
+        <temporary>true</temporary>
+        <statBases>
+            <Beauty>-1</Beauty>
+            <Cleanliness>-1</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>false</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+        <tags>
+            <li>Frozen</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef>
+        <defName>TKKN_MuddyIce</defName>
+        <label>ice</label>
+        <texturePath>TKKN_NPS/Terrain/muddyIce</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>4</pathCost>
+        <temporary>true</temporary>
+        <statBases>
+            <Beauty>-1</Beauty>
+            <Cleanliness>-1</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <takeFootprints>False</takeFootprints>
+        <tags>
+            <li>Frozen</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_WaterOceanTide</defName>
+        <label>tidal water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <waterBodyType>Saltwater</waterBodyType>
+        <temporary>true</temporary>
+        <tags>
+            <li>Ocean</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallow">
+        <defName>NPS_WaterRiverFlood</defName>
+        <label>tidal water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_WetMossyTerrain</defName>
+        <label>wet lichen-covered dirt</label>
+        <texturePath>TKKN_NPS/Terrain/wetMossy</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>4</pathCost>
+        <statBases>
+            <Beauty>-1</Beauty>
+            <Cleanliness>-1</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <tags>
+            <li>Wet</li>
+        </tags>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <generatedFilth>Filth_Dirt</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>1.35</fertility>
+        <takeFootprints>True</takeFootprints>
+        <avoidWander>true</avoidWander>
+        <driesTo>MossyTerrain</driesTo>
+    </TerrainDef>
+
+
 </Defs>

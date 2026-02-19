@@ -2,7 +2,7 @@
 <Defs>
     <JoyGiverDef>
         <defName>TKKN_RelaxSpring</defName>
-        <giverClass>TKKN_NPS.JoyGiver_RelaxInSpring</giverClass>
+        <giverClass>NPSWeather.JoyGiver_RelaxInSpring</giverClass>
         <baseChance>1</baseChance>
         <joyKind>Meditative</joyKind>
         <jobDef>TKKN_RelaxSpring</jobDef>

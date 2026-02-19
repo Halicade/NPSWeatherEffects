@@ -7,7 +7,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.IncidentWorker_LavaFlow</workerClass>
+    <workerClass>NPSWeather.IncidentWorker_LavaFlow</workerClass>
     <baseChance>2</baseChance>
     <category>ThreatBig</category>
     <pointsScaleable>true</pointsScaleable>
@@ -18,7 +18,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.IncidentWorker_Drought</workerClass>
+    <workerClass>NPSWeather.IncidentWorker_Drought</workerClass>
     <gameCondition>TKKN_Drought</gameCondition>
     <letterLabel>TKKN_NPS_DroughtLbl</letterLabel>
     <letterText>TKKN_NPS_DroughtTxt</letterText>
@@ -39,7 +39,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>TKKN_NPS.IncidentWorker_DustDevil</workerClass>
+    <workerClass>NPSWeather.IncidentWorker_DustDevil</workerClass>
     <letterLabel>Dust Devils!</letterLabel>
     <letterText>A dust devil has formed!\n\n It's less destructive than a tornado, but keep out of its way!</letterText>
     <letterDef>ThreatSmall</letterDef>

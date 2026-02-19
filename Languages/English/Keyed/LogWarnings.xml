@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LanguageData>
+    <!-- These warnings appear in the console log at startup for nobody to read -->
+
+    <NPS_DetectedTerrainGridPatches>NPS: Detected {0} mod(s) patching 'TerrainGrid.SetTerrain' It is advised to turn off 'terrain effects' if this leads to considerable performance impact. These come from the following mods: </NPS_DetectedTerrainGridPatches>
+
+    <NPS_DetectedStart>NPS: Detected </NPS_DetectedStart>
+    <NPS_GetTemperaturePatches>{0} mod(s) patching 'GenTemperature.GetTemperatureForCell' </NPS_GetTemperaturePatches>
+    <NPS_And>and </NPS_And>
+    <NPS_TryGetTemperaturePatches>{0} mod(s) patching 'GenTemperature.GetTemperatureForCell' </NPS_TryGetTemperaturePatches>
+    <NPS_AdviseTurnOn>It is advised to turn on 'use map-wide temperature' if this leads to considerable performance impact. These come from the following mods: </NPS_AdviseTurnOn>
+
+</LanguageData>

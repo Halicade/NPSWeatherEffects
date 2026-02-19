@@ -3,7 +3,7 @@
   <HediffDef>
     <defName>TKKN_Wetness</defName>
     <defaultLabelColor>(0.8, 0.8, 0.35)</defaultLabelColor>
-    <hediffClass>TKKN_NPS.Hediff_Wetness</hediffClass>
+    <hediffClass>NPSWeather.Hediff_Wetness</hediffClass>
     <description>Level of liquid saturation</description>
     <label>wetness</label>
     <stages>
@@ -50,7 +50,7 @@
     <defName>TKKN_Drowning</defName>
     <label>drowning</label>
     <lethalSeverity>1</lethalSeverity>
-    <hediffClass>TKKN_NPS.Hediff_Drowning</hediffClass>
+    <hediffClass>NPSWeather.Hediff_Drowning</hediffClass>
     <description>Too much liquid!</description>
     <stages>
       <li>

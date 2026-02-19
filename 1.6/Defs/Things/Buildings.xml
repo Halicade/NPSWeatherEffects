@@ -3,7 +3,7 @@
   <ThingDef ParentName="EtherealThingBase">
     <defName>TKKN_DustDevil</defName>
     <label>dustdevil</label>
-    <thingClass>TKKN_NPS.DustDevil</thingClass>
+    <thingClass>NPSWeather.DustDevil</thingClass>
     <tickerType>Normal</tickerType>
     <drawerType>RealtimeOnly</drawerType>
     <drawOffscreen>true</drawOffscreen>
@@ -13,6 +13,7 @@
       <li Class="CompProperties_WindSource" />
     </comps>
   </ThingDef>
+  
   <ThingDef ParentName="BuildingBase">
     <defName>TKKN_Sculpture_Shell</defName>
     <label>sea shell</label>
@@ -39,134 +40,5 @@
       <Mass>7.5</Mass>
     </statBases>
   </ThingDef>
-  <ThingDef ParentName="BuildingBase">
-    <defName>TKKN_RedwoodDead</defName>
-    <label>fallen redwood</label>
-    <description>A huge, dead tree. Its roots are shallow, and when it gets too large, it topples over. \n\n Yields red wood, which is valuable and rare.</description>
-    <graphicData>
-      <texPath>TKKN_NPS/Things/Plant/TreeRedwoodDead</texPath>
-      <graphicClass>Graphic_Random</graphicClass>
-      <drawRotated>false</drawRotated>
-      <shadowData>
-        <volume>(8.4, 1.4, 0.9)</volume>
-        <offset>(0,0,-1.2)</offset>
-      </shadowData>
-      <drawSize>(9,3)</drawSize>
-    </graphicData>
-    <comps />
-    <tickerType>Rare</tickerType>
-    <altitudeLayer>Building</altitudeLayer>
-    <passability>Impassable</passability>
-    <selectable>true</selectable>
-    <destroyable>true</destroyable>
-    <useHitPoints>true</useHitPoints>
-    <repairEffect />
-    <costList>
-      <RedWoodLog>200</RedWoodLog>
-    </costList>
-    <statBases>
-      <MaxHitPoints>3000</MaxHitPoints>
-      <WorkToBuild>4000</WorkToBuild>
-      <Flammability>0</Flammability>
-      <Beauty>15</Beauty>
-    </statBases>
-    <fillPercent>0.15</fillPercent>
-    <building>
-      <ai_chillDestination>true</ai_chillDestination>
-      <deconstructible>true</deconstructible>
-    </building>
-    <rotatable>false</rotatable>
-  </ThingDef>
-  <ThingDef ParentName="BuildingNaturalBase">
-    <defName>TKKN_SteamVent</defName>
-    <thingClass>TKKN_NPS.Building_SteamVent</thingClass>
-    <label>steam vent</label>
-    <graphicData>
-      <texPath>TKKN_NPS/Things/Building/Steamvent</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-      <shaderType>Transparent</shaderType>
-      <drawSize>(1,1)</drawSize>
-    </graphicData>
-    <altitudeLayer>Floor</altitudeLayer>
-    <rotatable>true</rotatable>
-    <destroyable>true</destroyable>
-    <useHitPoints>false</useHitPoints>
-    <tickerType>Normal</tickerType>
-    <selectable>true</selectable>
-    <description>Temporary natural steam source from lava rock.</description>
-    <size>(1,1)</size>
-    <neverOverlapFloors>true</neverOverlapFloors>
-    <blockPlants>true</blockPlants>
-    <building>
-      <isEdifice>false</isEdifice>
-      <claimable>false</claimable>
-      <deconstructible>false</deconstructible>
-    </building>
-  </ThingDef>
-  <ThingDef ParentName="BuildingBase">
-    <defName>TKKN_SteamGenerator</defName>
-    <label>steam generator</label>
-    <thingClass>Building</thingClass>
-    <graphicData>
-      <texPath>TKKN_NPS/Things/Building/SteamGenerator</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>(3,3)</drawSize>
-      <damageData>
-        <rect>(0.3,0,5.4,6)</rect>
-      </damageData>
-    </graphicData>
-    <altitudeLayer>Building</altitudeLayer>
-    <passability>Impassable</passability>
-    <minifiedDef>MinifiedThing</minifiedDef>
-    <thingCategories>
-      <li>BuildingsPower</li>
-    </thingCategories>
-    <blockWind>true</blockWind>
-    <castEdgeShadows>true</castEdgeShadows>
-    <scatterableOnMapGen>false</scatterableOnMapGen>
-    <fillPercent>1</fillPercent>
-    <blockLight>true</blockLight>
-    <canOverlapZones>false</canOverlapZones>
-    <statBases>
-      <MaxHitPoints>500</MaxHitPoints>
-      <WorkToBuild>500</WorkToBuild>
-      <Flammability>1.0</Flammability>
-      <Beauty>-30</Beauty>
-      <Mass>10</Mass>
-    </statBases>
-    <tickerType>Normal</tickerType>
-    <description>Produces electricity from steam vents in lava fields. Must be placed on a steam vent.</description>
-    <size>(3,3)</size>
-    <costList>
-      <Steel>100</Steel>
-      <ComponentIndustrial>1</ComponentIndustrial>
-    </costList>
-    <comps>
-      <li Class="CompProperties_Power">
-        <compClass>CompPowerPlantSteam</compClass>
-        <basePowerConsumption>-400</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
-      <li Class="CompProperties_Breakdownable" />
-      <li Class="CompProperties_AmbientSound">
-        <sound>GeothermalPlant_Ambience</sound>
-      </li>
-    </comps>
-    <rotatable>false</rotatable>
-    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-    <designationCategory>Power</designationCategory>
-    <staticSunShadowHeight>.5</staticSunShadowHeight>
-    <placeWorkers>
-      <li>TKKN_NPS.PlaceWorker_OnSteamVent</li>
-    </placeWorkers>
-    <building>
-      <ai_chillDestination>false</ai_chillDestination>
-    </building>
-    <constructEffect>ConstructMetal</constructEffect>
-    <designationHotKey>Misc6</designationHotKey>
-    <researchPrerequisites>
-      <li>Electricity</li>
-    </researchPrerequisites>
-    <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
-  </ThingDef>
+  
 </Defs>
