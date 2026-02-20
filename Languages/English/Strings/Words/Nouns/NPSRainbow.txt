@@ -1,0 +1,11 @@
+﻿
+//Vanilla colors have gray. Who ever seen a gray aurora
+
+
+red
+orange
+yellow
+green
+blue
+indigo
+violet

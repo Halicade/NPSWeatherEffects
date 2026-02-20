@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+    <GameConditionDef>
+        <defName>NPS_Rainbow</defName>
+        <conditionClass>NPSWeather.GameCondition_Rainbow</conditionClass>
+        <label>rainbow</label>
+        <description>A rainbow is appearing in th sky. The beautiful colors will boost the mood of anyone outside to see it.</description>
+        <endMessage>The rainbow is fading.</endMessage>
+        <letterText>A beautiful rainbow has appeared in the sky.\n\nThe beautiful colors will boost the mood of anyone outside to see it.</letterText>
+        <letterDef>PositiveEvent</letterDef>
+        <canBePermanent>true</canBePermanent>
+        <allowUnderground>false</allowUnderground>
+        <canAffectAllPlanetLayers>true</canAffectAllPlanetLayers>
+        <silencedByConditions>
+            <li MayRequire="Ludeon.RimWorld.Anomaly">UnnaturalDarkness</li>
+            <li>Eclipse</li>
+        </silencedByConditions>
+    </GameConditionDef>
+
+    <IncidentDef>
+        <defName>NPS_Rainbow</defName>
+        <label>rainbow</label>
+        <category>Misc</category>
+        <targetTags>
+            <li>World</li>
+        </targetTags>
+        <workerClass>NPSWeather.IncidentWorker_Rainbow</workerClass>
+        <gameCondition>NPS_Rainbow</gameCondition>
+        <letterLabel>Rainbow</letterLabel>
+        <letterDef>PositiveEvent</letterDef>
+        <baseChance>1.2</baseChance>
+        <minRefireDays>15</minRefireDays>
+        <durationDays>0.125~0.35</durationDays>
+        <tale>NPS_Rainbow</tale>
+        <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+    </IncidentDef>
+
+    <ThoughtDef>
+        <defName>NPS_Rainbow</defName>
+        <workerClass>ThoughtWorker_Aurora</workerClass>
+        <gameCondition>NPS_Rainbow</gameCondition>
+        <stages>
+            <li>
+                <label>beautiful rainbow</label>
+                <description>The colors are so pretty.</description>
+                <baseMoodEffect>14</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <TaleDef>
+        <defName>NPS_Rainbow</defName>
+        <label>rainbow</label>
+        <taleClass>Tale_SinglePawn</taleClass>
+        <type>Volatile</type>
+        <baseInterest>20</baseInterest>
+        <rulePack>
+            <rulesStrings>
+                <li>tale_noun->the time a rainbow appeared over [PAWN_nameDef]'s [Community]</li>
+                <li>tale_noun->the time a rainbow shone over [PAWN_nameDef]'s [Community]</li>
+                <li>tale_noun->[PAWN_nameDef]'s [Community] witnessing the majesty of a rainbow</li>
+                <li>image->the sky painted in [NPSRainbow]s and [NPSRainbow]s [circumstance_phrase]</li>
+                <li>image->a fabulous spectrum of [NPSRainbow] rays [circumstance_phrase]</li>
+                <li>image->a network of vibrant colors [circumstance_phrase]</li>
+                <li>image->[NPSRainbow] swooping arcs with [NPSRainbow] highlights [circumstance_phrase]</li>
+                <li>image->radiant [NPSRainbow] lights [circumstance_group]</li>
+                <li>circumstance_phrase->over a [TerrainFeature]</li>
+                <li>circumstance_phrase->illuminating a [TerrainFeature]</li>
+                <li>circumstance_phrase->floating over a [Community]</li>
+                <li>circumstance_phrase->bracketed between a [TerrainFeature] and a [TerrainFeature]</li>
+                <li>desc_sentence->Below, [PAWN_nameDef] plays [Game] with a [AdjectiveFriendly] look.</li>
+                <li>desc_sentence->[PAWN_nameDef] watches with awe on [PAWN_possessive] face.</li>
+                <li>desc_sentence->[Quantity_adjphrase] [PersonJob]s watch from below.</li>
+                <li>desc_sentence->[PAWN_nameDef] sits near a [TerrainFeature], gazing at the sky.</li>
+                <li>desc_sentence->[Quantity_adjphrase] [Animal]s wander peacefully.</li>
+                <li>desc_sentence->There is no [Enemy] in sight.</li>
+            </rulesStrings>
+        </rulePack>
+    </TaleDef>
+
+
+</Defs>
