@@ -57,12 +57,6 @@ public class HarmonyWeatherEffects
             ]),
             postfix: new HarmonyMethod(typeof(GenSpawn_Spawn), nameof(GenSpawn_Spawn.Postfix)));
 
-
-        harmony.Patch(
-            AccessTools.Method(typeof(Graphic_Shadow), nameof(Graphic_Shadow.DrawWorker)),
-            prefix: new HarmonyMethod(typeof(Graphic_Shadow_DrawWorker),
-                nameof(Graphic_Shadow_DrawWorker.Prefix)));
-
         harmony.Patch(AccessTools.Method(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI)),
             postfix: new HarmonyMethod(typeof(MouseoverReadout_MouseoverReadoutOnGUI),
                 nameof(MouseoverReadout_MouseoverReadoutOnGUI.Postfix)));
@@ -103,6 +97,11 @@ public class HarmonyWeatherEffects
                 AccessTools.Method(typeof(PawnRenderNodeWorker_Body), nameof(PawnRenderNodeWorker_Body.CanDrawNow)),
                 postfix: new HarmonyMethod(typeof(PawnRenderNodeWorker_Body_CanDrawNow),
                     nameof(PawnRenderNodeWorker_Body_CanDrawNow.Postfix)));
+            
+            harmony.Patch(
+                AccessTools.Method(typeof(Graphic_Shadow), nameof(Graphic_Shadow.DrawWorker)),
+                prefix: new HarmonyMethod(typeof(Graphic_Shadow_DrawWorker),
+                    nameof(Graphic_Shadow_DrawWorker.Prefix)));
         }
 
         if (EffectSettings.allowPlantEffects) {
