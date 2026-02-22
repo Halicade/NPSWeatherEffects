@@ -2,22 +2,27 @@
 <Defs>
   <GameConditionDef>
     <defName>TKKN_WildFlowerBloom</defName>
-    <conditionClass>NPSWeather.GameCondition_WildFlowerBloom</conditionClass>
+    <conditionClass>NPSWeather.GameCondition_WildflowerBloom</conditionClass>
     <label>wildflower bloom</label>
-    <description>An unusual amount of wildflowers are blooming! Make sure you go outside to see it. Watch out for allergies!</description>
+    <description>An unusual amount of wildflowers are blooming! Make sure you go outside to see it.</description>
     <endMessage>The wildflower bloom is ending.</endMessage>
+    <letterText>A record setting amount of wildflowers are blooming! Make sure you go outside to see it.</letterText>
+    <letterDef>PositiveEvent</letterDef>
     <exclusiveConditions>
       <li>ColdSnap</li>
       <li>VolcanicWinter</li>
       <li>ToxicFallout</li>
     </exclusiveConditions>
   </GameConditionDef>
+  
   <GameConditionDef>
     <defName>TKKN_Superbloom</defName>
-    <conditionClass>NPSWeather.GameCondition_Superbloom</conditionClass>
+    <conditionClass>NPSWeather.GameCondition_SuperBloom</conditionClass>
     <label>superbloom</label>
-    <description>A record setting amount of wildflowers are blooming! Make sure you go outside to see it. Watch out for allergies!</description>
+    <description>A record setting amount of wildflowers are blooming! Make sure you go outside to see it.</description>
     <endMessage>The superbloom is ending.</endMessage>
+    <letterText>A record setting amount of wildflowers are blooming! Make sure you go outside to see it.</letterText>
+    <letterDef>PositiveEvent</letterDef>
     <exclusiveConditions>
       <li>ColdSnap</li>
       <li>VolcanicWinter</li>

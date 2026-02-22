@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Defs>
 
     <TileMutatorDef>
@@ -41,7 +42,7 @@
             <li>Ocean</li>
             <li>SeaIce</li>
             <li>Desert</li>
-            
+
             <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
@@ -49,5 +50,44 @@
         <averageTemperatureRange>17.51~999</averageTemperatureRange>
         <coastSidesRange>0~0</coastSidesRange>
     </TileMutatorDef>
-    
+
+
+    <TileMutatorDef Name="NPS_TidalLevels" Abstract="True">
+        <priority>5</priority>
+        <categories>
+            <li>Coast</li>
+        </categories>
+        <overrideCategories>
+            <li>Mountain</li>
+        </overrideCategories>
+        <coastSidesRange>1~5</coastSidesRange>
+        <biomeBlacklist>
+            <li>Ocean</li>
+            <li>SeaIce</li>
+            <li>IceSheet</li>
+            <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
+            <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
+            <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
+        </biomeBlacklist>
+        <workerClass>TileMutatorWorker_Coast</workerClass>
+        <chanceOnNonLandmarkTile>0.01</chanceOnNonLandmarkTile>
+    </TileMutatorDef>
+
+    <TileMutatorDef ParentName="NPS_TidalLevels">
+        <defName>NPS_WeakOceanTide</defName>
+        <label>weak tide</label>
+        <description>The tidal levels are weaker here. Less resources are likely to show up on the shore.</description>
+
+    </TileMutatorDef>
+
+    <TileMutatorDef ParentName="NPS_TidalLevels">
+        <defName>NPS_StrongOceanTide</defName>
+        <label>strong tide</label>
+        <description>The tidal levels are stronger here. More resources are likely to show up on the shore.</description>
+        <biomeBlacklist>
+            <li>Desert</li>
+        </biomeBlacklist>
+    </TileMutatorDef>
+
+
 </Defs>

@@ -14,9 +14,9 @@ public class Watcher(Map map) : MapComponent(map)
     private readonly int halfRiverSteps = (int)Math.Round((HowManyRiverSteps - 1M) / 2);
     private const int MaxRiverSteps = HowManyRiverSteps - 1;
 
-    private const int HowManyTideSteps = 13;
-    private readonly int halfTideSteps = (int)Math.Round((HowManyTideSteps - 1M) / 2);
-    private const int MaxTideSteps = HowManyTideSteps - 1;
+    private int howManyTideSteps = 13;
+    private int halfTideSteps = 6;
+    private int maxTideSteps = 12;
 
     //Every quarter hour
     private const int TideIntervalCheck = 625;
@@ -92,12 +92,19 @@ public class Watcher(Map map) : MapComponent(map)
             dontRunAnything = true;
             return;
         }
+        
+
 
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
 
         if (MapGenUtility.ShallowOceanWaterTerrainAt(new IntVec3(1, 0, 1), map) !=
             RimWorld.TerrainDefOf.WaterOceanShallow) {
+            doCoast = false;
+        }
+
+        IList<TileMutatorDef> mutators = map.TileInfo.Mutators;
+        if (mutators.Contains(TileMutatorDefOf.VEE_RisingWaters)) {
             doCoast = false;
         }
 
@@ -112,6 +119,20 @@ public class Watcher(Map map) : MapComponent(map)
                     map.Biome + " From " + map.Biome.modContentPack?.Name);
                 doCoast = false;
             }
+
+            if (mutators.Contains(TileMutatorDefOf.NPS_StrongOceanTide)) {
+                howManyTideSteps = 19;
+                halfTideSteps = 9;
+                maxTideSteps = 18;
+                
+            }else if (mutators.Contains(TileMutatorDefOf.NPS_WeakOceanTide)) {
+                howManyTideSteps = 7;
+                halfTideSteps = 3;
+                maxTideSteps = 6;
+            }
+
+
+
         }
 
         if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
@@ -209,14 +230,19 @@ public class Watcher(Map map) : MapComponent(map)
     public override void ExposeData() {
         base.ExposeData();
 
-        Scribe_Values.Look(ref regenCellLists, "regenCellLists", true, true);
+        Scribe_Values.Look(ref regenCellLists, "regenCellLists", true);
         Scribe_Collections.Look(ref activeSprings, "TKKN_activeSprings", LookMode.Value, LookMode.Deep);
         Scribe_Collections.Look(ref cellWeatherAffects, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
-        Scribe_Values.Look(ref floodThreat, "floodThreat", 0, true);
-        Scribe_Values.Look(ref tideLevel, "tideLevel", 0, true);
-        Scribe_Values.Look(ref totalPuddles, "totalPuddles", totalPuddles, true);
-        Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding, true);
-        Scribe_Values.Look(ref anyLavaTerrain, "anyLavaTerrain", anyLavaTerrain, true);
+        Scribe_Values.Look(ref floodThreat, "floodThreat");
+        Scribe_Values.Look(ref tideLevel, "tideLevel");
+        Scribe_Values.Look(ref totalPuddles, "totalPuddles", totalPuddles);
+        Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding);
+        Scribe_Values.Look(ref anyLavaTerrain, "anyLavaTerrain", anyLavaTerrain);
+        Scribe_Values.Look(ref howManyTideSteps, "HowManyTideSteps", 13);
+        Scribe_Values.Look(ref halfTideSteps, "halfTideSteps", 6);
+        Scribe_Values.Look(ref maxTideSteps, "MaxTideSteps", 12);
+        
+        
     }
 
 
@@ -259,7 +285,7 @@ public class Watcher(Map map) : MapComponent(map)
                     terrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
                     terrain == beachTerrain) {
                     //get all the sand pieces that are touching the beach.
-                    for (var j = 0; j < HowManyTideSteps; j++) {
+                    for (var j = 0; j < howManyTideSteps; j++) {
                         // Checks to see if water is in the direction of the cell
                         // checks every cell up to HowManyTideSteps and will change the cell to TKKN_SandBeachWetSalt if this is true
                         var waterCheck = AdjustForRotation(focusCell, j);
@@ -327,7 +353,7 @@ public class Watcher(Map map) : MapComponent(map)
         tideCellsList = [];
         riverCellsList = [];
 
-        for (var k = 0; k < HowManyTideSteps; k++) {
+        for (var k = 0; k < howManyTideSteps; k++) {
             tideCellsList.Add([]);
         }
 
@@ -459,7 +485,7 @@ public class Watcher(Map map) : MapComponent(map)
             previousTideLevel = 0;
             tideLevel = 0;
 
-            for (var i = 0; i < HowManyTideSteps; i++) {
+            for (var i = 0; i < howManyTideSteps; i++) {
                 List<IntVec3> makeSand = tideCellsList[i];
                 foreach (var c in makeSand) {
                     if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
@@ -478,7 +504,7 @@ public class Watcher(Map map) : MapComponent(map)
             FloodType level = GetTideLevel();
             int max = level switch {
                 FloodType.Normal => halfTideSteps,
-                FloodType.High => HowManyTideSteps - 1,
+                FloodType.High => howManyTideSteps - 1,
                 _ => 0
             };
 
@@ -779,11 +805,11 @@ public class Watcher(Map map) : MapComponent(map)
         var tideType = GetTideLevel();
 
         if ((tideType == FloodType.Normal && tideLevel == halfTideSteps) ||
-            (tideType == FloodType.High && tideLevel == MaxTideSteps) ||
+            (tideType == FloodType.High && tideLevel == maxTideSteps) ||
             (tideType == FloodType.Low && tideLevel == 0))
             return;
 
-        if (tideType == FloodType.Normal && tideLevel == MaxTideSteps) {
+        if (tideType == FloodType.Normal && tideLevel == maxTideSteps) {
             previousTideLevel = tideLevel;
             tideLevel--;
             return;
@@ -853,7 +879,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         switch (tideType) {
             case FloodType.High: {
-                if (tideLevel < MaxTideSteps) {
+                if (tideLevel < maxTideSteps) {
                     previousTideLevel = tideLevel;
                     tideLevel++;
                 }

@@ -12,11 +12,16 @@ public static class ThingDefOf
     [MayRequire("Hali.NPSBiomes")]
     public static ThingDef TKKN_LavaRock;
 
-    
     public static ThingDef TKKN_DustDevil;
     
     [MayRequire("Hali.NPSBiomes")]
     public static ThingDef TKKN_PlantBarnacles;
+
+    [MayRequire("Hali.NPSBiomes")] 
+    public static ThingDef TKKN_PlantWildflowers;
+
+    public static ThingDef Plant_Tinctoria;
+    
     public static ThingDef TKKN_Mote_ColdBreath;
     public static ThingDef TKKN_FilthPuddle;
     
