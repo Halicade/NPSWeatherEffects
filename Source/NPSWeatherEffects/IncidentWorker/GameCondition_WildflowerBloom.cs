@@ -32,13 +32,7 @@ public class GameCondition_WildflowerBloom : GameCondition
             return false;
         }
 
-        if (plant.GetStatValueAbstract(StatDefOf.BeautyOutdoors) >= 4) {
-            Log.Message("Adding plant because of beauty" + plant);
-            return true;
-        }
-
-
-        return false;
+        return plant.GetStatValueAbstract(StatDefOf.BeautyOutdoors) >= 4;
     }
 
     public override void GameConditionTick() {

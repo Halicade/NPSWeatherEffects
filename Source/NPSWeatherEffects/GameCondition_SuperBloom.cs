@@ -23,7 +23,7 @@ public class GameCondition_SuperBloom : GameCondition
             foreach (var map in AffectedMaps) {
                 if (biomeSeasonalPlants.TryGetValue(map, out var biomePlants)) {
                     if (biomePlants.NullOrEmpty()) {
-                        return;
+                        continue;
                     }
 
                     MaybeGetAPlant(map, biomePlants);
