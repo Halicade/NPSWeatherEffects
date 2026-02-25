@@ -26,8 +26,6 @@ public class Watcher(Map map) : MapComponent(map)
 
     private const int MaxPuddles = 1000;
 
-    //used to save data about active springs.
-    public Dictionary<int, springData> activeSprings = new();
 
     private BiomeSeasonalSettings biomeSettings;
     public Dictionary<IntVec3, cellData> cellWeatherAffects = new();
@@ -231,7 +229,6 @@ public class Watcher(Map map) : MapComponent(map)
         base.ExposeData();
 
         Scribe_Values.Look(ref regenCellLists, "regenCellLists", true);
-        Scribe_Collections.Look(ref activeSprings, "TKKN_activeSprings", LookMode.Value, LookMode.Deep);
         Scribe_Collections.Look(ref cellWeatherAffects, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref floodThreat, "floodThreat");
         Scribe_Values.Look(ref tideLevel, "tideLevel");
