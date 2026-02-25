@@ -77,18 +77,49 @@
         <defName>TKKN_TidalLoot</defName>
         <root Class="ThingSetMaker_RandomOption">
             <options>
-
                 <li>
-                    <weight>2</weight>
+                    <weight>0.6</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
                                 <thingDefs>
-                                    <li>Filth_Slime</li>
-                                    <li>TKKN_FilthShells</li>
-                                    <li>TKKN_FilthPuddle</li>
-                                    <li>TKKN_FilthSeaweed</li>
-                                    <li>TKKN_FilthDriftwood</li>
+                                    <li>Kibble</li>
+                                    <li MayRequire="Ludeon.Rimworld.Anomaly">Meat_Twisted</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>6~34</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+
+
+                <li MayRequire="Hali.NPSBiomes">
+                    <weight>1</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
+                                    <li MayRequire="Hali.NPSBiomes">EggRoeFertilized</li>
+                                    <li MayRequire="Hali.NPSBiomes">EggRoeUnfertilized</li>
+                                    <li MayRequire="Hali.NPSBiomes">TKKN_ShellfishMeat</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>2~8</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+                
+                <li>
+                    <weight>0.3</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
+                                    <li>Heart</li>
+                                    <li>Lung</li>
+                                    <li>BionicEye</li>
+                                    <li>ElephantTusk</li>
+                                    <li>SimpleProstheticLeg</li>
                                 </thingDefs>
                             </filter>
                             <countRange>1</countRange>
@@ -97,7 +128,7 @@
                 </li>
 
                 <li>
-                    <weight>0.3</weight>
+                    <weight>0.25</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -110,35 +141,7 @@
                     </thingSetMaker>
                 </li>
 
-                <li>
-                    <weight>1</weight>
-                    <thingSetMaker Class="ThingSetMaker_StackCount">
-                        <fixedParams>
-                            <filter>
-                                <thingDefs>
-                                    <li>Kibble</li>
-                                </thingDefs>
-                            </filter>
-                            <countRange>25~74</countRange>
-                        </fixedParams>
-                    </thingSetMaker>
-                </li>
 
-
-                <li MayRequire="Hali.NPSBiomes">
-                    <weight>1</weight>
-                    <thingSetMaker Class="ThingSetMaker_StackCount">
-                        <fixedParams>
-                            <filter>
-                                <thingDefs>
-                                    <li>EggRoeFertilized</li>
-                                    <li>EggRoeUnfertilized</li>
-                                </thingDefs>
-                            </filter>
-                            <countRange>5~12</countRange>
-                        </fixedParams>
-                    </thingSetMaker>
-                </li>
 
                 <li>
                     <weight>0.15</weight>
@@ -154,17 +157,19 @@
                                     <li>Neutroamine</li>
                                     <li>Chemfuel</li>
                                     <li>Pemmican</li>
+                                    <li MayRequire="Ludoen.Rimworld.Anomaly">Bioferrite</li>
+                                    <li MayRequire="Ludoen.Rimworld.Odyssey">Obsidian</li>
                                     <li MayRequire="dankpyon.medieval.overhaul">DankPyon_IronIngot</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>25~74</countRange>
+                            <countRange>5~18</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
 
                 <!-- Silver -->
                 <li>
-                    <weight>0.15</weight>
+                    <weight>0.1</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -173,12 +178,11 @@
                                     <li>ComponentIndustrial</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>2~6</countRange>
+                            <countRange>1~2</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
 
-                <!-- Chemfuel -->
                 <li>
                     <weight>0.3</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -188,12 +192,11 @@
                                     <li>MealSurvivalPack</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>1~10</countRange>
+                            <countRange>1~4</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
 
-                <!-- Uranium -->
                 <li>
                     <weight>0.3</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -207,13 +210,13 @@
                                     <li>Jade</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>30~90</countRange>
+                            <countRange>5~20</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
 
                 <li>
-                    <weight>0.05</weight>
+                    <weight>0.03</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -222,19 +225,6 @@
                                     <li>Lung</li>
                                     <li>BionicEye</li>
                                     <li>ElephantTusk</li>
-                                </thingDefs>
-                            </filter>
-                            <countRange>1</countRange>
-                        </fixedParams>
-                    </thingSetMaker>
-                </li>
-
-                <li>
-                    <weight>0.15</weight>
-                    <thingSetMaker Class="ThingSetMaker_StackCount">
-                        <fixedParams>
-                            <filter>
-                                <thingDefs>
                                     <li>SimpleProstheticLeg</li>
                                 </thingDefs>
                             </filter>
@@ -244,7 +234,7 @@
                 </li>
 
                 <li>
-                    <weight>0.05</weight>
+                    <weight>0.015</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -273,7 +263,7 @@
 
                 <!-- Ultratech meds -->
                 <li>
-                    <weight>0.15</weight>
+                    <weight>0.02</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
                         <fixedParams>
                             <filter>
@@ -282,7 +272,7 @@
                                     <li>MedicineUltratech</li>
                                 </thingDefs>
                             </filter>
-                            <countRange>1~6</countRange>
+                            <countRange>1</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
@@ -293,6 +283,20 @@
                         <weightAccordingToPlayerNeeds>false</weightAccordingToPlayerNeeds>
                         <fixedParams>
                             <countRange>1</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+                <li MayRequire="ceteam.combatextended">
+                    <weight>0.1</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <totalMarketValueRange>10~200</totalMarketValueRange>
+                            <filter>
+                                <tradeTagsToAllow>
+                                    <li>CE_Ammo</li>
+                                </tradeTagsToAllow>
+                            </filter>
+                            <countRange>10~40</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>

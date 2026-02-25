@@ -312,6 +312,13 @@ public class cellData : IExposable
         }
     }
 
+    private readonly List<ThingDef> possibleFilth = [ThingDefOf.TKKN_FilthPuddle,
+        ThingDefOf.Filth_Slime,
+        ThingDefOf.TKKN_FilthShells,
+        ThingDefOf.TKKN_FilthPuddle,
+        ThingDefOf.TKKN_FilthSeaweed,
+        ThingDefOf.TKKN_FilthDriftwood];
+
     private void leaveLoot() {
         if (!EffectSettings.leaveLoot) {
             return;
@@ -319,16 +326,23 @@ public class cellData : IExposable
 
         var leaveSomething = Rand.Value;
         if (leaveSomething < 0.001f) {
-            List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
-
-            if (allowed == null) {
-                return;
+            if (Rand.Bool) {
+                FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
             }
+            else {
 
-            for (int i = 0; i < allowed.Count; i++) {
-                var spawnedThing = GenSpawn.Spawn(allowed[i], location, map);
-                if (EffectSettings.forbidLoot) {
-                    spawnedThing.SetForbidden(true);
+                List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
+
+                if (allowed == null) {
+                    return;
+                }
+
+                for (int i = 0; i < allowed.Count; i++) {
+                    allowed[i].HitPoints = (int)(allowed[i].HitPoints * Rand.Range(0.1f, 1f));
+                    var spawnedThing = GenSpawn.Spawn(allowed[i], location, map);
+                    if (EffectSettings.forbidLoot) {
+                        spawnedThing.SetForbidden(true);
+                    }
                 }
             }
         }

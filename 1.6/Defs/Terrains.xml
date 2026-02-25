@@ -60,7 +60,7 @@
         <driesTo>Gravel</driesTo>
         <waterBodyType>Other</waterBodyType>
         <statBases>
-            <Beauty>+2</Beauty>
+            <Beauty>2</Beauty>
         </statBases>
         <tags>
             <li>ColdSpring</li>
@@ -77,7 +77,7 @@
         <driesTo>Gravel</driesTo>
         <waterBodyType>Other</waterBodyType>
         <statBases>
-            <Beauty>+2</Beauty>
+            <Beauty>2</Beauty>
         </statBases>
         <tags>
             <li>Spring</li>
@@ -93,7 +93,7 @@
         <driesTo>Gravel</driesTo>
         <waterBodyType>Other</waterBodyType>
         <statBases>
-            <Beauty>+2</Beauty>
+            <Beauty>2</Beauty>
         </statBases>
         <tags>
             <li>Spring</li>
@@ -120,7 +120,7 @@
             <li>WetRain</li>
         </tags>
         <statBases>
-            <Beauty>+1</Beauty>
+            <Beauty>1</Beauty>
             <Cleanliness>-2</Cleanliness>
         </statBases>
         <generatedFilth>Filth_Dirt</generatedFilth>
@@ -150,7 +150,7 @@
             <li>WetRain</li>
         </tags>
         <statBases>
-            <Beauty>+1</Beauty>
+            <Beauty>1</Beauty>
             <Cleanliness>-2</Cleanliness>
         </statBases>
         <generatedFilth>Filth_Dirt</generatedFilth>
@@ -170,7 +170,7 @@
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
         <statBases>
-            <Beauty>+1</Beauty>
+            <Beauty>1</Beauty>
             <Cleanliness>-2</Cleanliness>
         </statBases>
         <affordances>
@@ -201,7 +201,7 @@
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
         <statBases>
-            <Beauty>+1</Beauty>
+            <Beauty>1</Beauty>
             <Cleanliness>-2</Cleanliness>
         </statBases>
         <tags>
