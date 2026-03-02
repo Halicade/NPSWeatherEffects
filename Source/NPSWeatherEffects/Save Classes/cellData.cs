@@ -11,7 +11,9 @@ public class cellData : IExposable
 {
     private const int PackAt = 750;
     private const int PackAtSmooth = PackAt * 10;
+
     private const int UnpackAt = PackAt / 2;
+
     //public TerrainDef baseTerrain;
     public int riverLevel = 999;
     public IntVec3 riverFocus = IntVec3.Invalid;
@@ -40,18 +42,18 @@ public class cellData : IExposable
 
 
     public void ExposeData() {
-        Scribe_Values.Look(ref tideLevel, "tideLevel", -1, false);
-        Scribe_Values.Look(ref riverLevel, "riverLevel", 999, false);
-        Scribe_Values.Look(ref riverFocus, "riverFocus", IntVec3.Invalid, false);
-        Scribe_Values.Look(ref howPacked, "howPacked", 0, false);
+        Scribe_Values.Look(ref tideLevel, "tideLevel", -1);
+        Scribe_Values.Look(ref riverLevel, "riverLevel", 999);
+        Scribe_Values.Look(ref riverFocus, "riverFocus", IntVec3.Invalid);
+        Scribe_Values.Look(ref howPacked, "howPacked");
         Scribe_Values.Look(ref packed, "packed");
-        Scribe_Values.Look(ref howWet, "howWet", 0, false);
-        Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60, false);
-        Scribe_Values.Look(ref frostLevel, "frostLevel", 0, false);
-        Scribe_Values.Look(ref frostNoise, "frostNoise", 0, false);
-        Scribe_Values.Look(ref isWet, "isWet", false, false);
-        Scribe_Values.Look(ref isFlooded, "isFlooded", false, false);
-        Scribe_Values.Look(ref location, "location", forceSave:true);
+        Scribe_Values.Look(ref howWet, "howWet");
+        Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60);
+        Scribe_Values.Look(ref frostLevel, "frostLevel");
+        Scribe_Values.Look(ref frostNoise, "frostNoise");
+        Scribe_Values.Look(ref isWet, "isWet");
+        Scribe_Values.Look(ref isFlooded, "isFlooded");
+        Scribe_Values.Look(ref location, "location", forceSave: true);
         Scribe_Defs.Look(ref driedTerrain, "driedTerrain");
     }
 
@@ -203,15 +205,16 @@ public class cellData : IExposable
         if (isFrozen) {
             return;
         }
+
         // Verify the current tile does not have anything on it.
         // Then verify
         if (currentTerrain.isFoundation)
             return;
-        if (location.GetEdifice(map) != null) 
+        if (location.GetEdifice(map) != null)
             return;
-        if (riverFocus.GetEdifice(map) != null) 
+        if (riverFocus.GetEdifice(map) != null)
             return;
-        if (!riverFocus.GetTerrain(map).IsWater) 
+        if (!riverFocus.GetTerrain(map).IsWater)
             return;
         map.terrainGrid.SetTempTerrain(location, riverTerrain);
     }
@@ -234,11 +237,12 @@ public class cellData : IExposable
         if (howPacked <= 0) {
             return;
         }
+
         howPacked--;
         if (!packed) {
             return;
         }
-        
+
         if (howPacked <= UnpackAt) {
             if (currentTerrain == TerrainDefOf.TKKN_DirtPath) {
                 map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Soil);
@@ -267,6 +271,7 @@ public class cellData : IExposable
         if (map.zoneManager.ZoneAt(location) is Zone_Growing) {
             return;
         }
+
         howPacked++;
         if (packed) {
             return;
@@ -297,7 +302,7 @@ public class cellData : IExposable
                 GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock), location, map);
             }
             else if (currentTerrain == TerrainDefOf.TKKN_SandBeachWetSalt
-                     && PawnDefOf.TKKN_crab!=null) {
+                     && PawnDefOf.TKKN_crab != null) {
                 var crab = PawnGenerator.GeneratePawn(PawnDefOf.TKKN_crab);
                 GenSpawn.Spawn(crab, location, map);
             }
@@ -312,12 +317,14 @@ public class cellData : IExposable
         }
     }
 
-    private readonly List<ThingDef> possibleFilth = [ThingDefOf.TKKN_FilthPuddle,
+    private readonly List<ThingDef> possibleFilth = [
+        ThingDefOf.TKKN_FilthPuddle,
         ThingDefOf.Filth_Slime,
         ThingDefOf.TKKN_FilthShells,
         ThingDefOf.TKKN_FilthPuddle,
         ThingDefOf.TKKN_FilthSeaweed,
-        ThingDefOf.TKKN_FilthDriftwood];
+        ThingDefOf.TKKN_FilthDriftwood
+    ];
 
     private void leaveLoot() {
         if (!EffectSettings.leaveLoot) {
@@ -330,7 +337,6 @@ public class cellData : IExposable
                 FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
             }
             else {
-
                 List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
 
                 if (allowed == null) {
@@ -371,11 +377,12 @@ public class cellData : IExposable
         if (!EffectSettings.leaveLoot) {
             return;
         }
+
         List<Thing> things = location.GetThingList(map);
-        DamageInfo asdf = new DamageInfo(DamageDefOf.Stab,9000f);
-            
+        DamageInfo asdf = new DamageInfo(DamageDefOf.Stab, 9000f);
+
         for (var i = things.Count - 1; i >= 0; i--) {
-            if (things[i].def.category == ThingCategory.Item || things[i].def.category ==  ThingCategory.Plant) {
+            if (things[i].def.category == ThingCategory.Item || things[i].def.category == ThingCategory.Plant) {
                 if (things[i].def.useHitPoints) {
                     things[i].TakeDamage(asdf);
                 }
