@@ -348,7 +348,8 @@ public class cellData : IExposable
         }
         else if (leaveSomething < 0.002f && (location.GetPlant(map) == null && location.GetCover(map) == null)) {
             //grow water and shore plants:
-            List<ThingDef> plants = map.Biome.AllWildPlants;
+            List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
+            plants.Shuffle();
             for (var i = plants.Count - 1; i >= 0; i--) {
                 //spawn some water plants:
                 var plantDef = plants[i];
@@ -371,10 +372,16 @@ public class cellData : IExposable
             return;
         }
         List<Thing> things = location.GetThingList(map);
-
+        DamageInfo asdf = new DamageInfo(DamageDefOf.Stab,9000f);
+            
         for (var i = things.Count - 1; i >= 0; i--) {
             if (things[i].def.category == ThingCategory.Item || things[i].def.category ==  ThingCategory.Plant) {
-                things[i].Destroy();
+                if (things[i].def.useHitPoints) {
+                    things[i].TakeDamage(asdf);
+                }
+                else {
+                    things[i].Destroy(DestroyMode.KillFinalize);
+                }
             }
         }
     }
