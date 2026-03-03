@@ -53,6 +53,7 @@ public class cellData : IExposable
         Scribe_Values.Look(ref frostNoise, "frostNoise");
         Scribe_Values.Look(ref isWet, "isWet");
         Scribe_Values.Look(ref isFlooded, "isFlooded");
+        Scribe_Values.Look(ref isFrozen, "isFrozen");
         Scribe_Values.Look(ref location, "location", forceSave: true);
         Scribe_Defs.Look(ref driedTerrain, "driedTerrain");
     }
