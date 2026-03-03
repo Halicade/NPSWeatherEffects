@@ -8,7 +8,7 @@ internal class SectionLayer_Frost : SectionLayer
 {
     private static readonly Color32 ColorClear = new(194, 219, 249, 0); // 194, 219, 249
 
-    private static readonly Color32 ColorWhite = new(194, 219, 249, 200);
+    private static readonly Color32 ColorWhite = new(194, 219, 249, 120);
     private readonly float[] vertDepth = new float[9];
 
     public SectionLayer_Frost(Section section) : base(section) {
