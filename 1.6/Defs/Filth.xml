@@ -11,6 +11,7 @@
         <filth>
             <cleaningWorkToReduceThickness>35</cleaningWorkToReduceThickness>
             <canFilthAttach>true</canFilthAttach>
+            <disappearsInDays>0.3~0.6</disappearsInDays>
         </filth>
         <statBases>
             <Beauty>1</Beauty>
