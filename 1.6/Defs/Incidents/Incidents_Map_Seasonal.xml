@@ -10,8 +10,7 @@
     </targetTags>
     <workerClass>NPSWeather.IncidentWorker_Bloom</workerClass>
     <gameCondition>TKKN_WildFlowerBloom</gameCondition>
-    <letterLabel>TKKN_NPS_WildFlowerBloomLbl</letterLabel>
-    <letterText>TKKN_NPS_WildFlowerBloomTxt</letterText>
+    <letterLabel>Wildflowers are blooming!</letterLabel>
     <letterDef>PositiveEvent</letterDef>
     <baseChance>1.5</baseChance>
     <minRefireDays>15</minRefireDays>
@@ -28,8 +27,7 @@
     </targetTags>
     <workerClass>NPSWeather.IncidentWorker_Bloom</workerClass>
     <gameCondition>TKKN_Superbloom</gameCondition>
-    <letterLabel>TKKN_NPS_SuperbloomLbl</letterLabel>
-    <letterText>TKKN_NPS_SuperbloomTxt</letterText>
+    <letterLabel>Superbloom!</letterLabel>
     <letterDef>PositiveEvent</letterDef>
     <baseChance>1.2</baseChance>
     <minRefireDays>15</minRefireDays>
