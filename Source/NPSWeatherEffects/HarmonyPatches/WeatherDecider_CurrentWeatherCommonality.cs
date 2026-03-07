@@ -4,7 +4,7 @@ using RimWorld;
 using Verse;
 
 namespace NPSWeather;
-
+/*
 //[HarmonyPatch(typeof(WeatherDecider), "CurrentWeatherCommonality")]
 public static class WeatherDecider_CurrentWeatherCommonality
 {
@@ -71,3 +71,4 @@ public static class WeatherDecider_CurrentWeatherCommonality
         return false;
     }
 }
+*/

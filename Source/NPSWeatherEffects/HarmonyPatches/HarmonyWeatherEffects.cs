@@ -82,11 +82,11 @@ public class HarmonyWeatherEffects
         harmony.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
             postfix: new HarmonyMethod(typeof(Pawn_SpawnSetup),
                 nameof(Pawn_SpawnSetup.Postfix)));
-
+/*
         harmony.Patch(AccessTools.Method(typeof(WeatherDecider), "CurrentWeatherCommonality"),
             prefix: new HarmonyMethod(typeof(WeatherDecider_CurrentWeatherCommonality),
                 nameof(WeatherDecider_CurrentWeatherCommonality.Prefix)));
-        
+  */      
         harmony.Patch(
             AccessTools.Method(typeof(JobGiver_SeekSafeTemperature), "TryGiveJob"),
             postfix: new HarmonyMethod(typeof(JobGiver_SeekSafeTemperature_TryGiveJob),
