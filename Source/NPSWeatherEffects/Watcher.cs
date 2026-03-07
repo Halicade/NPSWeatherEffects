@@ -651,6 +651,9 @@ public class Watcher(Map map) : MapComponent(map)
                     if (TerrainTagUtil.HoldsFrost.Contains(currentTerrain)) {
                         frostGridComponent.AddDepth(cell, cell.temperature * -.025f);
                     }
+                    else {
+                        frostGridComponent.removeDepth(cell.location);
+                    }
                 }
             }
         }

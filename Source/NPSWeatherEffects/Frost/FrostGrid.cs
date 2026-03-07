@@ -51,6 +51,10 @@ public class FrostGrid : MapComponent
         checkVisualOrPathCostChange(cell, num2, num3);
     }
 
+    public void removeDepth(IntVec3 c) {
+        DepthGridDirect_Unsafe[map.cellIndices.CellToIndex(c)] = 0f;
+    }
+
     public void SetDepth(IntVec3 c, float newDepth) {
 
         var num = map.cellIndices.CellToIndex(c);
