@@ -1098,7 +1098,7 @@ Winter: wet.
                 <winterWeathers>
                     <Clear>14</Clear>
                     <Fog>6</Fog>
-                    <Rain>0</Rain>
+                    <Rain>2</Rain>
                     <DryThunderstorm>0</DryThunderstorm>
                     <RainyThunderstorm>0</RainyThunderstorm>
                     <FoggyRain>0</FoggyRain>
