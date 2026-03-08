@@ -71,7 +71,7 @@ public static class PawnChecks
 
         //ignore if they're mostly vacuum resistant
         if (ModsConfig.OdysseyActive &&
-            pawn.GetStatValue(StatDefOf.VacuumResistance, cacheStaleAfterTicks: 60) > 0.95)
+            pawn.GetStatValue(StatDefOf.VacuumResistance) > 0.95)
             return;
 
         if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.TKKN_Drowning) != null)
@@ -160,7 +160,7 @@ public static class PawnChecks
             return;
         if (pawn.Position.GetTemperature(map) >= 3f ||
             (ModsConfig.OdysseyActive &&
-             pawn.GetStatValue(StatDefOf.VacuumResistance, cacheStaleAfterTicks: 60) > 0.95)) {
+             pawn.GetStatValue(StatDefOf.VacuumResistance) > 0.95)) {
             return;
         }
 
