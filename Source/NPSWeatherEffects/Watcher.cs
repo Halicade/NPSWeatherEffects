@@ -74,6 +74,7 @@ public class Watcher(Map map) : MapComponent(map)
     private bool doRiverFlooding;
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
+    private IReadOnlyList<Pawn> allPawnsSpawned;
 
     /* STANDARD STUFF */
 
@@ -90,7 +91,6 @@ public class Watcher(Map map) : MapComponent(map)
             dontRunAnything = true;
             return;
         }
-        
 
 
         mapArea = map.Area;
@@ -122,15 +122,12 @@ public class Watcher(Map map) : MapComponent(map)
                 howManyTideSteps = 19;
                 halfTideSteps = 9;
                 maxTideSteps = 18;
-                
-            }else if (mutators.Contains(TileMutatorDefOf.NPS_WeakOceanTide)) {
+            }
+            else if (mutators.Contains(TileMutatorDefOf.NPS_WeakOceanTide)) {
                 howManyTideSteps = 7;
                 halfTideSteps = 3;
                 maxTideSteps = 6;
             }
-
-
-
         }
 
         if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
@@ -142,6 +139,7 @@ public class Watcher(Map map) : MapComponent(map)
         biomeSettings = map.Biome.GetModExtension<BiomeSeasonalSettings>();
         frostGridComponent = map.GetComponent<FrostGrid>();
         location = Find.WorldGrid.LongLatOf(map.Tile);
+        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
         UpdateBiomeSettings(true);
 
         frostNoise = new Perlin(0.039999999105930328, 2.0, 0.5, 5,
@@ -190,11 +188,12 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         if (EffectSettings.allowPawnEffects) {
-            IReadOnlyList<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+            if (ticks % 250 == 0) {
+                allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+            }
 
-            //Clear the list of valid pawns if it gets too large
-            if (allPawnsSpawned.Count < validPawns.Count - 100 ||
-                ticks % 40000 == 0) {
+            //rebuild the list of valid pawns every quadrum
+            if (ticks % 900000 == 0) {
                 validPawns.Clear();
             }
 
@@ -220,7 +219,6 @@ public class Watcher(Map map) : MapComponent(map)
             return false;
         }
 
-
         validPawns.Add(pawn, true);
         return true;
     }
@@ -238,14 +236,12 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Values.Look(ref howManyTideSteps, "HowManyTideSteps", 13);
         Scribe_Values.Look(ref halfTideSteps, "halfTideSteps", 6);
         Scribe_Values.Look(ref maxTideSteps, "MaxTideSteps", 12);
-        
-        
     }
 
 
     private void RebuildCellLists() {
         if (EffectSettings.regenCells) {
-            regenCellLists = EffectSettings.regenCells;
+            regenCellLists = true;
         }
 
         if (regenCellLists) {
@@ -267,7 +263,10 @@ public class Watcher(Map map) : MapComponent(map)
                     doRiverFlooding = true;
                 }
 
-                var cell = new cellData { location = focusCell, currentTerrain = terrain, howWetPlants = 70 };
+                cellData cell = new cellData {
+                    location = focusCell, currentTerrain = terrain, howWetPlants = 70,
+                    locationIndex = map.cellIndices.CellToIndex(focusCell)
+                };
 
                 var frostVal = frostNoise.GetValue(focusCell) + 1;
                 frostVal += 1f;
@@ -340,6 +339,7 @@ public class Watcher(Map map) : MapComponent(map)
 
                 //Spawn special elements:
                 SpawnSpecialPlants(focusCell);
+                cell.setCurrentExtension();
 
                 cellWeatherAffects[focusCell] = cell;
             }
@@ -358,19 +358,24 @@ public class Watcher(Map map) : MapComponent(map)
             riverCellsList.Add([]);
         }
 
-        foreach (KeyValuePair<IntVec3, cellData> thisCell in cellWeatherAffects) {
-            cellWeatherAffects[thisCell.Key].map = map;
-            if (TerrainTagUtil.HoldsFrost.Contains(thisCell.Value.location.GetTerrain(map))) {
-                frostGridComponent.SetDepth(thisCell.Value.location, thisCell.Value.frostLevel);
+        foreach ((IntVec3 cellLocation, cellData cellDataValue) in cellWeatherAffects) {
+            cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
+            cellWeatherAffects[cellLocation].map = map;
+
+            cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
+            cellDataValue.setCurrentExtension();
+
+            if (cellDataValue?.weatherExtension?.holdFrost == true) {
+                frostGridComponent.SetDepth(cellDataValue.locationIndex, cellDataValue.frostLevel);
             }
 
-            if (thisCell.Value.tideLevel > -1) {
-                tideCellsList[thisCell.Value.tideLevel].Add(thisCell.Key);
+            if (cellDataValue.tideLevel > -1) {
+                tideCellsList[cellDataValue.tideLevel].Add(cellLocation);
             }
 
-            if (thisCell.Value.riverLevel != 999 &&
-                thisCell.Value.riverLevel != 0) {
-                riverCellsList[thisCell.Value.riverLevel].Add(thisCell.Key);
+            if (cellDataValue.riverLevel != 999 &&
+                cellDataValue.riverLevel != 0) {
+                riverCellsList[cellDataValue.riverLevel].Add(cellLocation);
             }
         }
 
@@ -493,6 +498,7 @@ public class Watcher(Map map) : MapComponent(map)
                         beachTerrain == TerrainDefOf.TKKN_SandBeachWetSalt) {
                         map.terrainGrid.SetTerrain(c, TerrainDefOf.TKKN_SandBeachWetSalt);
                         cell.currentTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
+                        cell.setCurrentExtension();
                     }
                 }
             }
@@ -576,7 +582,11 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         currentTerrain = c.GetTerrain(map);
-        cell.currentTerrain = currentTerrain;
+        if (cell.currentTerrain != currentTerrain) {
+            cell.currentTerrain = currentTerrain;
+            cell.setCurrentExtension();
+        }
+
         roofed = doRoofChecks && map.roofGrid.Roofed(c);
         gettingWet = false;
 
@@ -625,13 +635,13 @@ public class Watcher(Map map) : MapComponent(map)
         if (iceOrFrostGrid) {
             cell.temperature = EffectSettings.useMapTemperature ? outdoorTemp : cell.location.GetTemperature(map);
 
-            if (cell.temperature <= 4) {
+            if (cell.temperature <= 1) {
                 if (EffectSettings.doIce) {
                     cell.SetTerrainFrozen();
                 }
 
                 if (EffectSettings.showFrostGrid) {
-                    if (TerrainTagUtil.HoldsFrost.Contains(currentTerrain)) {
+                    if (cell.weatherExtension?.holdFrost == true) {
                         //handle frost based on snowing
                         if (!roofed && currentSnowRate > 0.001f) {
                             frostGridComponent.AddDepth(cell, currentSnowRate * -.01f);
@@ -641,18 +651,18 @@ public class Watcher(Map map) : MapComponent(map)
                         }
                     }
                     else {
-                        frostGridComponent.SetDepth(cell.location, 0);
+                        frostGridComponent.SetDepth(cell.locationIndex, 0);
                     }
                 }
             }
-            else {
+            else if (cell.temperature >= 2) {
                 cell.TrySetTerrainThawed();
                 if (EffectSettings.showFrostGrid) {
-                    if (TerrainTagUtil.HoldsFrost.Contains(currentTerrain)) {
+                    if (cell.weatherExtension?.holdFrost == true) {
                         frostGridComponent.AddDepth(cell, cell.temperature * -.025f);
                     }
                     else {
-                        frostGridComponent.removeDepth(cell.location);
+                        frostGridComponent.removeDepth(cell.locationIndex);
                     }
                 }
             }

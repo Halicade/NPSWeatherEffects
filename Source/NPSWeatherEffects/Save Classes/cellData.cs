@@ -28,6 +28,7 @@ public class cellData : IExposable
     public bool isFrozen;
     public bool isWet;
     public IntVec3 location;
+    public int locationIndex;
     public Map map;
     private TerrainDef driedTerrain;
 
@@ -35,11 +36,9 @@ public class cellData : IExposable
 
     public int tideLevel = -1;
 
-
-    public TerrainWeatherReactions Weather => currentTerrain.GetModExtension<TerrainWeatherReactions>();
-
     public TerrainDef currentTerrain;
 
+    public TerrainWeatherReactions weatherExtension;
 
     public void ExposeData() {
         Scribe_Values.Look(ref tideLevel, "tideLevel", -1);
@@ -58,6 +57,10 @@ public class cellData : IExposable
         Scribe_Defs.Look(ref driedTerrain, "driedTerrain");
     }
 
+    public void setCurrentExtension() {
+        weatherExtension = currentTerrain.GetModExtension<TerrainWeatherReactions>();
+    }
+
     public void wetCheck(bool gettingWet) {
         if (gettingWet && howWet < 3) {
             howWet += 2;
@@ -68,30 +71,26 @@ public class cellData : IExposable
     }
 
     public void setTerrainWet() {
-        var thisTerrain = currentTerrain;
         //if terrain is temporary we don't want to affect it
-        if (thisTerrain.temporary) {
+        if (currentTerrain.temporary) {
             return;
         }
 
-        if (!TerrainTagUtil.WetTerrain.TryGetValue(thisTerrain, out TerrainDef wetTerrain)) {
+        if (isWet) {
             return;
         }
 
-        if (!TerrainTagUtil.TerrainWetAt.TryGetValue(thisTerrain, out var wetAt)) {
+        if (weatherExtension?.wetTerrain == null) {
             return;
         }
 
-        if (howWet > wetAt) {
-            map.terrainGrid.SetTerrain(location, wetTerrain);
-            driedTerrain = thisTerrain;
+        if (howWet > weatherExtension.wetAt) {
+            driedTerrain = currentTerrain;
+            map.terrainGrid.SetTerrain(location, weatherExtension.wetTerrain);
+            currentTerrain = weatherExtension.wetTerrain;
+            setCurrentExtension();
             isWet = true;
             rainSpawns();
-        }
-        else if (howWet == 0) {
-            isWet = false;
-            howWet = -1;
-            driedTerrain = thisTerrain;
         }
     }
 
@@ -99,22 +98,18 @@ public class cellData : IExposable
         if (!isWet) {
             return;
         }
-
-        var thisTerrain = currentTerrain;
 /*
         //if terrain is temporary we don't want to affect it
         if (thisTerrain.temporary) {
             return;
         }*/
 
-        if (!TerrainTagUtil.TerrainWetAt.TryGetValue(thisTerrain, out var wetAt))
-            return;
-
-        if (howWet <= wetAt) {
+        if (howWet < weatherExtension?.wetAt) {
             map.terrainGrid.SetTerrain(location, driedTerrain);
             isWet = false;
             howWet = -1;
             driedTerrain = null;
+            setCurrentExtension();
         }
     }
 
@@ -128,16 +123,16 @@ public class cellData : IExposable
             return;
         }
 
-        TerrainDef thisTerrain = currentTerrain;
-        if (!TerrainTagUtil.FreezeTerrain.TryGetValue(thisTerrain, out var frozenTerrain))
+        if (weatherExtension?.freezeTerrain == null)
             return;
 
-        if (temperature > frozenTerrain.freezeAt)
+        if (temperature > weatherExtension.freezeTerrain.freezeAt)
             return;
         if (!Rand.Chance(0.05f))
             return;
 
-        map.terrainGrid.SetTempTerrain(location, frozenTerrain.terrain);
+        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
+        setCurrentExtension();
         isFrozen = true;
     }
 
@@ -153,7 +148,9 @@ public class cellData : IExposable
         map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
         howWet = 4;
         isFrozen = false;
+        currentTerrain = map.terrainGrid.TerrainAt(location);
         setTerrainWet();
+        
     }
 
 
@@ -284,15 +281,20 @@ public class cellData : IExposable
 
         if (terrain == RimWorld.TerrainDefOf.Soil) {
             map.terrainGrid.SetTerrain(location, TerrainDefOf.TKKN_DirtPath);
+            weatherExtension = null;
             packed = true;
         }
         else if (terrain == RimWorld.TerrainDefOf.Sand) {
             map.terrainGrid.SetTerrain(location, TerrainDefOf.TKKN_SandPath);
+            weatherExtension = null;
             packed = true;
         }
         else if (terrain.smoothedTerrain != null && howPacked > PackAtSmooth) {
             map.terrainGrid.SetTerrain(location, terrain.smoothedTerrain);
+            weatherExtension = null;
             packed = true;
+            //Don't care about the packed level of smooth terrain
+            howPacked = 0;
         }
     }
 

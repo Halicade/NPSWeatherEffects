@@ -103,15 +103,14 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                 }
             }
 
+            num += 19f;
+
+            depth = cachedFrostGrid.GetDepth(cell);
+            if (!(depth > 0.01f)) {
+                return;
+            }
+
             Widgets.Label(rect, label5);
-        }
-
-        num += 19f;
-
-
-        depth = cachedFrostGrid.GetDepth(c);
-        if (!(depth > 0.01f)) {
-            return;
         }
 
         rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);

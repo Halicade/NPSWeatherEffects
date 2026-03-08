@@ -23,11 +23,9 @@ public class FrostGrid : MapComponent
     }
 
     public void AddDepth(cellData cell, float depthToAdd) {
-        var c = cell.location;
-
-        var num = map.cellIndices.CellToIndex(c);
+        var num = cell.locationIndex;
         var num2 = DepthGridDirect_Unsafe[num];
-        if (num2 <= 0f && depthToAdd < 0f) {
+        if (num2 <= 0f && depthToAdd <= 0f) {
             return;
         }
 
@@ -51,21 +49,21 @@ public class FrostGrid : MapComponent
         checkVisualOrPathCostChange(cell, num2, num3);
     }
 
-    public void removeDepth(IntVec3 c) {
-        DepthGridDirect_Unsafe[map.cellIndices.CellToIndex(c)] = 0f;
+    public void removeDepth(int locationIndex) {
+        DepthGridDirect_Unsafe[locationIndex] = 0f;
     }
 
-    public void SetDepth(IntVec3 c, float newDepth) {
+    public void SetDepth(int locationIndex, float newDepth) {
 
-        var num = map.cellIndices.CellToIndex(c);
-        if (!canHaveFrost(num)) {
-            DepthGridDirect_Unsafe[num] = 0f;
+        
+        if (!canHaveFrost(locationIndex)) {
+            DepthGridDirect_Unsafe[locationIndex] = 0f;
             return;
         }
 
         newDepth = Mathf.Clamp(newDepth, 0f, 1f);
-        var num2 = DepthGridDirect_Unsafe[num];
-        DepthGridDirect_Unsafe[num] = newDepth;
+        var num2 = DepthGridDirect_Unsafe[locationIndex];
+        DepthGridDirect_Unsafe[locationIndex] = newDepth;
         //checkVisualOrPathCostChange(c, num2, newDepth);
     }
 
@@ -80,6 +78,8 @@ public class FrostGrid : MapComponent
             map.mapDrawer.MapMeshDirty(cell.location, MapMeshFlagDefOf.Snow, true, false);
         }
     }
-
+    
     public float GetDepth(IntVec3 c) => c.InBounds(map) ? DepthGridDirect_Unsafe[map.cellIndices.CellToIndex(c)] : 0f;
+
+    public float GetDepth(cellData c) => c.location.InBounds(map) ? DepthGridDirect_Unsafe[c.locationIndex] : 0f;
 }
