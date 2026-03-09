@@ -92,7 +92,7 @@ public class Watcher(Map map) : MapComponent(map)
             return;
         }
 
-
+        ticks = Find.TickManager.TicksGame;
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
 
@@ -153,16 +153,16 @@ public class Watcher(Map map) : MapComponent(map)
             return;
         }
 
-        ticks++;
-        base.MapComponentTick();
-
+        ticks = Find.TickManager.TicksGame;
+        
+        
+        isRaining = currentRainRate > 0;
         //environmental changes
         if (EffectSettings.doWeather) {
             //set up humidity
             outdoorTemp = map.mapTemperature.OutdoorTemp;
             currentRainRate = map.weatherManager.curWeather.rainRate;
             currentSnowRate = map.weatherManager.curWeather.snowRate;
-            isRaining = currentRainRate > 0;
             var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
                                (map.TileInfo.swampiness + 1);
             var currentHumidity =
@@ -537,7 +537,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     public Season season;
     private Quadrum quadrum;
-    private Quadrum previousQuadrum;
+    private Quadrum previousQuadrum = Quadrum.Undefined;
 
 
     private void UpdateBiomeSettings(bool force = false) {
@@ -548,15 +548,17 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
-        previousQuadrum = quadrum;
+        //previousQuadrum = quadrum;
         quadrum = GenDate.Quadrum(ticks, location.x);
 
         season = GenDate.Season(ticks, location);
         if (biomeSettings == null)
             return;
-        if (quadrum != previousQuadrum) {
+        if (quadrum == previousQuadrum) {
             return;
         }
+
+        previousQuadrum = quadrum;
 
         biomeSettings.setWeatherBySeason(map, season, quadrum);
         biomeSettings.setDiseaseBySeason(map, season, quadrum);

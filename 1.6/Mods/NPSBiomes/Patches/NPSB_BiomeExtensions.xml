@@ -103,7 +103,6 @@ Winter: wet.
                     <FoggyRain>2</FoggyRain>
                     <SnowGentle>0</SnowGentle>
                     <SnowHard>0</SnowHard>
-                    <TKKN_WindStorm>0</TKKN_WindStorm>
                     <TKKN_Overcast>3</TKKN_Overcast>
                     <TKKN_LavaSmoke>7</TKKN_LavaSmoke>
                 </springWeathers>
@@ -116,7 +115,6 @@ Winter: wet.
                     <FoggyRain>8</FoggyRain>
                     <SnowGentle>0</SnowGentle>
                     <SnowHard>0</SnowHard>
-                    <TKKN_WindStorm>0</TKKN_WindStorm>
                     <TKKN_Overcast>0</TKKN_Overcast>
                     <TKKN_LavaSmoke>7</TKKN_LavaSmoke>
                 </summerWeathers>
@@ -129,7 +127,6 @@ Winter: wet.
                     <FoggyRain>2</FoggyRain>
                     <SnowGentle>0</SnowGentle>
                     <SnowHard>0</SnowHard>
-                    <TKKN_WindStorm>0</TKKN_WindStorm>
                     <TKKN_Overcast>3</TKKN_Overcast>
                     <TKKN_LavaSmoke>7</TKKN_LavaSmoke>
                 </fallWeathers>
@@ -142,7 +139,6 @@ Winter: wet.
                     <FoggyRain>1</FoggyRain>
                     <SnowGentle>4</SnowGentle>
                     <SnowHard>4</SnowHard>
-                    <TKKN_WindStorm>0</TKKN_WindStorm>
                     <TKKN_Overcast>3</TKKN_Overcast>
                     <TKKN_LavaSmoke>7</TKKN_LavaSmoke>
                 </winterWeathers>
@@ -781,7 +777,6 @@ Winter: wet.
                 <springEvents>
                     <TKKN_WildFlowerBloom>1.2</TKKN_WildFlowerBloom>
                     <HerdMigration>1.5</HerdMigration>
-                    
                     <Aurora>0</Aurora>
                     <TKKN_DustDevil>0</TKKN_DustDevil>
                     <AnimalInsanityMass>1</AnimalInsanityMass>
@@ -793,7 +788,6 @@ Winter: wet.
                     <Flashstorm>.45</Flashstorm>
                 </springEvents>
                 <summerEvents>
-                    
                     <TKKN_WildFlowerBloom>.5</TKKN_WildFlowerBloom>
                     <HerdMigration>.2</HerdMigration>
                     <TKKN_DustDevil>0</TKKN_DustDevil>
