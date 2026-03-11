@@ -13,11 +13,7 @@ public class IncidentWorker_Drought : IncidentWorker_TKKN_Weather
 
     protected override bool TryExecuteWorker(IncidentParms parms)
     {
-        if (!settingsCheck())
-        {
-            return false;
-        }
-
+        
         var map = (Map)parms.target;
 
         if (map.weatherManager.RainRate > 0 || map.weatherManager.SnowRate > 0)
@@ -28,6 +24,6 @@ public class IncidentWorker_Drought : IncidentWorker_TKKN_Weather
         Find.LetterStack.ReceiveLetter(def.letterLabel.Translate(), def.letterText.Translate(), def.letterDef);
 
 
-        return true;
+        return base.TryExecuteWorker(parms);
     }
 }

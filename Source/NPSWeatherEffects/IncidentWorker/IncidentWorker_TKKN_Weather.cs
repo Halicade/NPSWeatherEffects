@@ -3,7 +3,7 @@ using Verse;
 
 namespace NPSWeather;
 
-public class IncidentWorker_TKKN_Weather : IncidentWorker
+public class IncidentWorker_TKKN_Weather : IncidentWorker_MakeGameCondition
 {
     private readonly bool relevantSetting = EffectSettings.doWeather;
     public string label;
@@ -15,8 +15,7 @@ public class IncidentWorker_TKKN_Weather : IncidentWorker
         return relevantSetting;
     }
 
-    protected override bool TryExecuteWorker(IncidentParms parms)
-    {
-        return settingsCheck();
+    protected override bool TryExecuteWorker(IncidentParms parms) {
+        return settingsCheck() && base.TryExecuteWorker(parms);
     }
 }

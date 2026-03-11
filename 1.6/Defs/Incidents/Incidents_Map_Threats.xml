@@ -12,6 +12,7 @@
     <category>ThreatBig</category>
     <pointsScaleable>true</pointsScaleable>
   </IncidentDef>
+  
   <IncidentDef>
     <defName>TKKN_Drought</defName>
     <label>drought</label>
@@ -24,14 +25,15 @@
     <letterText>TKKN_NPS_DroughtTxt</letterText>
     <letterDef>ThreatSmall</letterDef>
     <baseChance>1.2</baseChance>
-    <minRefireDays>0</minRefireDays>
+    <minRefireDays>15</minRefireDays>
     <durationDays>
-      <min>0.35</min>
-      <max>1</max>
+      <min>7.5</min>
+      <max>15</max>
     </durationDays>
     <category>ThreatBig</category>
     <tale>TKKN_Drought</tale>
   </IncidentDef>
+  
   <IncidentDef>
     <defName>TKKN_DustDevil</defName>
     <label>dustdevil</label>
