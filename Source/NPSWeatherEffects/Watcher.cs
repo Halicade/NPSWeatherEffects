@@ -608,7 +608,7 @@ public class Watcher(Map map) : MapComponent(map)
         if (EffectSettings.showRain) {
             if (!roofed) {
                 //if it's raining in this cell:
-                if (currentRainRate > .0001f) {
+                if (isRaining) {
                     if (floodThreat < 1090000) {
                         floodThreat += floodThreatIncrease;
                     }
@@ -616,10 +616,12 @@ public class Watcher(Map map) : MapComponent(map)
                     gettingWet = true;
                     cell.setTerrainWet();
                 }
+                /*
                 else if (currentSnowRate > .001f) {
                     gettingWet = true;
                     cell.setTerrainWet();
                 }
+                */
                 else {
                     if (currentRainRate == 0) {
                         floodThreat--;
@@ -661,7 +663,9 @@ public class Watcher(Map map) : MapComponent(map)
                 cell.TrySetTerrainThawed();
                 if (EffectSettings.showFrostGrid) {
                     if (cell.weatherExtension?.holdFrost == true) {
-                        frostGridComponent.AddDepth(cell, cell.temperature * -.025f);
+                        //TODO see if this works more performant
+                        frostGridComponent.removeDepth(cell.locationIndex);
+                        //frostGridComponent.AddDepth(cell, cell.temperature * -.025f);
                     }
                     else {
                         frostGridComponent.removeDepth(cell.locationIndex);
