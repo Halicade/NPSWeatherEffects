@@ -676,7 +676,9 @@ public class Watcher(Map map) : MapComponent(map)
 
 
         //HANDLE PLANT DAMAGES:
-
+        /*
+         The effect this has on the map is minimal unless on a desert tile or something. 
+         Then it just becomes actively harmful
         if (gettingWet) {
             //note - removed ismelt because the dirt shouldn't dry out in winter, and snow wets the ground then.
             if (cell.howWetPlants < 100) {
@@ -696,6 +698,7 @@ public class Watcher(Map map) : MapComponent(map)
                 }
             }
         }
+        */
 
         if (EffectSettings.showRain) {
             cell.wetCheck(gettingWet);
