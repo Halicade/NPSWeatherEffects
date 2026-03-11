@@ -334,6 +334,11 @@ public class cellData : IExposable
             return;
         }
 
+        if (location.GetEdifice(map) != null) {
+            //Prevent items from spawning if a building was placed there
+            return;
+        }
+
         var leaveSomething = Rand.Value;
         if (leaveSomething < 0.001f) {
             if (Rand.Bool) {
