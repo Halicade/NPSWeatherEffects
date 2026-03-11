@@ -12,6 +12,7 @@
     
     <!--Mods-->
     <li IfModActive="Hali.NPSBiomes">1.6/Mods/NPSBiomes</li>
+    <li IfModActive="reel.wintertaigabiome2">1.6/Mods/WinterTaigaBiome</li>
 
   </v1.6>
 </loadFolders>
