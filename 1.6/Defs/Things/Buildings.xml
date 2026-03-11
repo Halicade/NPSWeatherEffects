@@ -32,12 +32,12 @@
     <thingCategories>
       <li>BuildingsArt</li>
     </thingCategories>
-    <socialPropernessMatters>true</socialPropernessMatters>
     <statBases>
       <MaxHitPoints>75</MaxHitPoints>
       <Flammability>1.0</Flammability>
       <MarketValue>200</MarketValue>
       <Mass>7.5</Mass>
+      <Beauty>50</Beauty>
     </statBases>
   </ThingDef>
   
