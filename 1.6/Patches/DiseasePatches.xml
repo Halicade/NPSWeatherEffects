@@ -202,7 +202,8 @@
     -->
     <Operation Class="PostInheritanceOperation.Patch">
         <operation Class="PatchOperationAdd">
-            <xpath>Defs/BiomeDef/diseases[not (li/diseaseInc[text() = "TKKN_Disease_Common_Cold" or text="TKKN_Disease_Allergies"]) ]</xpath>
+            <xpath>Defs/BiomeDef[not (inVacuum)]
+                /diseases[not (li/diseaseInc[text() = "TKKN_Disease_Common_Cold" or text="TKKN_Disease_Allergies"]) ]</xpath>
             <value>
                 <li>
                     <diseaseInc>TKKN_Disease_Common_Cold</diseaseInc>
