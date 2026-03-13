@@ -207,6 +207,10 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private bool checkPawnHuman(Pawn pawn) {
+        if (EffectSettings.pawnEffectsOnlyColonists && !pawn.IsColonist) {
+            return false;
+        }
+        
         if (validPawns.TryGetValue(pawn, out var result)) {
             return result;
         }

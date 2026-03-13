@@ -76,7 +76,7 @@ public class FrostGrid : MapComponent
         }
 
         if (newDepth == 0f || Mathf.Abs(oldDepth - newDepth) > 0.12f || Rand.Value < 0.0025f) {
-            map.mapDrawer.MapMeshDirty(cell.location, MapMeshFlagDefOf.Snow, true, false);
+            map.mapDrawer.MapMeshDirty(cell.location, MapMeshDefOf.NPS_Frost, true, false);
         }
     }
     
