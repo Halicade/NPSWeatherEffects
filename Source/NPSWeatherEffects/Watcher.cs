@@ -664,11 +664,11 @@ public class Watcher(Map map) : MapComponent(map)
                 if (EffectSettings.showFrostGrid) {
                     if (cell.weatherExtension?.holdFrost == true) {
                         //TODO see if this works more performant
-                        frostGridComponent.removeDepth(cell.locationIndex);
+                        frostGridComponent.removeDepth(cell);
                         //frostGridComponent.AddDepth(cell, cell.temperature * -.025f);
                     }
                     else {
-                        frostGridComponent.removeDepth(cell.locationIndex);
+                        frostGridComponent.removeDepth(cell);
                     }
                 }
             }
