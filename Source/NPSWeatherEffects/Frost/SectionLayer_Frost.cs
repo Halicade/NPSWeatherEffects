@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using System;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -12,7 +13,7 @@ internal class SectionLayer_Frost : SectionLayer
     private readonly float[] vertDepth = new float[9];
 
     public SectionLayer_Frost(Section section) : base(section) {
-        relevantChangeTypes = MapMeshFlagDefOf.Snow;
+        relevantChangeTypes = MapMeshDefOf.NPS_Frost;
     }
 
     public override bool Visible => EffectSettings.showFrostGrid;
@@ -20,7 +21,6 @@ internal class SectionLayer_Frost : SectionLayer
     private FrostGrid FrostGrid => Map.GetComponent<FrostGrid>();
 
     public override void Regenerate() {
-        //LayerSubMesh subMesh = GetSubMesh(Verse.MatBases.Snow);
         LayerSubMesh subMesh = GetSubMesh(MatBases.Frost);
         // for some reason the custom one was causing a huge memory issue and rendering in giant squares :(
 
@@ -88,6 +88,6 @@ internal class SectionLayer_Frost : SectionLayer
 
 
     private static Color32 frostDepthColor(float frostDepth) {
-        return Color32.Lerp(ColorClear, ColorWhite, frostDepth);
+        return ColorWhite.MutateAlpha((byte)(Mathf.Lerp(0, 1, frostDepth) * 120));
     }
 }

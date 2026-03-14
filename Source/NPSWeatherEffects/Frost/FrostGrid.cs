@@ -39,7 +39,7 @@ public class FrostGrid : MapComponent
         }
 */
         var num3 = num2 + depthToAdd;
-        num3 = Mathf.Clamp(num3, 0f, MaxDepth);
+        num3 = Mathf.Clamp(num3, 0f, cell.frostNoise);
         var num4 = num3 - num2;
         if (!(Mathf.Abs(num4) > 0.0001f)) {
             return;

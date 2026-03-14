@@ -62,8 +62,8 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
         if (watcher.cellWeatherAffects.TryGetValue(c, out var cell)) {
             var currentTerrain = cell.currentTerrain;
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var label2 = $"Temperature: {cell.temperature}";
-            Widgets.Label(rect, label2);
+            var cellTemp = $"Temperature: {cell.temperature}";
+            Widgets.Label(rect, cellTemp);
             num += 19f;
             
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
@@ -72,9 +72,9 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             num += 19f;
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var label4 =
+            var cellTerrain =
                 $"Cell Info: Current Terrain: {c.GetTerrain(map)} | Current Terrain cached {currentTerrain}";
-            Widgets.Label(rect, label4);
+            Widgets.Label(rect, cellTerrain);
             num += 19f;
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
@@ -83,40 +83,36 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             num += 19f;
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var label6 =
+            var cellWetTags =
                 $"TKKN_Wet {TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)}TKKN_Swim {TerrainTagUtil.TKKN_Swim.Contains(currentTerrain)}";
-            Widgets.Label(rect, label6);
+            Widgets.Label(rect, cellWetTags);
             num += 19f;
 
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var label5 =
+            var cellWet =
                 $"Cell Info: howWet {cell.howWet} | How Wet (Plants) {cell.howWetPlants} | How Packed {cell.howPacked}";
             TerrainWeatherReactions weatherExt = currentTerrain?.GetModExtension<TerrainWeatherReactions>();
             if (weatherExt != null) {
                 if (weatherExt.wetTerrain != null) {
-                    label5 += $" | T Wet {weatherExt.wetTerrain}";
+                    cellWet += $" | T Wet {weatherExt.wetTerrain}";
                 }
 
                 if (weatherExt.freezeTerrain?.terrain != null) {
-                    label5 += $" | T Freeze {weatherExt.freezeTerrain.terrain}";
+                    cellWet += $" | T Freeze {weatherExt.freezeTerrain.terrain}";
                 }
             }
 
             num += 19f;
 
-            depth = cachedFrostGrid.GetDepth(cell);
-            if (!(depth > 0.01f)) {
-                return;
-            }
-
-            Widgets.Label(rect, label5);
+            Widgets.Label(rect, cellWet);
+            
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var frostLabel = $"MaxFrost: {cell.frostNoise} | CurrentFrost: {cell.frostLevel}";
+            Widgets.Label(rect, frostLabel);
         }
 
-        rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-        var frostCategory = FrostUtility.GetFrostCategory(depth);
-        var label = FrostUtility.GetDescription(frostCategory);
-        Widgets.Label(rect, label);
+        
         //	Widgets.Label(rect, unused + " " + depth.ToString());
     }
 }
