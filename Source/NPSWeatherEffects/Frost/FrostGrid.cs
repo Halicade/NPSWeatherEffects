@@ -50,6 +50,9 @@ public class FrostGrid : MapComponent
     }
 
     public void removeDepth(cellData cell) {
+        if (cell.frostLevel == 0) {
+            return;
+        }
         DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
         checkVisualOrPathCostChange(cell, cell.frostLevel, 0f);
     }

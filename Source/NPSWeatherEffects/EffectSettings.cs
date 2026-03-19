@@ -44,6 +44,7 @@ public class EffectSettings : ModSettings
     public static bool changeGrassGraphics = true;
 
     public static bool terrainAffectTemperature = false;
+    public static string modPackageID;
 
 
     public static void DoWindowContents(Rect inRect) {
@@ -213,7 +214,31 @@ public class EffectSettings : ModSettings
             "NPS_showDevReadout_title".Translate(),
             ref showDevReadout,
             "NPS_showDevReadout_text".Translate());
+        
+        
 
+        if (Current.Game?.CurrentMap != null) {
+            if (list.ButtonText("NPS_removeEffects".Translate())) {
+                Map currentMap = Current.Game.CurrentMap;
+                var watcherComponent=currentMap.GetComponent<Watcher>();
+                regenCells = true;
+                watcherComponent.resetCells();
+                regenCells = false;
+                
+            }
+            
+            if (list.ButtonText("NPS_resetMap".Translate())) {
+                Map currentMap = Current.Game.CurrentMap;
+                var watcherComponent=currentMap.GetComponent<Watcher>();
+                regenCells = true;
+                watcherComponent.resetCells();
+                watcherComponent.RebuildCellLists();
+                regenCells = false;
+
+                
+                
+            }
+        }
 
         list.End();
     }

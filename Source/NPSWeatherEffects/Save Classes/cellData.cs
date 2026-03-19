@@ -150,17 +150,6 @@ public class cellData : IExposable
         isFrozen = false;
         currentTerrain = map.terrainGrid.TerrainAt(location);
         setTerrainWet();
-        
-    }
-
-
-    public void removeTempTerrain() {
-        var thisTerrain = currentTerrain;
-        if (!thisTerrain.temporary) {
-            return;
-        }
-
-        map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
     }
 
     public void changeTide(TerrainDef tidalTerrain) {
@@ -399,5 +388,69 @@ public class cellData : IExposable
                 }
             }
         }
+    }
+
+    public void resetCellData() {
+        currentTerrain = location.GetTerrain(map);
+        forceRemoveTempTerrain();
+        currentTerrain = location.GetTerrain(map);
+        forceUnpack();
+        currentTerrain = location.GetTerrain(map);
+        forceTerrainDry();
+        currentTerrain = location.GetTerrain(map);
+        forceRemoveFrost();
+    }
+
+    public void forceRemoveTempTerrain() {
+        isFlooded = false;
+        isFrozen = false;
+        riverFocus = IntVec3.Invalid;
+        riverLevel = 999;
+        tideLevel = -1;
+
+        if (!currentTerrain.temporary) {
+            return;
+        }
+
+        if (currentTerrain?.modContentPack.PackageId == EffectSettings.modPackageID) {
+            map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
+        }
+    }
+
+    public void forceUnpack() {
+        howPacked = 0;
+        packed = false;
+        if (currentTerrain == TerrainDefOf.TKKN_DirtPath) {
+            map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Soil);
+        }
+        else if (currentTerrain == TerrainDefOf.TKKN_SandPath) {
+            map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Sand);
+        }
+    }
+
+
+    public void forceTerrainDry() {
+        if (driedTerrain == null) {
+            return;
+        }
+
+        if (map.terrainGrid.UnderTerrainAt(location) != null) {
+            map.terrainGrid.SetUnderTerrain(location, driedTerrain);
+        }
+        else {
+            map.terrainGrid.SetTerrain(location, driedTerrain);
+        }
+
+        currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
+
+        //map.terrainGrid.SetTerrain(location, driedTerrain);
+        isWet = false;
+        howWet = 0;
+        driedTerrain = null;
+        setCurrentExtension();
+    }
+
+    public void forceRemoveFrost() {
+        frostLevel = 0;
     }
 }

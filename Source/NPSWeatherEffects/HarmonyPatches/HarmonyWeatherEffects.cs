@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using HarmonyLib;
+using NPSWeatherEffects.HarmonyPatches;
 using RimWorld;
 using TKKN_NPS;
 using Verse;
@@ -10,8 +12,16 @@ namespace NPSWeather;
 [StaticConstructorOnStartup]
 public class HarmonyWeatherEffects
 {
+    
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=2079784964
     public static readonly bool RimBrellasActive;
+    
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=3555461401
     public static readonly bool DesirePathsActive;
+    
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=3403972335
+    public static readonly bool StorytellerJianghuActive;
+    
     public static readonly bool NPSBiomesActive;
 
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
@@ -29,6 +39,7 @@ public class HarmonyWeatherEffects
         DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths") != null;
         RimBrellasActive = ModLister.GetActiveModWithIdentifier("battlemage64.Rimbrellas", true) != null;
         NPSBiomesActive=ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
+        StorytellerJianghuActive = ModLister.GetActiveModWithIdentifier("zal.jianghujin", true) != null;
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
@@ -116,7 +127,15 @@ public class HarmonyWeatherEffects
                     nameof(Thing_AmbientTemperature.Postfix)));
         }
 
-
+        if (StorytellerJianghuActive) {
+            MethodInfo jianghuJinMethodInfo =
+                AccessTools.Method(AccessTools.TypeByName("YaomaJin.IncidentWorker_Terraform_Jin"), "TryExecuteWorker");
+            if (jianghuJinMethodInfo != null) {
+                harmony.Patch(jianghuJinMethodInfo,
+                    postfix: new HarmonyMethod(typeof(IncidentWorker_Terraform_Jin),
+                        nameof(IncidentWorker_Terraform_Jin.Postfix)));
+            }
+        }
 
         if (RimBrellasActive) {
             HasUmbrella = AccessTools.MethodDelegate<HasUmbrellaDelegate>(

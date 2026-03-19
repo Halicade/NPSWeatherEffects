@@ -46,7 +46,7 @@ public class Watcher(Map map) : MapComponent(map)
     public float outdoorTemp;
 
     //used by weather
-    private bool regenCellLists = true;
+    public bool regenCellLists = true;
 
     private int ticks;
 
@@ -243,7 +243,7 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
 
-    private void RebuildCellLists() {
+    public void RebuildCellLists() {
         if (EffectSettings.regenCells) {
             regenCellLists = true;
         }
@@ -254,48 +254,40 @@ public class Watcher(Map map) : MapComponent(map)
             cellWeatherAffects = new Dictionary<IntVec3, cellData>();
             foreach (var focusCell in tmpTerrain) {
                 var terrain = focusCell.GetTerrain(map);
+                var bottomTerrain=map.terrainGrid.BaseTerrainAt(focusCell);
 
                 if (!focusCell.InBounds(map)) {
                     continue;
                 }
 
-                if (terrain == TerrainDefOf.TKKN_Lava || terrain == TerrainDefOf.TKKN_LavaRock_RoughHewn) {
+                if (bottomTerrain == TerrainDefOf.TKKN_Lava || bottomTerrain == TerrainDefOf.TKKN_LavaRock_RoughHewn) {
                     anyLavaTerrain = true;
                 }
 
-                if (isRiverTerrain(terrain)) {
+                if (isRiverTerrain(bottomTerrain)) {
                     doRiverFlooding = true;
                 }
 
                 cellData cell = new cellData {
                     location = focusCell, currentTerrain = terrain, howWetPlants = 70,
-                    locationIndex = map.cellIndices.CellToIndex(focusCell)
+                    locationIndex = map.cellIndices.CellToIndex(focusCell),
+                    frostNoise = Mathf.Clamp(frostNoise.GetValue(focusCell), 0.25f, 1)
                 };
 
-                var frostVal = frostNoise.GetValue(focusCell) + 1;
-                frostVal += 1f;
-                frostVal *= 0.5f;
-                if (frostVal < 0.5f) {
-                    frostVal = 0.5f;
-                }
-
-                cell.frostNoise = frostVal;
-
-                if (terrain == RimWorld.TerrainDefOf.Sand ||
-                    terrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
-                    terrain == beachTerrain) {
+                if (bottomTerrain == RimWorld.TerrainDefOf.Sand ||
+                    bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
+                    bottomTerrain == beachTerrain) {
                     //get all the sand pieces that are touching the beach.
                     for (var j = 0; j < howManyTideSteps; j++) {
                         // Checks to see if water is in the direction of the cell
                         // checks every cell up to HowManyTideSteps and will change the cell to TKKN_SandBeachWetSalt if this is true
                         var waterCheck = AdjustForRotation(focusCell, j);
                         if (!waterCheck.InBounds(map) ||
-                            !isOceanicTerrain(waterCheck.GetTerrain(map))) {
+                            !isOceanicTerrain(map.terrainGrid.BaseTerrainAt(waterCheck))) {
                             continue;
                         }
 
-                        if (terrain == RimWorld.TerrainDefOf.Sand ||
-                            terrain == TerrainDefOf.TKKN_SandBeachWetSalt) {
+                        if (terrain == RimWorld.TerrainDefOf.Sand) {
                             map.terrainGrid.SetTerrain(focusCell, TerrainDefOf.TKKN_SandBeachWetSalt);
                         }
 
@@ -303,7 +295,7 @@ public class Watcher(Map map) : MapComponent(map)
                         break;
                     }
                 }
-                else if (isRiverTerrain(terrain)) {
+                else if (isRiverTerrain(bottomTerrain)) {
                     cell.riverLevel = 0;
                     for (var j = 0; j < HowManyRiverSteps; j++) {
                         var num = GenRadial.NumCellsInRadius(j);
@@ -313,8 +305,8 @@ public class Watcher(Map map) : MapComponent(map)
                                 continue;
                             }
 
-                            TerrainDef bankCheckTerrain = bankCheck.GetTerrain(map);
-                            if (terrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
+                            TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
+                            if (bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
                                 TerrainTagUtil.TKKN_Wet.Contains(bankCheckTerrain)) {
                                 continue;
                             }
@@ -403,7 +395,7 @@ public class Watcher(Map map) : MapComponent(map)
                     if (levelCell.riverLevel >= possiblePotentialCell.riverLevel) {
                         levelCell.riverFocus = cellAround;
                     }
-                    else if (isRiverTerrain(map.terrainGrid.TerrainAt(cellAround))) {
+                    else if (isRiverTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
                         levelCell.riverFocus = cellAround;
                         break;
                     }
@@ -966,6 +958,27 @@ public class Watcher(Map map) : MapComponent(map)
             damage *= thing.def.plant.fertilityMin;
             thing.TakeDamage(new DamageInfo(DamageDefOf.Rotting, damage, 0, 0));
         }
+    }
+
+    public void resetCells() {
+        IEnumerable<IntVec3> allCells = map.AllCells;
+        //IEnumerable<IntVec3> tmpTerrain = map.AllCells.InRandomOrder();
+        Log.Message("NPSWeatherEffects: Resetting cells for map: " + map +
+                    " Biome: " + map.Biome +
+                    " Biome name: " + map.Biome.label +
+                    " Biome source: " + map.Biome.modContentPack.Name +
+                    " Map size: " + map.Size);
+        foreach (var focusCell in allCells) {
+            if (!cellWeatherAffects.TryGetValue(focusCell, out var cellData)) {
+                Log.Error("NPSWeatherEffects: unable to find cellData for " + focusCell);
+                continue;
+            }
+            cellData.resetCellData();
+            frostGridComponent.removeDepth(cellData);
+            map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
+            
+        }
+        cellWeatherAffects.Clear();
     }
 
     private bool isOceanicTerrain(TerrainDef terrain) {
