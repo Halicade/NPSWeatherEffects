@@ -132,6 +132,7 @@
           <terrain>TKKN_MuddyIce</terrain>
         </freezeTerrain>
         <holdFrost>True</holdFrost>
+        <wetAt>0</wetAt>
       </li>
     </value>
   </Operation>
