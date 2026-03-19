@@ -73,7 +73,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var cellTerrain =
-                $"Cell Info: Current Terrain: {c.GetTerrain(map)} | Current Terrain cached {currentTerrain}";
+                $"Cell Info: Current Terrain: {c.GetTerrain(map)} | Current Terrain cached: {currentTerrain}";
             Widgets.Label(rect, cellTerrain);
             num += 19f;
 
