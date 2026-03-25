@@ -128,9 +128,6 @@
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
         <floodTerrain>Marsh</floodTerrain>
-        <freezeTerrain>
-          <terrain>TKKN_MuddyIce</terrain>
-        </freezeTerrain>
         <holdFrost>True</holdFrost>
         <wetAt>0</wetAt>
       </li>
