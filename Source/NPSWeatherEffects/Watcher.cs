@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -28,6 +29,8 @@ public class Watcher(Map map) : MapComponent(map)
 
     private BiomeSeasonalSettings biomeSettings;
     public Dictionary<IntVec3, cellData> cellWeatherAffects = new();
+    private List<cellData> cellWeatherList = [];
+
     private int cycleIndex;
     private bool doCoast = true; //false if no coast
     private List<List<IntVec3>> riverCellsList = [];
@@ -40,7 +43,7 @@ public class Watcher(Map map) : MapComponent(map)
     private Vector2 location;
 
     private ModuleBase frostNoise;
-    
+
 
     public float outdoorTemp;
 
@@ -163,21 +166,7 @@ public class Watcher(Map map) : MapComponent(map)
             Rand.Range(0, 651431), QualityMode.Medium);
 
         RebuildCellLists();
-        outdoorTemp = map.mapTemperature.OutdoorTemp;
-        currentRainRate = map.weatherManager.curWeather.rainRate;
-        currentSnowRate = map.weatherManager.curWeather.snowRate;
-        /*
-        float baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
-                             (map.TileInfo.swampiness + 1);
-        float currentHumidity = (1 + currentRainRate) * (1 + outdoorTemp);
-        humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
-        wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
-        */
-        floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
-        //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
-        doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
-        iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-        doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+        mapChecks();
     }
 
     public override void MapComponentTick() {
@@ -191,23 +180,8 @@ public class Watcher(Map map) : MapComponent(map)
         //environmental changes
         if (EffectSettings.doWeather) {
             if (ticks % EffectIntervalCheck == 0) {
-                //set up humidity
-                outdoorTemp = map.mapTemperature.OutdoorTemp;
-                currentRainRate = map.weatherManager.curWeather.rainRate;
-                currentSnowRate = map.weatherManager.curWeather.snowRate;
-                /*
-                var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
-                                   (map.TileInfo.swampiness + 1);
-                var currentHumidity =
-                    (1 + currentRainRate) * (1 + outdoorTemp);
-                humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
-                wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
-                */
-                floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
-                //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
-                doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
-                iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-                doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+                mapChecks();
+                
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
                     cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
                     Log.Warning("New cell per tick value " + cellActionsPerTick);
@@ -228,7 +202,7 @@ public class Watcher(Map map) : MapComponent(map)
                     cycleIndex = 0;
                 }
 
-                DoCellEnvironment(map.cellsInRandomOrder.Get(cycleIndex));
+                DoCellEnvironment(cellWeatherList[cycleIndex]);
                 cycleIndex++;
             }
         }
@@ -274,6 +248,27 @@ public class Watcher(Map map) : MapComponent(map)
         return true;
     }
 
+    private void mapChecks() {
+        //set up humidity
+        outdoorTemp = map.mapTemperature.OutdoorTemp;
+        currentRainRate = map.weatherManager.curWeather.rainRate;
+        currentSnowRate = map.weatherManager.curWeather.snowRate;
+        /*
+        var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
+                           (map.TileInfo.swampiness + 1);
+        var currentHumidity =
+            (1 + currentRainRate) * (1 + outdoorTemp);
+        humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
+        wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+        //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
+        */
+        floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
+        
+        doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
+        iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
+        doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+    }
+
     public override void ExposeData() {
         base.ExposeData();
 
@@ -316,7 +311,7 @@ public class Watcher(Map map) : MapComponent(map)
                 }
 
                 cellData cell = new cellData {
-                    location = focusCell, currentTerrain = terrain, howWetPlants = 70,
+                    location = focusCell, currentTerrain = terrain,
                     locationIndex = map.cellIndices.CellToIndex(focusCell),
                     frostNoise = Mathf.Clamp(frostNoise.GetValue(focusCell), 0.25f, 1)
                 };
@@ -388,6 +383,8 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
+        cellWeatherList = cellWeatherAffects.Values.ToList();
+        cellWeatherList.Shuffle();
 
         //rebuild lookup lists.
         tideCellsList = [];
@@ -613,12 +610,10 @@ public class Watcher(Map map) : MapComponent(map)
     private TerrainDef currentTerrain;
 
 
-    private void DoCellEnvironment(IntVec3 c) {
-        if (c.GetEdifice(map) != null) {
-            return;
-        }
-
-        if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
+    private void DoCellEnvironment(cellData cell) {
+        var c = cell.location;
+        
+        if (map.edificeGrid[cell.locationIndex] != null) {
             return;
         }
 
@@ -626,13 +621,14 @@ public class Watcher(Map map) : MapComponent(map)
             cell.Unpack();
         }
 
-        currentTerrain = c.GetTerrain(map);
+        // Can the soil be null? I'm not really sure but Imma check it just in case
+        currentTerrain = map.terrainGrid.TerrainAt(cell.locationIndex) ?? RimWorld.TerrainDefOf.Soil;
         if (cell.currentTerrain != currentTerrain) {
             cell.currentTerrain = currentTerrain;
             cell.setCurrentExtension();
         }
 
-        roofed = doRoofChecks && map.roofGrid.Roofed(c);
+        roofed = doRoofChecks && map.roofGrid.Roofed(cell.locationIndex);
         gettingWet = false;
 
         /*
