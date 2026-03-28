@@ -21,12 +21,14 @@
     <TKKN_doWeather_title>Show weather effects (master)</TKKN_doWeather_title>
     <TKKN_doWeather_text>If unchecked, none of the below will happen. If checked, only the ones checked below will happen.</TKKN_doWeather_text>
     
+    <NPS_OnlyTargetPlayerHome_title>Only target home map</NPS_OnlyTargetPlayerHome_title>
+    <NPS_OnlyTargetPlayerHome_text>Only the home map will receive weather effects.</NPS_OnlyTargetPlayerHome_text>
     <NPS_DoColdBreath_title>Show cold breath</NPS_DoColdBreath_title>
     <NPS_DoColdBreath_text>When it gets cold, pawns will occasionally emit cold breath effects. This is more noticeable than base game cold breath.</NPS_DoColdBreath_text>
     <NPS_ShowFrostGrid_title>Show frost grid</NPS_ShowFrostGrid_title>
     <NPS_FrostGrid_text>When it gets cold, frost can appear on the map.</NPS_FrostGrid_text>
-    <NPS_weatherCellUpdateSpeed_title>Cell scan speed: {0}</NPS_weatherCellUpdateSpeed_title>
-    <NPS_weatherCellUpdateSpeed_text>How many cells to scan per tick. Lower numbers for higher performance but slower update speed.</NPS_weatherCellUpdateSpeed_text>
+    <NPS_weatherCellUpdateSpeed_title>Maximum scan speed: {0}</NPS_weatherCellUpdateSpeed_title>
+    <NPS_weatherCellUpdateSpeed_text>5 cells are scanned every tick. When effects that change terrain occur, this will increase up to the value specified.\n\nHigher numbers can lead to performance loss, but weather changes will resolve faster.</NPS_weatherCellUpdateSpeed_text>
     <TKKN_doTides_title>Do Tides</TKKN_doTides_title>
     <TKKN_doTides_text>Oceans will rise and fall throughout the day.</TKKN_doTides_text>
     <TKKN_doFloods_title>Do Floods</TKKN_doFloods_title>
@@ -79,6 +81,12 @@
     
     <NPS_showDevReadout_title>Show dev readout</NPS_showDevReadout_title>
     <NPS_showDevReadout_text>Show dev in the bottom left</NPS_showDevReadout_text>
+    
+    <NPS_removeEffects>Remove all effects</NPS_removeEffects>
+    <NPS_removeEffects_text>Remove all effects on the current map.</NPS_removeEffects_text>
+    
+    <NPS_resetMap>Reset map</NPS_resetMap>
+    <NPS_resetMap_text>Remove and reset all effects on the map.</NPS_resetMap_text>
 
     <!-- @formatter:on -->
 </LanguageData>

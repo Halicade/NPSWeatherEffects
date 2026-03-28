@@ -28,13 +28,14 @@ public class EffectSettings : ModSettings
     public static bool showRain = true;
     public static bool makePuddles = true;
     public static bool doWeather = true;
+    public static bool onlyPlayerHome = true;
     public static bool doDirtPath = true;
     public static bool regenCells;
     public static bool doTides = true;
     public static bool showDevReadout;
 
     public static bool doFloods = true;
-    public static float cellsPerTick = 5;
+    public static int maxCellsPerTick = 50;
     public static bool useMapTemperature = false;
 
     public static bool seasonalDiseases = true;
@@ -58,11 +59,16 @@ public class EffectSettings : ModSettings
             ref doWeather,
             "TKKN_doWeather_text".Translate());
         if (doWeather) {
-            cellsPerTick = (int)list.SliderLabeled(
-                "NPS_weatherCellUpdateSpeed_title".Translate(cellsPerTick),
-                cellsPerTick, 3, 75, 0.5f, "NPS_weatherCellUpdateSpeed_text".Translate());
-        }
+            maxCellsPerTick = (int)list.SliderLabeled(
+                "NPS_weatherCellUpdateSpeed_title".Translate(maxCellsPerTick),
+                maxCellsPerTick, 10, 100, 0.5f, "NPS_weatherCellUpdateSpeed_text".Translate());
 
+            list.CheckboxLabeled(
+                "NPS_OnlyTargetPlayerHome_title".Translate(),
+                ref onlyPlayerHome,
+                "NPS_OnlyTargetPlayerHome_text".Translate()
+            );
+        }
 
         list.CheckboxLabeled(
             "NPS_DoColdEffects_title".Translate(),
@@ -214,29 +220,24 @@ public class EffectSettings : ModSettings
             "NPS_showDevReadout_title".Translate(),
             ref showDevReadout,
             "NPS_showDevReadout_text".Translate());
-        
-        
+
 
         if (Current.Game?.CurrentMap != null) {
-            if (list.ButtonText("NPS_removeEffects".Translate())) {
+            if (list.ButtonText("NPS_removeEffects".Translate(), "NPS_removeEffects_text".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
-                var watcherComponent=currentMap.GetComponent<Watcher>();
+                var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
                 watcherComponent.resetCells();
                 regenCells = false;
-                
             }
-            
-            if (list.ButtonText("NPS_resetMap".Translate())) {
+
+            if (list.ButtonText("NPS_resetMap".Translate(), "NPS_resetMap_text".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
-                var watcherComponent=currentMap.GetComponent<Watcher>();
+                var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
                 watcherComponent.resetCells();
                 watcherComponent.RebuildCellLists();
                 regenCells = false;
-
-                
-                
             }
         }
 
@@ -247,7 +248,8 @@ public class EffectSettings : ModSettings
         base.ExposeData();
 
         Scribe_Values.Look(ref doWeather, "doWeather", true);
-        Scribe_Values.Look(ref cellsPerTick, "cellsPerTick", 5f);
+        Scribe_Values.Look(ref maxCellsPerTick, "cellsPerTick", 50);
+        Scribe_Values.Look(ref onlyPlayerHome, "onlyPlayerHome", true);
         Scribe_Values.Look(ref doDirtPath, "doDirtPath", true);
         Scribe_Values.Look(ref allowPlantEffects, "allowPlantEffects", false);
         Scribe_Values.Look(ref showRain, "showRain", true);

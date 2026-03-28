@@ -22,6 +22,7 @@ public class cellData : IExposable
 
     public int howPacked;
     private bool packed = false;
+    private int lastPackedCheck;
     public int howWet;
     public float howWetPlants = 60;
     public bool isFlooded;
@@ -46,6 +47,7 @@ public class cellData : IExposable
         Scribe_Values.Look(ref riverFocus, "riverFocus", IntVec3.Invalid);
         Scribe_Values.Look(ref howPacked, "howPacked");
         Scribe_Values.Look(ref packed, "packed");
+        Scribe_Values.Look(ref lastPackedCheck, "lastPackedCheck");
         Scribe_Values.Look(ref howWet, "howWet");
         Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60);
         Scribe_Values.Look(ref frostLevel, "frostLevel");
@@ -61,27 +63,31 @@ public class cellData : IExposable
         weatherExtension = currentTerrain.GetModExtension<TerrainWeatherReactions>();
     }
 
-    public void wetCheck(bool gettingWet) {
-        if (gettingWet && howWet < 3) {
+    public bool wetCheck(bool gettingWet) {
+        if (howWet < 3 && gettingWet) {
             howWet += 2;
+            return true;
         }
-        else if (!gettingWet && howWet > -1) {
+        if (howWet > -1 && !gettingWet) {
             howWet--;
+            return true;
         }
+
+        return false;
     }
 
-    public void setTerrainWet() {
+    public bool setTerrainWet() {
         //if terrain is temporary we don't want to affect it
         if (currentTerrain.temporary) {
-            return;
+            return false;
         }
 
         if (isWet) {
-            return;
+            return false;
         }
 
         if (weatherExtension?.wetTerrain == null) {
-            return;
+            return false;
         }
 
         if (howWet > weatherExtension.wetAt) {
@@ -91,12 +97,15 @@ public class cellData : IExposable
             setCurrentExtension();
             isWet = true;
             rainSpawns();
+            return true;
         }
+
+        return false;
     }
 
-    public void trySetTerrainDry() {
+    public bool trySetTerrainDry() {
         if (!isWet) {
-            return;
+            return false;
         }
 /*
         //if terrain is temporary we don't want to affect it
@@ -110,7 +119,10 @@ public class cellData : IExposable
             howWet = -1;
             driedTerrain = null;
             setCurrentExtension();
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>
@@ -118,31 +130,32 @@ public class cellData : IExposable
     /// Needs to reduce the amount of pieces that turn to ice per tick so now it has a 5% chance to happen
     /// If anyone has a better suggestion I'm all ears.
     /// </summary>
-    public void SetTerrainFrozen() {
+    public bool SetTerrainFrozen() {
         if (isFrozen) {
-            return;
+            return false;
         }
 
         if (weatherExtension?.freezeTerrain == null)
-            return;
+            return false;
 
         if (temperature > weatherExtension.freezeTerrain.freezeAt)
-            return;
+            return false;
         if (!Rand.Chance(0.05f))
-            return;
+            return false;
 
         map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
         setCurrentExtension();
         isFrozen = true;
+        return true;
     }
 
-    public void TrySetTerrainThawed() {
+    public bool TrySetTerrainThawed() {
         if (!isFrozen) {
-            return;
+            return false;
         }
 
         if (!currentTerrain.temporary) {
-            return;
+            return false;
         }
 
         map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
@@ -150,6 +163,7 @@ public class cellData : IExposable
         isFrozen = false;
         currentTerrain = map.terrainGrid.TerrainAt(location);
         setTerrainWet();
+        return true;
     }
 
     public void changeTide(TerrainDef tidalTerrain) {

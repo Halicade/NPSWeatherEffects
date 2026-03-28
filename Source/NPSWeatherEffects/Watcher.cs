@@ -56,12 +56,17 @@ public class Watcher(Map map) : MapComponent(map)
     private int previousTideLevel;
     private int totalPuddles;
 
+    //Value not in use
     private float wetPlantsValue;
 
     public bool dontRunAnything;
     private bool anyLavaTerrain;
+
     private bool doUnpacking;
-    private bool noHurtPlants;
+
+    //Not using this value
+    //Value not in use
+    //private bool noHurtPlants;
     public readonly Dictionary<Pawn, bool> validPawns = [];
     private float currentRainRate;
     private float currentSnowRate;
@@ -76,6 +81,11 @@ public class Watcher(Map map) : MapComponent(map)
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
 
+    private const int EffectIntervalCheck = 625;
+    private const int MinimumCellsPerTick = 5;
+    private int cellActionsPerformed = 0;
+    private int cellActionsPerTick = 5;
+
     /* STANDARD STUFF */
 
     public override void FinalizeInit() {
@@ -84,6 +94,13 @@ public class Watcher(Map map) : MapComponent(map)
             //Log.Message("This is a pocket map. Nothing is running");
             dontRunAnything = true;
             return;
+        }
+
+        if (!map.IsPlayerHome) {
+            if (EffectSettings.onlyPlayerHome) {
+                dontRunAnything = true;
+                return;
+            }
         }
 
         if (map.Biome.inVacuum) {
@@ -146,6 +163,19 @@ public class Watcher(Map map) : MapComponent(map)
             Rand.Range(0, 651431), QualityMode.Medium);
 
         RebuildCellLists();
+        outdoorTemp = map.mapTemperature.OutdoorTemp;
+        currentRainRate = map.weatherManager.curWeather.rainRate;
+        currentSnowRate = map.weatherManager.curWeather.snowRate;
+        float baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
+                             (map.TileInfo.swampiness + 1);
+        float currentHumidity = (1 + currentRainRate) * (1 + outdoorTemp);
+        humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
+        //wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+        floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
+        //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
+        doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
+        iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
+        doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
     }
 
     public override void MapComponentTick() {
@@ -154,30 +184,42 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         ticks = Find.TickManager.TicksGame;
-        
-        
+
         isRaining = currentRainRate > 0;
         //environmental changes
         if (EffectSettings.doWeather) {
-            //set up humidity
-            outdoorTemp = map.mapTemperature.OutdoorTemp;
-            currentRainRate = map.weatherManager.curWeather.rainRate;
-            currentSnowRate = map.weatherManager.curWeather.snowRate;
-            var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
-                               (map.TileInfo.swampiness + 1);
-            var currentHumidity =
-                (1 + currentRainRate) * (1 + outdoorTemp);
-            humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
-            wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
-            floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
-            noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
-            doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
-            iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-            doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+            if (ticks % EffectIntervalCheck == 0) {
+                //set up humidity
+                outdoorTemp = map.mapTemperature.OutdoorTemp;
+                currentRainRate = map.weatherManager.curWeather.rainRate;
+                currentSnowRate = map.weatherManager.curWeather.snowRate;
+                var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
+                                   (map.TileInfo.swampiness + 1);
+                var currentHumidity =
+                    (1 + currentRainRate) * (1 + outdoorTemp);
+                humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
+                //wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+                floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
+                //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
+                doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
+                iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
+                doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+                if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
+                    cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
+                    Log.Warning("New cell per tick value " + cellActionsPerTick);
+                }
+                else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
+                    cellActionsPerTick = MinimumCellsPerTick;
+                    Log.Message("New cell per tick value " + cellActionsPerTick);
+                }
+
+                cellActionsPerformed = 0;
+            }
+
             DoTides();
             DoRiverModify();
 
-            for (var i = 0; i < EffectSettings.cellsPerTick; i++) {
+            for (var i = 0; i < cellActionsPerTick; i++) {
                 if (cycleIndex >= mapArea) {
                     cycleIndex = 0;
                 }
@@ -192,7 +234,7 @@ public class Watcher(Map map) : MapComponent(map)
                 allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
             }
 
-            //rebuild the list of valid pawns every quadrum
+            // rebuild the list of valid pawns every quadrum
             if (ticks % 900000 == 0) {
                 validPawns.Clear();
             }
@@ -207,10 +249,11 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private bool checkPawnHuman(Pawn pawn) {
+        // Having this check first because it's cheaper than dictionary search 
         if (EffectSettings.pawnEffectsOnlyColonists && !pawn.IsColonist) {
             return false;
         }
-        
+
         if (validPawns.TryGetValue(pawn, out var result)) {
             return result;
         }
@@ -254,7 +297,7 @@ public class Watcher(Map map) : MapComponent(map)
             cellWeatherAffects = new Dictionary<IntVec3, cellData>();
             foreach (var focusCell in tmpTerrain) {
                 var terrain = focusCell.GetTerrain(map);
-                var bottomTerrain=map.terrainGrid.BaseTerrainAt(focusCell);
+                var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
 
                 if (!focusCell.InBounds(map)) {
                     continue;
@@ -610,21 +653,19 @@ public class Watcher(Map map) : MapComponent(map)
                     }
 
                     gettingWet = true;
-                    cell.setTerrainWet();
+                    if (cell.setTerrainWet()) {
+                        cellActionsPerformed++;
+                    }
                 }
-                /*
-                else if (currentSnowRate > .001f) {
-                    gettingWet = true;
-                    cell.setTerrainWet();
-                }
-                */
                 else {
                     if (currentRainRate == 0) {
                         floodThreat--;
                     }
 
                     //DRY GROUND
-                    cell.trySetTerrainDry();
+                    if (cell.trySetTerrainDry()) {
+                        cellActionsPerformed++;
+                    }
                 }
             }
         }
@@ -637,17 +678,23 @@ public class Watcher(Map map) : MapComponent(map)
 
             if (cell.temperature <= 1) {
                 if (EffectSettings.doIce) {
-                    cell.SetTerrainFrozen();
+                    if (cell.SetTerrainFrozen()) {
+                        cellActionsPerformed++;
+                    }
                 }
 
                 if (EffectSettings.showFrostGrid) {
                     if (cell.weatherExtension?.holdFrost == true) {
                         //handle frost based on snowing
                         if (!roofed && currentSnowRate > 0.001f) {
-                            frostGridComponent.AddDepth(cell, currentSnowRate * -.01f);
+                            if (frostGridComponent.AddDepth(cell, currentSnowRate * -.01f)) {
+                                cellActionsPerformed++;
+                            }
                         }
                         else {
-                            CreepFrostAt(cell, 0.138f);
+                            if (frostGridComponent.AddDepth(cell, 0.138f * cell.frostNoise)) {
+                                cellActionsPerformed++;
+                            }
                         }
                     }
                     else {
@@ -656,9 +703,14 @@ public class Watcher(Map map) : MapComponent(map)
                 }
             }
             else if (cell.temperature >= 2) {
-                cell.TrySetTerrainThawed();
+                if (cell.TrySetTerrainThawed()) {
+                    cellActionsPerformed++;
+                }
+
                 if (EffectSettings.showFrostGrid) {
-                    frostGridComponent.removeDepth(cell);
+                    if (frostGridComponent.removeDepth(cell)) {
+                        cellActionsPerformed++;
+                    }
                 }
             }
         }
@@ -666,7 +718,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         //HANDLE PLANT DAMAGES:
         /*
-         The effect this has on the map is minimal unless on a desert tile or something. 
+         The effect this has on the map is minimal unless on a desert tile or something.
          Then it just becomes actively harmful
         if (gettingWet) {
             //note - removed ismelt because the dirt shouldn't dry out in winter, and snow wets the ground then.
@@ -690,7 +742,9 @@ public class Watcher(Map map) : MapComponent(map)
         */
 
         if (EffectSettings.showRain) {
-            cell.wetCheck(gettingWet);
+            if (cell.wetCheck(gettingWet)) {
+                cellActionsPerformed++;
+            }
         }
 
         if (EffectSettings.makePuddles) {
@@ -721,10 +775,7 @@ public class Watcher(Map map) : MapComponent(map)
         }
     }
 
-    private void CreepFrostAt(cellData c, float baseAmount) {
-        var depthToAdd = baseAmount * c.frostNoise;
-        frostGridComponent.AddDepth(c, depthToAdd);
-    }
+    private void CreepFrostAt(cellData c, float baseAmount) { }
 
     public FloodType GetRiverLevel() {
         var flood = FloodType.Normal;
@@ -852,31 +903,22 @@ public class Watcher(Map map) : MapComponent(map)
 
             switch (tideType) {
                 case FloodType.High:
-                    //cell.terrainOverride = TerrainType.Wet;
-                    //cell.changeTide(TerrainType.Wet, oceanTerrain, beachTerrain);
                     cell.increaseTide(oceanTerrain);
                     break;
                 case FloodType.Low:
-                    //cell.terrainOverride = TerrainType.Dry;
-                    //cell.changeTide(TerrainType.Dry, oceanTerrain, beachTerrain);
                     cell.decreaseTide();
                     break;
                 case FloodType.Normal:
                     if (tideLevel < halfTideSteps) {
-                        //cell.changeTide(TerrainType.Wet, oceanTerrain, beachTerrain);
                         cell.increaseTide(oceanTerrain);
                     }
                     else if (tideLevel > halfTideSteps) {
-                        //cell.changeTide(TerrainType.Dry, oceanTerrain, beachTerrain);
                         cell.decreaseTide();
                     }
                     else if (previousTideLevel < tideLevel) {
-                        //cell.changeTide(TerrainType.Wet, oceanTerrain, beachTerrain);
                         cell.increaseTide(oceanTerrain);
                     }
-                    else if (previousTideLevel > tideLevel) {
-                        //cell.changeTide(TerrainType.Dry, oceanTerrain, beachTerrain);
-                    }
+                    else if (previousTideLevel > tideLevel) { }
                     else {
                         cell.changeTide(oceanTerrain);
                     }
@@ -917,6 +959,8 @@ public class Watcher(Map map) : MapComponent(map)
         }
     }
 
+    /*
+     // There's no good way to implement this. It occurs rarely and the player has no way to react to this happening
     private void HurtPlants(IntVec3 c, bool onlyLow, bool saveHarvest) {
         if (noHurtPlants) {
             return;
@@ -952,6 +996,7 @@ public class Watcher(Map map) : MapComponent(map)
             thing.TakeDamage(new DamageInfo(DamageDefOf.Rotting, damage, 0, 0));
         }
     }
+    */
 
     public void resetCells() {
         IEnumerable<IntVec3> allCells = map.AllCells;
@@ -966,11 +1011,12 @@ public class Watcher(Map map) : MapComponent(map)
                 Log.Error("NPSWeatherEffects: unable to find cellData for " + focusCell);
                 continue;
             }
+
             cellData.resetCellData();
             frostGridComponent.removeDepth(cellData);
             map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
-            
         }
+
         cellWeatherAffects.Clear();
     }
 
