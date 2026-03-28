@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -41,7 +40,7 @@ public class Watcher(Map map) : MapComponent(map)
     private Vector2 location;
 
     private ModuleBase frostNoise;
-    private float humidity;
+    
 
     public float outdoorTemp;
 
@@ -56,8 +55,9 @@ public class Watcher(Map map) : MapComponent(map)
     private int previousTideLevel;
     private int totalPuddles;
 
-    //Value not in use
-    private float wetPlantsValue;
+    //Values not in use
+    //private float humidity;
+    //private float wetPlantsValue;
 
     public bool dontRunAnything;
     private bool anyLavaTerrain;
@@ -83,7 +83,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     private const int EffectIntervalCheck = 625;
     private const int MinimumCellsPerTick = 5;
-    private int cellActionsPerformed = 0;
+    private int cellActionsPerformed;
     private int cellActionsPerTick = 5;
 
     /* STANDARD STUFF */
@@ -166,11 +166,13 @@ public class Watcher(Map map) : MapComponent(map)
         outdoorTemp = map.mapTemperature.OutdoorTemp;
         currentRainRate = map.weatherManager.curWeather.rainRate;
         currentSnowRate = map.weatherManager.curWeather.snowRate;
+        /*
         float baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
                              (map.TileInfo.swampiness + 1);
         float currentHumidity = (1 + currentRainRate) * (1 + outdoorTemp);
         humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
-        //wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+        wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+        */
         floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
         //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
@@ -193,12 +195,14 @@ public class Watcher(Map map) : MapComponent(map)
                 outdoorTemp = map.mapTemperature.OutdoorTemp;
                 currentRainRate = map.weatherManager.curWeather.rainRate;
                 currentSnowRate = map.weatherManager.curWeather.snowRate;
+                /*
                 var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
                                    (map.TileInfo.swampiness + 1);
                 var currentHumidity =
                     (1 + currentRainRate) * (1 + outdoorTemp);
                 humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
-                //wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+                wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
+                */
                 floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
                 //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
                 doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
@@ -641,7 +645,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         //spawn special things
         if (anyLavaTerrain) {
-            LavaRockSpecials(c, currentTerrain);
+            LavaRockSpecials(c);
         }
 
         if (EffectSettings.showRain) {
@@ -758,7 +762,7 @@ public class Watcher(Map map) : MapComponent(map)
         //cellWeatherAffects[c] = cell;
     }
 
-    private void LavaRockSpecials(IntVec3 c, TerrainDef currentTerrain) {
+    private void LavaRockSpecials(IntVec3 c) {
         if (Rand.Value < .0001f) {
             if (c.InBounds(map)) {
                 if (currentTerrain == TerrainDefOf.TKKN_Lava) {
@@ -774,8 +778,6 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
     }
-
-    private void CreepFrostAt(cellData c, float baseAmount) { }
 
     public FloodType GetRiverLevel() {
         var flood = FloodType.Normal;
