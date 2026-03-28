@@ -115,11 +115,14 @@ public class HarmonyWeatherEffects
                     nameof(Graphic_Shadow_DrawWorker.Prefix)));
         }
 
+        /*
+         Taking this out for now because most things aren't implemented
         if (EffectSettings.allowPlantEffects) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.Graphic)),
                 postfix: new HarmonyMethod(typeof(Plant_Graphic),
                     nameof(Plant_Graphic.Postfix)));
         }
+        */
 
         if (EffectSettings.terrainAffectTemperature) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Thing), nameof(Thing.AmbientTemperature)),

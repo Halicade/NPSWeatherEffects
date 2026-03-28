@@ -90,8 +90,8 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
 
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var cellWet =
-                $"Cell Info: howWet {cell.howWet} | How Wet (Plants) {cell.howWetPlants} | How Packed {cell.howPacked}";
+            var cellWet = $"Cell Info: howWet {cell.howWet} | How Packed {cell.howPacked}";
+            //var cellWet = $"Cell Info: howWet {cell.howWet} | How Wet (Plants) {cell.howWetPlants} | How Packed {cell.howPacked}";
             TerrainWeatherReactions weatherExt = currentTerrain?.GetModExtension<TerrainWeatherReactions>();
             if (weatherExt != null) {
                 if (weatherExt.wetTerrain != null) {
