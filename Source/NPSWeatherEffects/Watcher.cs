@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -28,7 +29,8 @@ public class Watcher(Map map) : MapComponent(map)
 
 
     private BiomeSeasonalSettings biomeSettings;
-    public Dictionary<IntVec3, cellData> cellWeatherAffects = new();
+    private Dictionary<IntVec3, cellData> cellWeatherAffectsDict = new();
+    public FrozenDictionary<IntVec3, cellData> cellWeatherAffects;
     private List<cellData> cellWeatherList = [];
 
     private int cycleIndex;
@@ -273,7 +275,7 @@ public class Watcher(Map map) : MapComponent(map)
         base.ExposeData();
 
         Scribe_Values.Look(ref regenCellLists, "regenCellLists", true);
-        Scribe_Collections.Look(ref cellWeatherAffects, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
+        Scribe_Collections.Look(ref cellWeatherAffectsDict, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref floodThreat, "floodThreat");
         Scribe_Values.Look(ref tideLevel, "tideLevel");
         Scribe_Values.Look(ref totalPuddles, "totalPuddles", totalPuddles);
@@ -293,7 +295,8 @@ public class Watcher(Map map) : MapComponent(map)
         if (regenCellLists) {
             //random so we can spawn plants and stuff in this step.
             IEnumerable<IntVec3> tmpTerrain = map.AllCells.InRandomOrder();
-            cellWeatherAffects = new Dictionary<IntVec3, cellData>();
+            cellWeatherAffectsDict = new Dictionary<IntVec3, cellData>();
+            cellWeatherAffects = [];
             foreach (var focusCell in tmpTerrain) {
                 var terrain = focusCell.GetTerrain(map);
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
@@ -353,7 +356,7 @@ public class Watcher(Map map) : MapComponent(map)
                                 continue;
                             }
 
-                            if (!cellWeatherAffects.TryGetValue(bankCheck, out var affect)) {
+                            if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
                                 affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
                             }
 
@@ -377,11 +380,12 @@ public class Watcher(Map map) : MapComponent(map)
                 SpawnSpecialPlants(focusCell);
                 cell.setCurrentExtension();
 
-                cellWeatherAffects[focusCell] = cell;
+                cellWeatherAffectsDict[focusCell] = cell;
             }
         }
 
-        cellWeatherList = cellWeatherAffects.Values.ToList();
+        cellWeatherList = cellWeatherAffectsDict.Values.ToList();
+        cellWeatherAffects = cellWeatherAffectsDict.ToFrozenDictionary();
         cellWeatherList.Shuffle();
 
         //rebuild lookup lists.
@@ -1013,7 +1017,8 @@ public class Watcher(Map map) : MapComponent(map)
             map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
         }
 
-        cellWeatherAffects.Clear();
+        cellWeatherAffectsDict.Clear();
+        cellWeatherAffects = [];
     }
 
     private bool isOceanicTerrain(TerrainDef terrain) {

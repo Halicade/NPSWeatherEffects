@@ -1,47 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
 using Verse;
 
 namespace NPSWeather;
 
 public static class TerrainTagUtil
 {
-    public static readonly HashSet<TerrainDef> TKKN_Wet = [];
-    public static readonly HashSet<TerrainDef> TKKN_Swim = [];
-    public static readonly HashSet<TerrainDef> Lava = [];
-    public static readonly HashSet<TerrainDef> CanBePacked = [];
-    public static readonly HashSet<TerrainDef> SaltTerrains = [];
-    public static readonly Dictionary<TerrainDef, float> AmbientTempReaction = [];
+    private static readonly HashSet<TerrainDef> HashTKKN_Wet = [];
+    private static readonly HashSet<TerrainDef> HashTKKN_Swim = [];
+    private static readonly HashSet<TerrainDef> HashLava = [];
+    private static readonly HashSet<TerrainDef> HashCanBePacked = [];
+    private static readonly HashSet<TerrainDef> HashSaltTerrains = [];
+    private static readonly Dictionary<TerrainDef, float> HashAmbientTempReaction = [];
+    
+    public static FrozenSet<TerrainDef> TKKN_Wet = [];
+    public static FrozenSet<TerrainDef> TKKN_Swim = [];
+    public static FrozenSet<TerrainDef> Lava = [];
+    public static FrozenSet<TerrainDef> CanBePacked = [];
+    public static FrozenSet<TerrainDef> SaltTerrains = [];
+    public static FrozenDictionary<TerrainDef, float> AmbientTempReaction = [];
 
     public static void IntializeTerrainTags() {
         List<TerrainDef> allTerrains = DefDatabase<TerrainDef>.AllDefsListForReading;
-        CanBePacked.Add(RimWorld.TerrainDefOf.Soil);
-        CanBePacked.Add(RimWorld.TerrainDefOf.Sand);
-        CanBePacked.Add(TerrainDefOf.TKKN_DirtPath);
-        CanBePacked.Add(TerrainDefOf.TKKN_SandPath);
+        HashCanBePacked.Add(RimWorld.TerrainDefOf.Soil);
+        HashCanBePacked.Add(RimWorld.TerrainDefOf.Sand);
+        HashCanBePacked.Add(TerrainDefOf.TKKN_DirtPath);
+        HashCanBePacked.Add(TerrainDefOf.TKKN_SandPath);
 
         foreach (var terrain in allTerrains) {
             if (terrain.HasTag("TKKN_Wet")) {
-                TKKN_Wet.Add(terrain);
+                HashTKKN_Wet.Add(terrain);
             }
 
             if (terrain.HasTag("TKKN_Swim")) {
-                TKKN_Swim.Add(terrain);
+                HashTKKN_Swim.Add(terrain);
             }
 
             if (terrain.HasTag("Lava") || terrain.HasTag("TKKN_Lava")) {
-                Lava.Add(terrain);
+                HashLava.Add(terrain);
             }
 
             if (terrain.smoothedTerrain != null) {
-                CanBePacked.Add(terrain);
+                HashCanBePacked.Add(terrain);
             }
-            
+
 
             var weatherExtension = terrain.GetModExtension<TerrainWeatherReactions>();
             if (weatherExtension != null) {
-
                 if (weatherExtension.temperatureAdjust != 0) {
-                    AmbientTempReaction.Add(terrain, weatherExtension.temperatureAdjust);
+                    HashAmbientTempReaction.Add(terrain, weatherExtension.temperatureAdjust);
                 }
 
                 if (weatherExtension.freezeTerrain?.terrain != null) {
@@ -52,9 +59,23 @@ public static class TerrainTagUtil
                 }
 
                 if (weatherExtension.isSalty) {
-                    SaltTerrains.Add(terrain);
+                    HashSaltTerrains.Add(terrain);
                 }
             }
         }
+
+        TKKN_Wet = HashTKKN_Wet.ToFrozenSet();
+        TKKN_Swim = HashTKKN_Swim.ToFrozenSet();
+        Lava = HashLava.ToFrozenSet();
+        CanBePacked = HashCanBePacked.ToFrozenSet();
+        SaltTerrains = HashSaltTerrains.ToFrozenSet();
+        AmbientTempReaction = HashAmbientTempReaction.ToFrozenDictionary();
+        //Don't need the original dicts
+        HashTKKN_Wet.Clear();
+        HashTKKN_Swim.Clear();
+        HashLava.Clear();
+        HashCanBePacked.Clear();
+        HashSaltTerrains.Clear();
+        HashAmbientTempReaction.Clear();
     }
 }
