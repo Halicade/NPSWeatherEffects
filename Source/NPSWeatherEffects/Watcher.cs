@@ -353,23 +353,21 @@ public class Watcher(Map map) : MapComponent(map)
                                 continue;
                             }
 
-                            cellData bankCell;
-                            if (cellWeatherAffects.TryGetValue(bankCheck, out var affect))
-                                bankCell = affect;
-                            else
-                                bankCell = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
+                            if (!cellWeatherAffects.TryGetValue(bankCheck, out var affect)) {
+                                affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
+                            }
 
-                            if (j <= bankCell.riverLevel) {
-                                bankCell.riverLevel = j;
-                                // If bankCell has already had a riverFocus assigned, and the distance is further away, ignore it.
+                            if (j <= affect.riverLevel) {
+                                affect.riverLevel = j;
+                                // If affect has already had a riverFocus assigned, and the distance is further away, ignore it.
                                 // Otherwise, assign it focusCell 
-                                if (bankCell.riverFocus != IntVec3.Invalid &&
-                                    bankCheck.DistanceToSquared(bankCell.riverFocus) <
+                                if (affect.riverFocus != IntVec3.Invalid &&
+                                    bankCheck.DistanceToSquared(affect.riverFocus) <
                                     bankCheck.DistanceToSquared(focusCell)) {
                                     continue;
                                 }
 
-                                bankCell.riverFocus = focusCell;
+                                affect.riverFocus = focusCell;
                             }
                         }
                     }
