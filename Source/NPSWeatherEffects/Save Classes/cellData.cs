@@ -202,22 +202,23 @@ public class cellData : IExposable
     /// If true set terrain to riverTerrain
     /// </summary>
     /// <param name="riverTerrain"></param>
-    public void increaseRiver(TerrainDef riverTerrain) {
+    public bool increaseRiver(TerrainDef riverTerrain) {
         if (isFrozen) {
-            return;
+            return false;
         }
 
         // Verify the current tile does not have anything on it.
         // Then verify
         if (currentTerrain.isFoundation)
-            return;
+            return false;
         if (location.GetEdifice(map) != null)
-            return;
+            return false;
         if (riverFocus.GetEdifice(map) != null)
-            return;
+            return false;
         if (!riverFocus.GetTerrain(map).IsWater)
-            return;
+            return false;
         map.terrainGrid.SetTempTerrain(location, riverTerrain);
+        return true;
     }
 
     public void decreaseRiver() {

@@ -25,6 +25,9 @@ public class Watcher(Map map) : MapComponent(map)
     //Every 6 hours
     private const int RiverIntervalCheck = 15000;
 
+    //Every 12 hours
+    private const int BiomeUpdateCheck = 30000;
+
     private const int MaxPuddles = 1000;
 
 
@@ -55,7 +58,7 @@ public class Watcher(Map map) : MapComponent(map)
     private int ticks;
 
     //rebuild every save to keep file size down
-    private List<List<IntVec3>> tideCellsList = [];
+    private readonly List<List<IntVec3>> tideCellsList = [];
     private int tideLevel; // 0 - 13
     private int previousTideLevel;
     private int totalPuddles;
@@ -183,7 +186,7 @@ public class Watcher(Map map) : MapComponent(map)
         if (EffectSettings.doWeather) {
             if (ticks % EffectIntervalCheck == 0) {
                 mapChecks();
-                
+
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
                     cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
                     Log.Warning("New cell per tick value " + cellActionsPerTick);
@@ -265,7 +268,7 @@ public class Watcher(Map map) : MapComponent(map)
         //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
         */
         floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
-        
+
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
         doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
@@ -292,12 +295,17 @@ public class Watcher(Map map) : MapComponent(map)
             regenCellLists = true;
         }
 
+        //rebuild lookup lists.
+        tideCellsList.Clear();
+        riverCellsList.Clear();
+
         if (regenCellLists) {
             //random so we can spawn plants and stuff in this step.
-            IEnumerable<IntVec3> tmpTerrain = map.AllCells.InRandomOrder();
-            cellWeatherAffectsDict = new Dictionary<IntVec3, cellData>();
+            cellWeatherAffectsDict.Clear();
             cellWeatherAffects = [];
-            foreach (var focusCell in tmpTerrain) {
+            cellWeatherList.Clear();
+
+            foreach (var focusCell in map.AllCells.InRandomOrder()) {
                 var terrain = focusCell.GetTerrain(map);
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
 
@@ -318,6 +326,7 @@ public class Watcher(Map map) : MapComponent(map)
                     locationIndex = map.cellIndices.CellToIndex(focusCell),
                     frostNoise = Mathf.Clamp(frostNoise.GetValue(focusCell), 0.25f, 1)
                 };
+                cellWeatherAffectsDict[focusCell] = cell;
 
                 if (bottomTerrain == RimWorld.TerrainDefOf.Sand ||
                     bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
@@ -342,9 +351,20 @@ public class Watcher(Map map) : MapComponent(map)
                 }
                 else if (isRiverTerrain(bottomTerrain)) {
                     cell.riverLevel = 0;
-                    for (var j = 0; j < HowManyRiverSteps; j++) {
+                }
+
+                //Spawn special elements:
+                SpawnSpecialPlants(focusCell);
+                cell.setCurrentExtension();
+            }
+
+
+            foreach (var focusCell in map.AllCells.InRandomOrder()) {
+                var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
+                if (isRiverTerrain(bottomTerrain)) {
+                    for (var j = 1; j < HowManyRiverSteps; j++) {
                         var num = GenRadial.NumCellsInRadius(j);
-                        for (var i = 0; i < num; i++) {
+                        for (var i = 0; i <= num; i++) {
                             IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
                             if (!bankCheck.InBounds(map)) {
                                 continue;
@@ -360,13 +380,17 @@ public class Watcher(Map map) : MapComponent(map)
                                 affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
                             }
 
-                            if (j <= affect.riverLevel) {
+                            //Prefer lower river levels first. Then go to cardinal direction 
+                            if (j < affect.riverLevel) {
                                 affect.riverLevel = j;
-                                // If affect has already had a riverFocus assigned, and the distance is further away, ignore it.
-                                // Otherwise, assign it focusCell 
+                                affect.riverFocus = focusCell;
+                                continue;
+                            }
+
+                            if (j == affect.riverLevel) {
+                                affect.riverLevel = j;
                                 if (affect.riverFocus != IntVec3.Invalid &&
-                                    bankCheck.DistanceToSquared(affect.riverFocus) <
-                                    bankCheck.DistanceToSquared(focusCell)) {
+                                    bankCheck.CardinalTo(affect.riverFocus)) {
                                     continue;
                                 }
 
@@ -375,22 +399,13 @@ public class Watcher(Map map) : MapComponent(map)
                         }
                     }
                 }
-
-                //Spawn special elements:
-                SpawnSpecialPlants(focusCell);
-                cell.setCurrentExtension();
-
-                cellWeatherAffectsDict[focusCell] = cell;
             }
         }
+
 
         cellWeatherList = cellWeatherAffectsDict.Values.ToList();
         cellWeatherAffects = cellWeatherAffectsDict.ToFrozenDictionary();
         cellWeatherList.Shuffle();
-
-        //rebuild lookup lists.
-        tideCellsList = [];
-        riverCellsList = [];
 
         for (var k = 0; k < howManyTideSteps; k++) {
             tideCellsList.Add([]);
@@ -402,7 +417,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         foreach ((IntVec3 cellLocation, cellData cellDataValue) in cellWeatherAffects) {
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
-            cellWeatherAffects[cellLocation].map = map;
+            cellDataValue.map = map;
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
@@ -418,37 +433,6 @@ public class Watcher(Map map) : MapComponent(map)
             if (cellDataValue.riverLevel != 999 &&
                 cellDataValue.riverLevel != 0) {
                 riverCellsList[cellDataValue.riverLevel].Add(cellLocation);
-            }
-        }
-
-        // After calculating the initial river levels for all tiles we want to recalculate them.
-        // This time, we try to get each cell to point to the lowest nearby level
-        //Ignore the first row because that is empty.
-        for (int i = 1; i < riverCellsList.Count; i++) {
-            foreach (var riverLevel in riverCellsList[i]) {
-                if (!cellWeatherAffects.TryGetValue(riverLevel, out var levelCell)) {
-                    Log.Error("A cell that should have a value doesn't have a value");
-                    continue;
-                }
-
-                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(riverLevel).InRandomOrder()) {
-                    if (!cellAround.IsValid)
-                        continue;
-                    if (!cellWeatherAffects.TryGetValue(cellAround, out var possiblePotentialCell)) {
-                        continue;
-                    }
-
-                    if (levelCell.riverLevel >= possiblePotentialCell.riverLevel) {
-                        levelCell.riverFocus = cellAround;
-                    }
-                    else if (isRiverTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
-                        levelCell.riverFocus = cellAround;
-                        break;
-                    }
-
-                    if (levelCell.riverLevel > possiblePotentialCell.riverLevel)
-                        break;
-                }
             }
         }
 
@@ -570,10 +554,14 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private void SetUpRiverLevel() {
-        if (!EffectSettings.doFloods) return;
+        if (!EffectSettings.doFloods || !doRiverFlooding) {
+            return;
+        }
 
-        for (int i = 0; i < HowManyRiverSteps; i++)
+        floodLevel = 0;
+        for (int i = 0; i < HowManyRiverSteps; i++) {
             DoRiverModify(force: true);
+        }
     }
 
 
@@ -584,7 +572,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     private void UpdateBiomeSettings(bool force = false) {
         if (!force) {
-            if (ticks % 30000 != 0) {
+            if (ticks % BiomeUpdateCheck != 0) {
                 // Check every 12 hours
                 return;
             }
@@ -614,7 +602,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     private void DoCellEnvironment(cellData cell) {
         var c = cell.location;
-        
+
         if (map.edificeGrid[cell.locationIndex] != null) {
             return;
         }
@@ -778,19 +766,19 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     public FloodType GetRiverLevel() {
-        var flood = FloodType.Normal;
         if (floodThreat > 1000000 || season == Season.Spring) {
-            flood = FloodType.High;
+            return FloodType.High;
         }
-        else if (season == Season.Fall) {
-            flood = FloodType.Low;
+
+        if (season == Season.Fall) {
+            return FloodType.Low;
         }
 
         if (map.gameConditionManager.GetActiveCondition<GameCondition_Drought>() != null) {
-            flood = FloodType.Low;
+            return FloodType.Low;
         }
 
-        return flood;
+        return FloodType.Normal;
     }
 
     private void DoRiverModify(bool force = false) {
@@ -821,17 +809,29 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         List<IntVec3> cellsToChange = riverCellsList[floodLevel];
+        List<cellData> failedFloodingTiles = [];
         foreach (var c in cellsToChange.InRandomOrder()) {
             if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
                 continue;
             }
 
-            if (increaseFlood)
-                cell.increaseRiver(shallowRiverTerrain);
+            if (increaseFlood) {
+                if (!cell.increaseRiver(shallowRiverTerrain)) {
+                    failedFloodingTiles.Add(cell);
+                }
+            }
             else {
                 cell.decreaseRiver();
             }
         }
+
+        //Try again with any cells that may have failed because they were reliant on neighboring cells
+        if (increaseFlood) {
+            foreach (var failedCell in failedFloodingTiles) {
+                failedCell.increaseRiver(shallowRiverTerrain);
+            }
+        }
+
 
         if (riverLevel == FloodType.High && floodLevel < MaxRiverSteps)
             floodLevel++;
@@ -1019,6 +1019,9 @@ public class Watcher(Map map) : MapComponent(map)
 
         cellWeatherAffectsDict.Clear();
         cellWeatherAffects = [];
+        cellWeatherList.Clear();
+        riverCellsList.Clear();
+        tideCellsList.Clear();
     }
 
     private bool isOceanicTerrain(TerrainDef terrain) {
