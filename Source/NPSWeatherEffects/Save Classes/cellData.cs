@@ -35,14 +35,16 @@ public class cellData : IExposable
 
     public float temperature = -9999;
 
-    public int tideLevel = -1;
+    public int tideLevel = 999;
+    public IntVec3 tideFocus=IntVec3.Invalid;
 
     public TerrainDef currentTerrain;
 
     public TerrainWeatherReactions weatherExtension;
 
     public void ExposeData() {
-        Scribe_Values.Look(ref tideLevel, "tideLevel", -1);
+        Scribe_Values.Look(ref tideLevel, "tideLevel", 999);
+        Scribe_Values.Look(ref tideFocus, "tideFocus", IntVec3.Invalid);
         Scribe_Values.Look(ref riverLevel, "riverLevel", 999);
         Scribe_Values.Look(ref riverFocus, "riverFocus", IntVec3.Invalid);
         Scribe_Values.Look(ref howPacked, "howPacked");
@@ -166,34 +168,45 @@ public class cellData : IExposable
         return true;
     }
 
-    public void changeTide(TerrainDef tidalTerrain) {
+    public bool changeTide(TerrainDef tidalTerrain) {
         if (currentTerrain == tidalTerrain) {
             //Log.Message("Making beach terrain "+beachTerrain+" at "+location);
             decreaseTide();
+            return false;
         }
-        else {
-            //Log.Message("Making tidal terrain "+tidalTerrain+" at "+location);
-            if (isFrozen)
-                return;
-            increaseTide(tidalTerrain);
-        }
+        
+        return increaseTide(tidalTerrain);
     }
 
-    public void increaseTide(TerrainDef beachTerrain) {
+    public bool increaseTide(TerrainDef beachTerrain) {
         if (isFrozen) {
-            return;
+            return false;
         }
 
-        if (location.GetEdifice(map) == null) {
-            map.terrainGrid.SetTempTerrain(location, beachTerrain);
-            currentTerrain = beachTerrain;
-            clearLoot();
-        }
+        // Verify the current tile does not have anything on it.
+        // Then verify
+        if (currentTerrain.isFoundation)
+            return false;
+        if (location.GetEdifice(map) != null)
+            return false;
+        if (tideFocus.GetEdifice(map) != null)
+            return false;
+        if (!tideFocus.GetTerrain(map).IsWater)
+            return false;
+        map.terrainGrid.SetTempTerrain(location, beachTerrain);
+        clearLoot();
+        return true;
     }
 
     public void decreaseTide() {
         map.terrainGrid.RemoveTempTerrain(location);
         leaveLoot();
+        if (EffectSettings.showRain) {
+            howWet = 4;
+            currentTerrain = location.GetTerrain(map);
+            setCurrentExtension();
+            setTerrainWet();
+        }
     }
 
     /// <summary>
@@ -226,6 +239,7 @@ public class cellData : IExposable
         if (EffectSettings.showRain) {
             howWet = 4;
             currentTerrain = location.GetTerrain(map);
+            setCurrentExtension();
             setTerrainWet();
         }
     }

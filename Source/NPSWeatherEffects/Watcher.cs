@@ -59,7 +59,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     //rebuild every save to keep file size down
     private readonly List<List<IntVec3>> tideCellsList = [];
-    private int tideLevel; // 0 - 13
+    public int tideLevel; // 0 - 13
     private int previousTideLevel;
     private int totalPuddles;
 
@@ -82,6 +82,7 @@ public class Watcher(Map map) : MapComponent(map)
     private bool isRaining;
     private Rot4 coastRotation;
     private TerrainDef oceanTerrain;
+    private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
     private TerrainDef shallowRiverTerrain;
     private bool doRiverFlooding;
@@ -121,7 +122,7 @@ public class Watcher(Map map) : MapComponent(map)
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
 
-        if (MapGenUtility.ShallowOceanWaterTerrainAt(new IntVec3(1, 0, 1), map) !=
+        if (MapGenUtility.ShallowOceanWaterTerrainAt(IntVec3.NorthEast, map) !=
             RimWorld.TerrainDefOf.WaterOceanShallow) {
             doCoast = false;
         }
@@ -132,8 +133,9 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         //oceanTerrain = MapGenUtility.ShallowOceanWaterTerrainAt(new IntVec3(1, 0, 1), map);
+        deepOceanTerrain = MapGenUtility.DeepOceanWaterTerrainAt(IntVec3.NorthEast, map);
         oceanTerrain = TerrainDefOf.NPS_WaterOceanTide;
-        beachTerrain = MapGenUtility.BeachTerrainAt(new IntVec3(1, 0, 1), map);
+        beachTerrain = MapGenUtility.BeachTerrainAt(IntVec3.NorthEast, map);
         if (doCoast) {
             coastRotation = Find.World.CoastDirectionAt(map.Tile);
             if (!coastRotation.IsValid) {
@@ -328,7 +330,7 @@ public class Watcher(Map map) : MapComponent(map)
                 };
                 cellWeatherAffectsDict[focusCell] = cell;
 
-                if (bottomTerrain == RimWorld.TerrainDefOf.Sand ||
+                /*if (bottomTerrain == RimWorld.TerrainDefOf.Sand ||
                     bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
                     bottomTerrain == beachTerrain) {
                     //get all the sand pieces that are touching the beach.
@@ -348,6 +350,9 @@ public class Watcher(Map map) : MapComponent(map)
                         cell.tideLevel = j;
                         break;
                     }
+                }*/
+                if (isOceanicTerrain(bottomTerrain)) {
+                    cell.tideLevel = 0;
                 }
                 else if (isRiverTerrain(bottomTerrain)) {
                     cell.riverLevel = 0;
@@ -361,7 +366,54 @@ public class Watcher(Map map) : MapComponent(map)
 
             foreach (var focusCell in map.AllCells.InRandomOrder()) {
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
-                if (isRiverTerrain(bottomTerrain)) {
+                if (isOceanicTerrain(bottomTerrain)) {
+                    for (var j = 1; j < howManyTideSteps; j++) {
+                        var num = GenRadial.NumCellsInRadius(j);
+                        for (var i = 0; i <= num; i++) {
+                            IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
+                            if (!bankCheck.InBounds(map)) {
+                                continue;
+                            }
+
+                            TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
+                            //Don't want to tide over the river. Or over the ocean...
+                            if (isOceanicTerrain(bankCheckTerrain) || isRiverTerrain(bankCheckTerrain)) {
+                                continue;
+                            }
+
+                            if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
+                                affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
+                            }
+                            
+                            if (bankCheckTerrain == RimWorld.TerrainDefOf.Sand) {
+                                if (map.terrainGrid.UnderTerrainAt(bankCheck) != null) {
+                                    map.terrainGrid.SetUnderTerrain(bankCheck, TerrainDefOf.TKKN_SandBeachWetSalt);
+                                }
+                                else {
+                                    map.terrainGrid.SetTerrain(bankCheck, TerrainDefOf.TKKN_SandBeachWetSalt);
+                                }
+                            }
+
+                            //Prefer lower tide levels first. Then go to cardinal direction 
+                            if (j < affect.tideLevel) {
+                                affect.tideLevel = j;
+                                affect.tideFocus = focusCell;
+                                continue;
+                            }
+
+                            if (j == affect.tideLevel) {
+                                affect.tideLevel = j;
+                                if (affect.tideFocus != IntVec3.Invalid &&
+                                    bankCheck.CardinalTo(affect.tideFocus)) {
+                                    continue;
+                                }
+
+                                affect.tideFocus = focusCell;
+                            }
+                        }
+                    }
+                }
+                else if (isRiverTerrain(bottomTerrain)) {
                     for (var j = 1; j < HowManyRiverSteps; j++) {
                         var num = GenRadial.NumCellsInRadius(j);
                         for (var i = 0; i <= num; i++) {
@@ -422,17 +474,80 @@ public class Watcher(Map map) : MapComponent(map)
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
 
-            if (cellDataValue?.weatherExtension?.holdFrost == true) {
+            if (cellDataValue.weatherExtension?.holdFrost == true) {
                 frostGridComponent.SetDepth(cellDataValue.locationIndex, cellDataValue.frostLevel);
             }
 
-            if (cellDataValue.tideLevel > -1) {
+            if (cellDataValue.tideLevel != 999 &&
+                cellDataValue.tideLevel != 0) {
                 tideCellsList[cellDataValue.tideLevel].Add(cellLocation);
             }
 
             if (cellDataValue.riverLevel != 999 &&
                 cellDataValue.riverLevel != 0) {
                 riverCellsList[cellDataValue.riverLevel].Add(cellLocation);
+            }
+        }
+
+        // After calculating the initial tidal levels for all tiles we want to recalculate them.
+        // This time, we try to get each cell to point to the lowest nearby level
+        //Ignore the first row because that is empty.
+        for (int i = 1; i < tideCellsList.Count; i++) {
+            foreach (var tidalLevel in tideCellsList[i]) {
+                if (!cellWeatherAffects.TryGetValue(tidalLevel, out var levelCell)) {
+                    Log.Error("A cell that should have a value doesn't have a value");
+                    continue;
+                }
+
+                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(tidalLevel).InRandomOrder()) {
+                    if (!cellAround.IsValid)
+                        continue;
+                    if (!cellWeatherAffects.TryGetValue(cellAround, out var possiblePotentialCell)) {
+                        continue;
+                    }
+
+                    if (levelCell.tideLevel >= possiblePotentialCell.tideLevel) {
+                        levelCell.tideFocus = cellAround;
+                    }
+                    else if (isOceanicTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
+                        levelCell.tideFocus = cellAround;
+                        break;
+                    }
+
+                    if (levelCell.tideLevel > possiblePotentialCell.tideLevel)
+                        break;
+                }
+            }
+        }
+
+        // After calculating the initial river levels for all tiles we want to recalculate them.
+        // This time, we try to get each cell to point to the lowest nearby level
+        //Ignore the first row because that is empty.
+        for (int i = 1; i < riverCellsList.Count; i++) {
+            foreach (var riverLevel in riverCellsList[i]) {
+                if (!cellWeatherAffects.TryGetValue(riverLevel, out var levelCell)) {
+                    Log.Error("A cell that should have a value doesn't have a value");
+                    continue;
+                }
+
+                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(riverLevel).InRandomOrder()) {
+                    if (!cellAround.IsValid)
+                        continue;
+                    if (!cellWeatherAffects.TryGetValue(cellAround, out var possiblePotentialCell)) {
+                        continue;
+                    }
+
+                    if (levelCell.riverLevel >= possiblePotentialCell.riverLevel) {
+                        levelCell.riverFocus = cellAround;
+                    }
+                    else if (isRiverTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
+                        levelCell.riverFocus = cellAround;
+                        break;
+                    }
+
+                    if (levelCell.riverLevel > possiblePotentialCell.riverLevel)
+                        break;
+                }
             }
         }
 
@@ -508,49 +623,15 @@ public class Watcher(Map map) : MapComponent(map)
 
     private void SetUpTidesBanks() {
         //set up ocean tides for the first time:
-        if (doCoast) {
-            //set up for low tide
-            previousTideLevel = 0;
-            tideLevel = 0;
-
-            for (var i = 0; i < howManyTideSteps; i++) {
-                List<IntVec3> makeSand = tideCellsList[i];
-                foreach (var c in makeSand) {
-                    if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
-                        continue;
-                    }
-
-                    if (beachTerrain == RimWorld.TerrainDefOf.Sand ||
-                        beachTerrain == TerrainDefOf.TKKN_SandBeachWetSalt) {
-                        map.terrainGrid.SetTerrain(c, TerrainDefOf.TKKN_SandBeachWetSalt);
-                        cell.currentTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
-                        cell.setCurrentExtension();
-                    }
-                }
-            }
-
-            //bring to current tide levels
-            FloodType level = GetTideLevel();
-            int max = level switch {
-                FloodType.Normal => halfTideSteps,
-                FloodType.High => howManyTideSteps - 1,
-                _ => 0
-            };
-
-            for (var i = 0; i < max; i++) {
-                List<IntVec3> makeSand = tideCellsList[i];
-                foreach (var c in makeSand) {
-                    if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
-                        continue;
-                    }
-
-                    cell.increaseTide(oceanTerrain);
-                }
-            }
-
-            previousTideLevel = Math.Max(0, max - 1);
-            tideLevel = max;
+        if (!doCoast) return;
+        //set up for low tide
+        previousTideLevel = 0;
+        tideLevel = 0;
+        for (int i = 0; i < howManyTideSteps; i++) {
+            DoTides(force: true);
         }
+
+        return;
     }
 
     private void SetUpRiverLevel() {
@@ -843,7 +924,7 @@ public class Watcher(Map map) : MapComponent(map)
             floodLevel--;
     }
 
-    private FloodType GetTideLevel() {
+    public FloodType GetTideLevel() {
         if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse)) {
             return FloodType.High;
         }
@@ -855,13 +936,15 @@ public class Watcher(Map map) : MapComponent(map)
         };
     }
 
-    private void DoTides() {
+    private void DoTides(bool force = false) {
         //notes to future me: use this.howManyTideSteps - 1, so we always have a little bit of wet sand, or else it looks stupid.
-        if (!doCoast || !EffectSettings.doTides || ticks % TideIntervalCheck != 0) {
-            return;
+        if (!force) {
+            if (!doCoast || !EffectSettings.doTides || ticks % TideIntervalCheck != 0) {
+                return;
+            }
         }
 
-        var tideType = GetTideLevel();
+        FloodType tideType = GetTideLevel();
 
         if ((tideType == FloodType.Normal && tideLevel == halfTideSteps) ||
             (tideType == FloodType.High && tideLevel == maxTideSteps) ||
@@ -875,57 +958,83 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         List<IntVec3> cellsToChange = tideCellsList[tideLevel];
-        foreach (var c in cellsToChange) {
+        List<cellData> failedTidalTiles = [];
+        foreach (var c in cellsToChange.InRandomOrder()) {
             if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
-                continue;
-            }
-
-            var previousCell = AdjustForRotation(c, 0);
-            if (!previousCell.InBounds(map)) {
-                continue;
-            }
-
-            // Check if the previous tile is an ocean tile
-            // If it isn't, check if the current tile is and remove it if so
-            cell.currentTerrain = c.GetTerrain(map);
-
-            if (!isOceanicTerrain(previousCell.GetTerrain(map))) {
-                if (isOceanicTerrain(cell.currentTerrain)) {
-                    cell.decreaseTide();
-                }
-
-                continue;
-            }
-
-            if (cell.currentTerrain.isFoundation) {
                 continue;
             }
 
             switch (tideType) {
                 case FloodType.High:
-                    cell.increaseTide(oceanTerrain);
+                    if (!cell.increaseTide(oceanTerrain)) {
+                        failedTidalTiles.Add(cell);
+                    }
+
                     break;
                 case FloodType.Low:
                     cell.decreaseTide();
                     break;
                 case FloodType.Normal:
                     if (tideLevel < halfTideSteps) {
-                        cell.increaseTide(oceanTerrain);
+                        if (!cell.increaseTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
                     }
                     else if (tideLevel > halfTideSteps) {
                         cell.decreaseTide();
                     }
                     else if (previousTideLevel < tideLevel) {
-                        cell.increaseTide(oceanTerrain);
+                        if (!cell.increaseTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
                     }
                     else if (previousTideLevel > tideLevel) { }
                     else {
-                        cell.changeTide(oceanTerrain);
+                        if (!cell.changeTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
                     }
 
                     break;
             }
         }
+
+        foreach (var cell in failedTidalTiles.InRandomOrder()) {
+            switch (tideType) {
+                case FloodType.High:
+                    if (!cell.increaseTide(oceanTerrain)) {
+                        failedTidalTiles.Add(cell);
+                    }
+
+                    break;
+                case FloodType.Low:
+                    cell.decreaseTide();
+                    break;
+                case FloodType.Normal:
+                    if (tideLevel < halfTideSteps) {
+                        if (!cell.increaseTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
+                    }
+                    else if (tideLevel > halfTideSteps) {
+                        cell.decreaseTide();
+                    }
+                    else if (previousTideLevel < tideLevel) {
+                        if (!cell.increaseTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
+                    }
+                    else if (previousTideLevel > tideLevel) { }
+                    else {
+                        if (!cell.changeTide(oceanTerrain)) {
+                            failedTidalTiles.Add(cell);
+                        }
+                    }
+
+                    break;
+            }
+        }
+
 
         switch (tideType) {
             case FloodType.High: {
@@ -1027,7 +1136,9 @@ public class Watcher(Map map) : MapComponent(map)
     private bool isOceanicTerrain(TerrainDef terrain) {
         return terrain == RimWorld.TerrainDefOf.WaterOceanShallow ||
                terrain == TerrainDefOf.NPS_WaterOceanTide ||
-               terrain == oceanTerrain;
+               terrain == oceanTerrain ||
+               terrain == RimWorld.TerrainDefOf.WaterOceanDeep ||
+               terrain == deepOceanTerrain;
     }
 
     private bool isRiverTerrain(TerrainDef terrain) {
