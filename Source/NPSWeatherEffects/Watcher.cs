@@ -38,7 +38,7 @@ public class Watcher(Map map) : MapComponent(map)
 
     private int cycleIndex;
     private bool doCoast = true; //false if no coast
-    private List<List<IntVec3>> riverCellsList = [];
+    private List<List<cellData>> riverCellsList = [];
 
     private int floodLevel; // 0 - 3
     private int floodThreat;
@@ -58,7 +58,7 @@ public class Watcher(Map map) : MapComponent(map)
     private int ticks;
 
     //rebuild every save to keep file size down
-    private readonly List<List<IntVec3>> tideCellsList = [];
+    private readonly List<List<cellData>> tideCellsList = [];
     public int tideLevel; // 0 - 13
     private int previousTideLevel;
     private int totalPuddles;
@@ -467,7 +467,7 @@ public class Watcher(Map map) : MapComponent(map)
             riverCellsList.Add([]);
         }
 
-        foreach ((IntVec3 cellLocation, cellData cellDataValue) in cellWeatherAffects) {
+        foreach ((IntVec3 _, cellData cellDataValue) in cellWeatherAffects) {
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
             cellDataValue.map = map;
 
@@ -480,12 +480,12 @@ public class Watcher(Map map) : MapComponent(map)
 
             if (cellDataValue.tideLevel != 999 &&
                 cellDataValue.tideLevel != 0) {
-                tideCellsList[cellDataValue.tideLevel].Add(cellLocation);
+                tideCellsList[cellDataValue.tideLevel].Add(cellDataValue);
             }
 
             if (cellDataValue.riverLevel != 999 &&
                 cellDataValue.riverLevel != 0) {
-                riverCellsList[cellDataValue.riverLevel].Add(cellLocation);
+                riverCellsList[cellDataValue.riverLevel].Add(cellDataValue);
             }
         }
 
@@ -493,13 +493,10 @@ public class Watcher(Map map) : MapComponent(map)
         // This time, we try to get each cell to point to the lowest nearby level
         //Ignore the first row because that is empty.
         for (int i = 1; i < tideCellsList.Count; i++) {
-            foreach (var tidalLevel in tideCellsList[i]) {
-                if (!cellWeatherAffects.TryGetValue(tidalLevel, out var levelCell)) {
-                    Log.Error("A cell that should have a value doesn't have a value");
-                    continue;
-                }
+            foreach (var levelCell in tideCellsList[i]) {
+         
 
-                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(tidalLevel).InRandomOrder()) {
+                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(levelCell.location).InRandomOrder()) {
                     if (!cellAround.IsValid)
                         continue;
                     if (!cellWeatherAffects.TryGetValue(cellAround, out var possiblePotentialCell)) {
@@ -524,13 +521,9 @@ public class Watcher(Map map) : MapComponent(map)
         // This time, we try to get each cell to point to the lowest nearby level
         //Ignore the first row because that is empty.
         for (int i = 1; i < riverCellsList.Count; i++) {
-            foreach (var riverLevel in riverCellsList[i]) {
-                if (!cellWeatherAffects.TryGetValue(riverLevel, out var levelCell)) {
-                    Log.Error("A cell that should have a value doesn't have a value");
-                    continue;
-                }
+            foreach (var levelCell in riverCellsList[i]) {
 
-                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(riverLevel).InRandomOrder()) {
+                foreach (var cellAround in GenAdjFast.AdjacentCells8Way(levelCell.location).InRandomOrder()) {
                     if (!cellAround.IsValid)
                         continue;
                     if (!cellWeatherAffects.TryGetValue(cellAround, out var possiblePotentialCell)) {
@@ -597,30 +590,6 @@ public class Watcher(Map map) : MapComponent(map)
         }
     }
 
-    /// <summary>
-    /// Takes the current cell and moves moveCount cells into coastRotations direction
-    /// </summary>
-    /// <param name="cell">Current location</param>
-    /// <param name="moveCount">cells to move</param>
-    /// <returns>new cell location</returns>
-    private IntVec3 AdjustForRotation(IntVec3 cell, int moveCount) {
-        var newDirection = new IntVec3(cell.x, cell.y, cell.z);
-        if (coastRotation == Rot4.North) {
-            newDirection.z += moveCount + 1;
-        }
-        else if (coastRotation == Rot4.South) {
-            newDirection.z -= moveCount + 1;
-        }
-        else if (coastRotation == Rot4.East) {
-            newDirection.x += moveCount + 1;
-        }
-        else if (coastRotation == Rot4.West) {
-            newDirection.x -= moveCount + 1;
-        }
-
-        return newDirection;
-    }
-
     private void SetUpTidesBanks() {
         //set up ocean tides for the first time:
         if (!doCoast) return;
@@ -630,8 +599,6 @@ public class Watcher(Map map) : MapComponent(map)
         for (int i = 0; i < howManyTideSteps; i++) {
             DoTides(force: true);
         }
-
-        return;
     }
 
     private void SetUpRiverLevel() {
@@ -889,13 +856,9 @@ public class Watcher(Map map) : MapComponent(map)
             return;
         }
 
-        List<IntVec3> cellsToChange = riverCellsList[floodLevel];
+        var cellsToChange = riverCellsList[floodLevel];
         List<cellData> failedFloodingTiles = [];
-        foreach (var c in cellsToChange.InRandomOrder()) {
-            if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
-                continue;
-            }
-
+        foreach (var cell in cellsToChange.InRandomOrder()) {
             if (increaseFlood) {
                 if (!cell.increaseRiver(shallowRiverTerrain)) {
                     failedFloodingTiles.Add(cell);
@@ -957,12 +920,9 @@ public class Watcher(Map map) : MapComponent(map)
             return;
         }
 
-        List<IntVec3> cellsToChange = tideCellsList[tideLevel];
+        List<cellData> cellsToChange = tideCellsList[tideLevel];
         List<cellData> failedTidalTiles = [];
-        foreach (var c in cellsToChange.InRandomOrder()) {
-            if (!cellWeatherAffects.TryGetValue(c, out var cell)) {
-                continue;
-            }
+        foreach (var cell in cellsToChange.InRandomOrder()) {
 
             switch (tideType) {
                 case FloodType.High:
