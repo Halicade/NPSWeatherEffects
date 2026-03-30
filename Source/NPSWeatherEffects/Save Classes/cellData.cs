@@ -36,7 +36,7 @@ public class cellData : IExposable
     public float temperature = -9999;
 
     public int tideLevel = 999;
-    public IntVec3 tideFocus=IntVec3.Invalid;
+    public IntVec3 tideFocus = IntVec3.Invalid;
 
     public TerrainDef currentTerrain;
 
@@ -70,6 +70,7 @@ public class cellData : IExposable
             howWet += 2;
             return true;
         }
+
         if (howWet > -1 && !gettingWet) {
             howWet--;
             return true;
@@ -170,15 +171,14 @@ public class cellData : IExposable
 
     public bool changeTide(TerrainDef tidalTerrain) {
         if (currentTerrain == tidalTerrain) {
-            //Log.Message("Making beach terrain "+beachTerrain+" at "+location);
-            decreaseTide();
+            decreaseTide(tidalTerrain);
             return false;
         }
-        
+
         return increaseTide(tidalTerrain);
     }
 
-    public bool increaseTide(TerrainDef beachTerrain) {
+    public bool increaseTide(TerrainDef tidalTerrain) {
         if (isFrozen) {
             return false;
         }
@@ -193,12 +193,17 @@ public class cellData : IExposable
             return false;
         if (!tideFocus.GetTerrain(map).IsWater)
             return false;
-        map.terrainGrid.SetTempTerrain(location, beachTerrain);
+        map.terrainGrid.SetTempTerrain(location, tidalTerrain);
         clearLoot();
         return true;
     }
 
-    public void decreaseTide() {
+    public void decreaseTide(TerrainDef tidalTerrain) {
+        currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
+        if (currentTerrain != tidalTerrain) {
+            return;
+        }
+
         map.terrainGrid.RemoveTempTerrain(location);
         leaveLoot();
         if (EffectSettings.showRain) {
@@ -234,7 +239,12 @@ public class cellData : IExposable
         return true;
     }
 
-    public void decreaseRiver() {
+    public void decreaseRiver(TerrainDef riverTerrain) {
+        currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
+        if (currentTerrain != riverTerrain) {
+            return;
+        }
+
         map.terrainGrid.RemoveTempTerrain(location);
         if (EffectSettings.showRain) {
             howWet = 4;
@@ -441,7 +451,7 @@ public class cellData : IExposable
             return;
         }
 
-        if (currentTerrain?.modContentPack.PackageId == EffectSettings.modPackageID) {
+        if (currentTerrain?.modContentPack?.PackageId == EffectSettings.modPackageID) {
             map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
         }
     }

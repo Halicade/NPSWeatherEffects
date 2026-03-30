@@ -329,28 +329,6 @@ public class Watcher(Map map) : MapComponent(map)
                     frostNoise = Mathf.Clamp(frostNoise.GetValue(focusCell), 0.25f, 1)
                 };
                 cellWeatherAffectsDict[focusCell] = cell;
-
-                /*if (bottomTerrain == RimWorld.TerrainDefOf.Sand ||
-                    bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
-                    bottomTerrain == beachTerrain) {
-                    //get all the sand pieces that are touching the beach.
-                    for (var j = 0; j < howManyTideSteps; j++) {
-                        // Checks to see if water is in the direction of the cell
-                        // checks every cell up to HowManyTideSteps and will change the cell to TKKN_SandBeachWetSalt if this is true
-                        var waterCheck = AdjustForRotation(focusCell, j);
-                        if (!waterCheck.InBounds(map) ||
-                            !isOceanicTerrain(map.terrainGrid.BaseTerrainAt(waterCheck))) {
-                            continue;
-                        }
-
-                        if (terrain == RimWorld.TerrainDefOf.Sand) {
-                            map.terrainGrid.SetTerrain(focusCell, TerrainDefOf.TKKN_SandBeachWetSalt);
-                        }
-
-                        cell.tideLevel = j;
-                        break;
-                    }
-                }*/
                 if (isOceanicTerrain(bottomTerrain)) {
                     cell.tideLevel = 0;
                 }
@@ -384,7 +362,7 @@ public class Watcher(Map map) : MapComponent(map)
                             if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
                                 affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
                             }
-                            
+
                             if (bankCheckTerrain == RimWorld.TerrainDefOf.Sand) {
                                 if (map.terrainGrid.UnderTerrainAt(bankCheck) != null) {
                                     map.terrainGrid.SetUnderTerrain(bankCheck, TerrainDefOf.TKKN_SandBeachWetSalt);
@@ -494,8 +472,6 @@ public class Watcher(Map map) : MapComponent(map)
         //Ignore the first row because that is empty.
         for (int i = 1; i < tideCellsList.Count; i++) {
             foreach (var levelCell in tideCellsList[i]) {
-         
-
                 foreach (var cellAround in GenAdjFast.AdjacentCells8Way(levelCell.location).InRandomOrder()) {
                     if (!cellAround.IsValid)
                         continue;
@@ -522,7 +498,6 @@ public class Watcher(Map map) : MapComponent(map)
         //Ignore the first row because that is empty.
         for (int i = 1; i < riverCellsList.Count; i++) {
             foreach (var levelCell in riverCellsList[i]) {
-
                 foreach (var cellAround in GenAdjFast.AdjacentCells8Way(levelCell.location).InRandomOrder()) {
                     if (!cellAround.IsValid)
                         continue;
@@ -856,7 +831,7 @@ public class Watcher(Map map) : MapComponent(map)
             return;
         }
 
-        var cellsToChange = riverCellsList[floodLevel];
+        List<cellData> cellsToChange = riverCellsList[floodLevel];
         List<cellData> failedFloodingTiles = [];
         foreach (var cell in cellsToChange.InRandomOrder()) {
             if (increaseFlood) {
@@ -865,7 +840,7 @@ public class Watcher(Map map) : MapComponent(map)
                 }
             }
             else {
-                cell.decreaseRiver();
+                cell.decreaseRiver(shallowRiverTerrain);
             }
         }
 
@@ -923,7 +898,6 @@ public class Watcher(Map map) : MapComponent(map)
         List<cellData> cellsToChange = tideCellsList[tideLevel];
         List<cellData> failedTidalTiles = [];
         foreach (var cell in cellsToChange.InRandomOrder()) {
-
             switch (tideType) {
                 case FloodType.High:
                     if (!cell.increaseTide(oceanTerrain)) {
@@ -932,7 +906,7 @@ public class Watcher(Map map) : MapComponent(map)
 
                     break;
                 case FloodType.Low:
-                    cell.decreaseTide();
+                    cell.decreaseTide(oceanTerrain);
                     break;
                 case FloodType.Normal:
                     if (tideLevel < halfTideSteps) {
@@ -941,7 +915,7 @@ public class Watcher(Map map) : MapComponent(map)
                         }
                     }
                     else if (tideLevel > halfTideSteps) {
-                        cell.decreaseTide();
+                        cell.decreaseTide(oceanTerrain);
                     }
                     else if (previousTideLevel < tideLevel) {
                         if (!cell.increaseTide(oceanTerrain)) {
@@ -968,7 +942,7 @@ public class Watcher(Map map) : MapComponent(map)
 
                     break;
                 case FloodType.Low:
-                    cell.decreaseTide();
+                    cell.decreaseTide(oceanTerrain);
                     break;
                 case FloodType.Normal:
                     if (tideLevel < halfTideSteps) {
@@ -977,7 +951,7 @@ public class Watcher(Map map) : MapComponent(map)
                         }
                     }
                     else if (tideLevel > halfTideSteps) {
-                        cell.decreaseTide();
+                        cell.decreaseTide(oceanTerrain);
                     }
                     else if (previousTideLevel < tideLevel) {
                         if (!cell.increaseTide(oceanTerrain)) {
