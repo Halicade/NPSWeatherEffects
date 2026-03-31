@@ -50,7 +50,7 @@ public class cellData : IExposable
         Scribe_Values.Look(ref howPacked, "howPacked");
         Scribe_Values.Look(ref packed, "packed");
         Scribe_Values.Look(ref lastPackedCheck, "lastPackedCheck");
-        Scribe_Values.Look(ref howWet, "howWet");
+        Scribe_Values.Look(ref howWet, "howWet", -1);
         Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60);
         Scribe_Values.Look(ref frostLevel, "frostLevel");
         Scribe_Values.Look(ref frostNoise, "frostNoise");
@@ -110,7 +110,8 @@ public class cellData : IExposable
         if (!isWet) {
             return false;
         }
-/*
+        /*
+        I don't know why I commented this out, but it hasn't seemed to break anything yet
         //if terrain is temporary we don't want to affect it
         if (thisTerrain.temporary) {
             return;
@@ -194,6 +195,7 @@ public class cellData : IExposable
         if (!tideFocus.GetTerrain(map).IsWater)
             return false;
         map.terrainGrid.SetTempTerrain(location, tidalTerrain);
+        setCurrentExtension();
         clearLoot();
         return true;
     }
@@ -429,18 +431,52 @@ public class cellData : IExposable
         }
     }
 
+    /// <summary>
+    /// Check terrain on load and to if it was previously a wet terrain that is no longer that terrain. 
+    /// </summary>
+    public void checkTerrainDry() {
+        if (driedTerrain == null) {
+            return;
+        }
+
+        TerrainWeatherReactions driedModExtension = driedTerrain.GetModExtension<TerrainWeatherReactions>();
+        if (driedModExtension?.wetTerrain == null) {
+            driedTerrain = null;
+            isWet = false;
+            Log.Error(
+                "NPSWeatherEffects: Tile: " + location +
+                " Biome: " + map.Biome +
+                " Former terrain: " + driedTerrain +
+                " Current Terrain " + currentTerrain +
+                "NPSWeatherEffects: A terrain that previously had a mod extension for wet terrain no longer has it." +
+                " You should report this error. ");
+            return;
+        }
+
+        TerrainDef baseTerrain = map.terrainGrid.BaseTerrainAt(location);
+
+        if (baseTerrain != driedModExtension.wetTerrain) {
+            driedTerrain = null;
+            isWet = false;
+            Log.Warning(
+                "NPSWeatherEffects: Tile: " + location +
+                " Biome: " + map.Biome +
+                " Former terrain: " + driedTerrain +
+                " Current Base Terrain " + baseTerrain +
+                "A terrain that was previously wet terrain no longer has that terrain as a base terrain." +
+                " Normally this occurs due to terraforming a wet terrain tile. ");
+        }
+    }
+
     public void resetCellData() {
-        currentTerrain = location.GetTerrain(map);
         forceRemoveTempTerrain();
-        currentTerrain = location.GetTerrain(map);
         forceUnpack();
-        currentTerrain = location.GetTerrain(map);
         forceTerrainDry();
-        currentTerrain = location.GetTerrain(map);
         forceRemoveFrost();
     }
 
     public void forceRemoveTempTerrain() {
+        currentTerrain = location.GetTerrain(map);
         isFlooded = false;
         isFrozen = false;
         riverFocus = IntVec3.Invalid;
@@ -457,6 +493,7 @@ public class cellData : IExposable
     }
 
     public void forceUnpack() {
+        currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
         howPacked = 0;
         packed = false;
         if (currentTerrain == TerrainDefOf.TKKN_DirtPath) {

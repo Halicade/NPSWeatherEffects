@@ -143,7 +143,7 @@ public static class PawnChecks
             return;
 
         if (EffectSettings.doWalkThroughSnow && watcher.outdoorTemp < 3) {
-            watcher.frostGridComponent.AddDepth(cell, -.005f);
+            watcher.frostGridComponent.addDepth(cell, -.005f);
             map.snowGrid.AddDepth(pawn.Position, -.005f);
         }
 

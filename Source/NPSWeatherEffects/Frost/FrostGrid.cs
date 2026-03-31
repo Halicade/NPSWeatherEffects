@@ -22,7 +22,7 @@ public class FrostGrid : MapComponent
         return building == null || building.def.category == ThingCategory.Building;
     }
 
-    public bool AddDepth(cellData cell, float depthToAdd) {
+    public bool addDepth(cellData cell, float depthToAdd) {
         var num = cell.locationIndex;
         var num2 = DepthGridDirect_Unsafe[num];
         if (num2 <= 0f && depthToAdd <= 0f) {
@@ -32,6 +32,7 @@ public class FrostGrid : MapComponent
         if (num2 >= 0.999f && depthToAdd > MaxDepth) {
             return false;
         }
+
 /*
         if (!canHaveFrost(num)) {
             DepthGridDirect_Unsafe[num] = 0f;
@@ -53,13 +54,12 @@ public class FrostGrid : MapComponent
         if (cell.frostLevel == 0) {
             return false;
         }
+
         DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
         return checkVisualOrPathCostChange(cell, cell.frostLevel, 0f);
     }
 
-    public void SetDepth(int locationIndex, float newDepth) {
-
-        
+    public void setDepth(int locationIndex, float newDepth) {
         if (!canHaveFrost(locationIndex)) {
             DepthGridDirect_Unsafe[locationIndex] = 0f;
             return;
@@ -85,7 +85,7 @@ public class FrostGrid : MapComponent
 
         return false;
     }
-    
+
     public float GetDepth(IntVec3 c) => c.InBounds(map) ? DepthGridDirect_Unsafe[map.cellIndices.CellToIndex(c)] : 0f;
 
     public float GetDepth(cellData c) => c.location.InBounds(map) ? DepthGridDirect_Unsafe[c.locationIndex] : 0f;

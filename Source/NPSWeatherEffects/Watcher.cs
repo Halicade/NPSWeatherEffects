@@ -451,9 +451,13 @@ public class Watcher(Map map) : MapComponent(map)
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
+            cellDataValue.checkTerrainDry();
 
             if (cellDataValue.weatherExtension?.holdFrost == true) {
-                frostGridComponent.SetDepth(cellDataValue.locationIndex, cellDataValue.frostLevel);
+                frostGridComponent.setDepth(cellDataValue.locationIndex, cellDataValue.frostLevel);
+            }
+            else {
+                frostGridComponent.removeDepth(cellDataValue);
             }
 
             if (cellDataValue.tideLevel != 999 &&
@@ -700,18 +704,18 @@ public class Watcher(Map map) : MapComponent(map)
                     if (cell.weatherExtension?.holdFrost == true) {
                         //handle frost based on snowing
                         if (!roofed && currentSnowRate > 0.001f) {
-                            if (frostGridComponent.AddDepth(cell, currentSnowRate * -.01f)) {
+                            if (frostGridComponent.addDepth(cell, currentSnowRate * -.01f)) {
                                 cellActionsPerformed++;
                             }
                         }
                         else {
-                            if (frostGridComponent.AddDepth(cell, 0.138f * cell.frostNoise)) {
+                            if (frostGridComponent.addDepth(cell, 0.138f * cell.frostNoise)) {
                                 cellActionsPerformed++;
                             }
                         }
                     }
                     else {
-                        frostGridComponent.SetDepth(cell.locationIndex, 0);
+                        frostGridComponent.setDepth(cell.locationIndex, 0);
                     }
                 }
             }
