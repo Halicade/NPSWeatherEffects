@@ -13,7 +13,6 @@ public class EffectSettings : ModSettings
     public static bool allowLavaEruption = true;
     public static bool allowPlantEffects = false;
 
-    public static bool doColdEffects = true;
     public static bool doIce = true;
     public static bool doColdBreath = true;
     public static bool showFrostGrid = true;
@@ -55,9 +54,9 @@ public class EffectSettings : ModSettings
 
         //Performance Settings
         list.CheckboxLabeled(
-            "TKKN_doWeather_title".Translate(),
+            "NPS_doWeather_title".Translate(),
             ref doWeather,
-            "TKKN_doWeather_text".Translate());
+            "NPS_doWeather_text".Translate());
         if (doWeather) {
             maxCellsPerTick = (int)list.SliderLabeled(
                 "NPS_weatherCellUpdateSpeed_title".Translate(maxCellsPerTick),
@@ -68,95 +67,90 @@ public class EffectSettings : ModSettings
                 ref onlyPlayerHome,
                 "NPS_OnlyTargetPlayerHome_text".Translate()
             );
-        }
 
-        list.CheckboxLabeled(
-            "NPS_DoColdEffects_title".Translate(),
-            ref doColdEffects,
-            "NPS_DoColdEffects_text".Translate());
-
-        if (doColdEffects) {
-            if (!ModsConfig.OdysseyActive) {
-                list.CheckboxLabeled(
-                    "TKKN_doIce_title".Translate(),
-                    ref doIce,
-                    "TKKN_doIce_text".Translate());
-            }
 
             list.CheckboxLabeled(
-                "NPS_DoColdBreath_title".Translate(),
-                ref doColdBreath,
-                "NPS_DoColdBreath_text".Translate());
+                "NPS_useMapTemperature_title".Translate(),
+                ref useMapTemperature,
+                "NPS_useMapTemperature_text".Translate());
+
+            if (!ModsConfig.OdysseyActive) {
+                list.CheckboxLabeled(
+                    "NPS_doIce_title".Translate(),
+                    ref doIce,
+                    "NPS_doIce_text".Translate());
+            }
 
             list.CheckboxLabeled(
                 "NPS_ShowFrostGrid_title".Translate(),
                 ref showFrostGrid,
                 "NPS_FrostGrid_text".Translate());
-        }
 
-        list.CheckboxLabeled(
-            "TKKN_showRain_title".Translate(),
-            ref showRain,
-            "TKKN_showRain_text".Translate());
-        list.CheckboxLabeled(
-            "NPS_makePuddles_title".Translate(),
-            ref makePuddles,
-            "NPS_makePuddles_text".Translate());
-        list.CheckboxLabeled(
-            "TKKN_doTides_title".Translate(),
-            ref doTides,
-            "TKKN_doTides_text".Translate());
-        if (!ModsConfig.OdysseyActive) {
             list.CheckboxLabeled(
-                "TKKN_doFloods_title".Translate(),
-                ref doFloods,
-                "TKKN_doFloods_text".Translate());
-        }
+                "NPS_showRain_title".Translate(),
+                ref showRain,
+                "NPS_showRain_text".Translate());
 
-        list.CheckboxLabeled(
-            "NPS_leaveLoot_title".Translate(),
-            ref leaveLoot,
-            "NPS_leaveLoot_text".Translate());
-        if (leaveLoot) {
             list.CheckboxLabeled(
-                "NPS_forbidLoot_title".Translate(),
-                ref forbidLoot,
-                "NPS_forbidLoot_text".Translate());
+                "NPS_makePuddles_title".Translate(),
+                ref makePuddles,
+                "NPS_makePuddles_text".Translate());
+            
+                    
+            if (!ModsConfig.OdysseyActive) {
+                list.CheckboxLabeled(
+                    "NPS_doFloods_title".Translate(),
+                    ref doFloods,
+                    "NPS_doFloods_text".Translate());
+            }
+
+            list.CheckboxLabeled(
+                "NPS_doTides_title".Translate(),
+                ref doTides,
+                "NPS_doTides_text".Translate());
+            
+            list.CheckboxLabeled(
+                "NPS_leaveLoot_title".Translate(),
+                ref leaveLoot,
+                "NPS_leaveLoot_text".Translate());
+
+            if (leaveLoot) {
+                list.CheckboxLabeled(
+                    "NPS_forbidLoot_title".Translate(),
+                    ref forbidLoot,
+                    "NPS_forbidLoot_text".Translate());
+            }
+            
         }
 
         list.Gap();
+
+        list.CheckboxLabeled(
+            "NPS_allowLavaEruption_title".Translate(),
+            ref allowLavaEruption,
+            "NPS_allowLavaEruption_text".Translate());
+        list.CheckboxLabeled(
+            "NPS_spawnLavaOnlyInBiome_title".Translate(),
+            ref spawnLavaOnlyInBiome,
+            "NPS_spawnLavaOnlyInBiome_text".Translate());
+
+        list.Gap();
+
+        list.Label("NPS_RequiresRestart".Translate());
 
         list.CheckboxLabeled(
             "NPS_doAmbientTemperature_title".Translate(),
             ref terrainAffectTemperature,
             "NPS_doAmbientTemperature_text".Translate());
 
-        list.Gap();
+        list.CheckboxLabeled(
+            "NPS_allowPlantEffects_title".Translate(),
+            ref allowPlantEffects,
+            "NPS_allowPlantEffects_text".Translate());
 
-
-        //Game Play Settings
         list.End();
 
         list.Begin(inRect.RightPart(0.49f));
-
-
-        list.CheckboxLabeled(
-            "TKKN_allowLavaEruption_title".Translate(),
-            ref allowLavaEruption,
-            "TKKN_allowLavaEruption_text".Translate());
-        list.CheckboxLabeled(
-            "TKKN_spawnLavaOnlyInBiome_title".Translate(),
-            ref spawnLavaOnlyInBiome,
-            "TKKN_spawnLavaOnlyInBiome_text".Translate());
-        list.CheckboxLabeled(
-            "TKKN_allowPlantEffects_title".Translate(),
-            ref allowPlantEffects,
-            "TKKN_allowPlantEffects_text".Translate());
-
-        list.CheckboxLabeled(
-            "NPS_useMapTemperature_title".Translate(),
-            ref useMapTemperature,
-            "NPS_useMapTemperature_text".Translate());
 
 
         list.CheckboxLabeled(
@@ -172,6 +166,8 @@ public class EffectSettings : ModSettings
             ref seasonalWeather,
             "NPS_seasonalWeather_text".Translate());
 
+        list.Gap();
+
         list.CheckboxLabeled(
             "NPS_allowPawnEffects_title".Translate(),
             ref allowPawnEffects,
@@ -182,11 +178,13 @@ public class EffectSettings : ModSettings
                 "NPS_pawnEffectsOnlyColonists_title".Translate(),
                 ref pawnEffectsOnlyColonists,
                 "NPS_pawnEffectsOnlyColonists_text".Translate());
-            if (!HarmonyWeatherEffects.DesirePathsActive && allowPawnEffects) {
+            list.Label("NPS_springEffects_title".Translate(),tooltip:"NPS_springEffects_text".Translate());
+            if (!HarmonyWeatherEffects.DesirePathsActive) {
                 list.CheckboxLabeled(
-                    "TKKN_doDirtPath_title".Translate(),
+                    "NPS_doDirtPath_title".Translate(),
                     ref doDirtPath,
-                    "TKKN_doDirtPath_text".Translate());
+                    "NPS_doDirtPath_text".Translate());
+
                 if (doDirtPath) {
                     list.CheckboxLabeled(
                         "NPS_doWalkThroughSnow_title".Translate(),
@@ -196,14 +194,19 @@ public class EffectSettings : ModSettings
             }
 
             list.CheckboxLabeled(
-                "TKKN_allowPawnsToGetWet_title".Translate(),
+                "NPS_DoColdBreath_title".Translate(),
+                ref doColdBreath,
+                "NPS_DoColdBreath_text".Translate());
+
+            list.CheckboxLabeled(
+                "NPS_allowPawnsToGetWet_title".Translate(),
                 ref allowPawnsToGetWet,
-                "TKKN_allowPawnsToGetWet_text".Translate());
+                "NPS_allowPawnsToGetWet_text".Translate());
             if (!ModsConfig.OdysseyActive) {
                 list.CheckboxLabeled(
-                    "TKKN_allowPawnsSwim_title".Translate(),
+                    "NPS_allowPawnsSwim_title".Translate(),
                     ref allowPawnsSwim,
-                    "TKKN_allowPawnsToSwim_text".Translate());
+                    "NPS_allowPawnsToSwim_text".Translate());
             }
 
             list.CheckboxLabeled(
@@ -212,8 +215,6 @@ public class EffectSettings : ModSettings
                 "NPS_allowPawnsToDrown_text".Translate());
         }
 
-
-        //Development stuff
         list.Gap(30f);
 
         list.CheckboxLabeled(
@@ -221,7 +222,7 @@ public class EffectSettings : ModSettings
             ref showDevReadout,
             "NPS_showDevReadout_text".Translate());
 
-
+        list.Gap(30f);
         if (Current.Game?.CurrentMap != null) {
             if (list.ButtonText("NPS_removeEffects".Translate(), "NPS_removeEffects_text".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
@@ -231,6 +232,8 @@ public class EffectSettings : ModSettings
                 regenCells = false;
             }
 
+            list.Gap(30f);
+            
             if (list.ButtonText("NPS_resetMap".Translate(), "NPS_resetMap_text".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
@@ -259,7 +262,6 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref leaveLoot, "leaveStuff", true);
         Scribe_Values.Look(ref forbidLoot, "forbidLoot", true);
 
-        Scribe_Values.Look(ref doColdEffects, "doColdEffects", true);
         Scribe_Values.Look(ref doIce, "doIce", true);
         Scribe_Values.Look(ref doColdBreath, "doColdBreath", true);
         Scribe_Values.Look(ref showFrostGrid, "showFrostGrid", true);

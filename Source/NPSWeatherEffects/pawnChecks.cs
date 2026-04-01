@@ -18,8 +18,9 @@ public static class PawnChecks
         makePaths(pawn, watcher, map);
         makeBreath(pawn, map, doExtraChecks);
         makeWet(pawn, terrain, isRaining, map);
-        drowningCheck(pawn, terrain, doExtraChecks);
-        springCheck(pawn, terrain, doExtraChecks);
+        if (!drowningCheck(pawn, terrain, doExtraChecks)) {
+            springCheck(pawn, terrain, doExtraChecks);
+        }
     }
 
     private static void springCheck(Pawn pawn, TerrainDef terrain, bool terrainChecks) {
@@ -61,21 +62,21 @@ public static class PawnChecks
         }
     }
 
-    private static void drowningCheck(Pawn pawn, TerrainDef terrain, bool drowningCheck) {
+    private static bool drowningCheck(Pawn pawn, TerrainDef terrain, bool drowningCheck) {
         //drowning == immobile and in water
-        if (!EffectSettings.allowPawnsDrowning && !drowningCheck) return;
+        if (!EffectSettings.allowPawnsDrowning && !drowningCheck) return false;
 
         if (!TerrainTagUtil.TKKN_Wet.Contains(terrain) || !pawn.health.Downed) {
-            return;
+            return false;
         }
 
         //ignore if they're mostly vacuum resistant
         if (ModsConfig.OdysseyActive &&
             pawn.GetStatValue(StatDefOf.VacuumResistance) > 0.95)
-            return;
+            return false;
 
         if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.TKKN_Drowning) != null)
-            return;
+            return false;
             
         var hediff = HediffMaker.MakeHediff(HediffDefOf.TKKN_Drowning, pawn);
         hediff.Severity = 0.001f;
@@ -86,6 +87,8 @@ public static class PawnChecks
                 MessageTypeDefOf.NegativeHealthEvent,
                 false);
         }
+
+        return true;
     }
 
     private static void makeWet(Pawn pawn, TerrainDef currentTerrain, bool isRaining, Map map) {

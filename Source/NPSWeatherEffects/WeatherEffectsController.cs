@@ -23,11 +23,6 @@ public class WeatherEffectsController : Mod
     }
     
     public override void WriteSettings() {
-        if (!EffectSettings.doColdEffects) {
-            EffectSettings.doIce = false;
-            EffectSettings.doColdBreath = false;
-            EffectSettings.showFrostGrid = false;
-        }
 
         if (!EffectSettings.allowPawnEffects) {
             EffectSettings.pawnEffectsOnlyColonists = false;
