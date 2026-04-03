@@ -144,8 +144,9 @@ public class cellData : IExposable
 
         if (temperature > weatherExtension.freezeTerrain.freezeAt)
             return false;
+        // Still want the system to count this as a changed tile
         if (!Rand.Chance(0.05f))
-            return false;
+            return true;
 
         map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
         setCurrentExtension();
@@ -168,15 +169,6 @@ public class cellData : IExposable
         currentTerrain = map.terrainGrid.TerrainAt(location);
         setTerrainWet();
         return true;
-    }
-
-    public bool changeTide(TerrainDef tidalTerrain) {
-        if (currentTerrain == tidalTerrain) {
-            decreaseTide(tidalTerrain);
-            return false;
-        }
-
-        return increaseTide(tidalTerrain);
     }
 
     public bool increaseTide(TerrainDef tidalTerrain) {
@@ -209,7 +201,6 @@ public class cellData : IExposable
         map.terrainGrid.RemoveTempTerrain(location);
         leaveLoot();
         if (EffectSettings.showRain) {
-            howWet = 4;
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
             setTerrainWet();

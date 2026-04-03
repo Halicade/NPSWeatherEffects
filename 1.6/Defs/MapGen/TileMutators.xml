@@ -76,17 +76,31 @@
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_WeakOceanTide</defName>
         <label>weak tide</label>
-        <description>The tidal levels are weaker here. Less resources are likely to show up on the shore.</description>
+        <description>The tide levels are weaker here. Less resources are likely to show up on the shore as a result.</description>
 
     </TileMutatorDef>
 
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_StrongOceanTide</defName>
         <label>strong tide</label>
-        <description>The tidal levels are stronger here. More resources are likely to show up on the shore.</description>
+        <description>The tide levels are stronger here. More resources are likely to show up on the shore as a result.</description>
         <biomeBlacklist>
             <li>Desert</li>
         </biomeBlacklist>
+    </TileMutatorDef>
+
+    <TileMutatorDef ParentName="NPS_TidalLevels">
+        <defName>NPS_DiurnalTide</defName>
+        <label>diurnal tide</label>
+        <description>The tidal levels follow a diurnal cycle. There is only one tidal cycke eacg kybar day.</description>
+
+    </TileMutatorDef>
+
+    <TileMutatorDef ParentName="NPS_TidalLevels">
+        <defName>NPS_MixedSemidiurnal</defName>
+        <label>mixed semidiurnal tide</label>
+        <description>The tidal levels follow a mixed semidiurnal cycle. It experiences two high and two low tides of different size every lunar day.</description>
+
     </TileMutatorDef>
 
 

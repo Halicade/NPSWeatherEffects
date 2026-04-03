@@ -60,8 +60,13 @@ public class Watcher(Map map) : MapComponent(map)
     //rebuild every save to keep file size down
     private readonly List<List<cellData>> tideCellsList = [];
     public int tideLevel; // 0 - 13
-    private int previousTideLevel;
     private int totalPuddles;
+    private float longCurrentTile;
+    private long ticksOffsetFromLongitude;
+    private int checkUpToCell = 0;
+    private List<cellData> failedTidalTiles = [];
+    private bool finishedTideMovement = true;
+    private bool tideIncreasing;
 
     //Values not in use
     //private float humidity;
@@ -137,6 +142,9 @@ public class Watcher(Map map) : MapComponent(map)
         oceanTerrain = TerrainDefOf.NPS_WaterOceanTide;
         beachTerrain = MapGenUtility.BeachTerrainAt(IntVec3.NorthEast, map);
         if (doCoast) {
+            failedTidalTiles ??= [];
+            longCurrentTile = Find.WorldGrid.LongLatOf(map.Tile).x;
+            ticksOffsetFromLongitude = GenDate.LocalTicksOffsetFromLongitude(longCurrentTile);
             coastRotation = Find.World.CoastDirectionAt(map.Tile);
             if (!coastRotation.IsValid) {
                 Log.Error(
@@ -191,11 +199,11 @@ public class Watcher(Map map) : MapComponent(map)
 
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
                     cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
-                    Log.Warning("New cell per tick value " + cellActionsPerTick);
+                    //Log.Warning("New cell per tick value " + cellActionsPerTick);
                 }
                 else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
                     cellActionsPerTick = MinimumCellsPerTick;
-                    Log.Message("New cell per tick value " + cellActionsPerTick);
+                    //Log.Message("New cell per tick value " + cellActionsPerTick);
                 }
 
                 cellActionsPerformed = 0;
@@ -289,6 +297,8 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Values.Look(ref howManyTideSteps, "HowManyTideSteps", 13);
         Scribe_Values.Look(ref halfTideSteps, "halfTideSteps", 6);
         Scribe_Values.Look(ref maxTideSteps, "MaxTideSteps", 12);
+        Scribe_Values.Look(ref checkUpToCell, "checkUpToCell");
+        Scribe_Values.Look(ref finishedTideMovement, "finishedTideMovement", true);
     }
 
 
@@ -296,6 +306,8 @@ public class Watcher(Map map) : MapComponent(map)
         if (EffectSettings.regenCells) {
             regenCellLists = true;
         }
+
+        Rand.PushState(map.uniqueID);
 
         //rebuild lookup lists.
         tideCellsList.Clear();
@@ -345,7 +357,8 @@ public class Watcher(Map map) : MapComponent(map)
             foreach (var focusCell in map.AllCells.InRandomOrder()) {
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
                 if (isOceanicTerrain(bottomTerrain)) {
-                    for (var j = 1; j < howManyTideSteps; j++) {
+                    int tideVariance = howManyTideSteps - Rand.Range(0, 6);
+                    for (var j = 1; j < tideVariance; j++) {
                         var num = GenRadial.NumCellsInRadius(j);
                         for (var i = 0; i <= num; i++) {
                             IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
@@ -523,6 +536,8 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
+        Rand.PopState();
+
         if (!regenCellLists) {
             return;
         }
@@ -573,9 +588,8 @@ public class Watcher(Map map) : MapComponent(map)
         //set up ocean tides for the first time:
         if (!doCoast) return;
         //set up for low tide
-        previousTideLevel = 0;
         tideLevel = 0;
-        for (int i = 0; i < howManyTideSteps; i++) {
+        for (int i = 0; i < howManyTideSteps * 2; i++) {
             DoTides(force: true);
         }
     }
@@ -771,8 +785,6 @@ public class Watcher(Map map) : MapComponent(map)
                 totalPuddles++;
             }
         }
-
-        //cellWeatherAffects[c] = cell;
     }
 
     private void LavaRockSpecials(IntVec3 c) {
@@ -866,17 +878,42 @@ public class Watcher(Map map) : MapComponent(map)
             floodLevel--;
     }
 
+
     public FloodType GetTideLevel() {
         if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse)) {
             return FloodType.High;
         }
 
-        return GenLocalDate.HourOfDay(map) switch {
-            > 4 and < 8 => FloodType.Low,
-            > 15 and < 20 => FloodType.High,
-            _ => FloodType.Normal
-        };
+        var hoursPassed = GenMath.PositiveModRemap(Find.TickManager.TicksAbs + ticksOffsetFromLongitude, 2500, 24);
+
+
+        hoursPassed = GenDate.DaysPassed * 24 + hoursPassed;
+
+        /*
+        // For Desmos
+        // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25))*x))+2\right)
+        int diurnalValue = (int)(2 * Mathf.Sin(0.25132743f * hoursPassed) + 2);
+*/
+        // For Desmos
+        // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25/24)*12)*x))+2\right)
+        int diurnalValue = (int)(2 * Mathf.Sin(0.5235988f * hoursPassed)) + 2;
+
+        /*
+        // For Desmos
+        // \operatorname{round}\left(-\left(1.2\sin\left(\frac{\pi x}{6.21}\right)+0.6\ \sin\left(\frac{\pi x}{12.42}\right)\right)+2\right)
+        int mixedSemiDiurnalValue =
+            (int)(-(1.2 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
+                    0.6 * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2);
+        */
+        /*
+        Log.Message("Hour of latOfDay: " + hoursPassed);
+        Log.Message("New tidal value: " + diurnalValue);
+           */
+        // Log.Message("Mixed Semi diurnal value: " + mixedSemiDiurnalValue);
+
+        return (FloodType)diurnalValue;
     }
+
 
     private void DoTides(bool force = false) {
         //notes to future me: use this.howManyTideSteps - 1, so we always have a little bit of wet sand, or else it looks stupid.
@@ -886,123 +923,68 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
-        FloodType tideType = GetTideLevel();
+        if (finishedTideMovement) {
+            FloodType tideType = GetTideLevel();
+            checkUpToCell = 0;
+            int tideAsInt = (int)tideType * 3;
 
-        if ((tideType == FloodType.Normal && tideLevel == halfTideSteps) ||
-            (tideType == FloodType.High && tideLevel == maxTideSteps) ||
-            (tideType == FloodType.Low && tideLevel == 0))
-            return;
+            if (tideLevel == tideAsInt) {
+                return;
+            }
 
-        if (tideType == FloodType.Normal && tideLevel == maxTideSteps) {
-            previousTideLevel = tideLevel;
-            tideLevel--;
-            return;
+            if (tideAsInt >= tideCellsList.Count) {
+                tideAsInt = tideCellsList.Count - 1;
+            }
+
+            tideIncreasing = tideLevel < tideAsInt;
         }
 
         List<cellData> cellsToChange = tideCellsList[tideLevel];
-        List<cellData> failedTidalTiles = [];
-        foreach (var cell in cellsToChange.InRandomOrder()) {
-            switch (tideType) {
-                case FloodType.High:
-                    if (!cell.increaseTide(oceanTerrain)) {
-                        failedTidalTiles.Add(cell);
-                    }
+        int initialCellCheck = 0;
+        if (checkUpToCell == 0) {
+            checkUpToCell = cellsToChange.Count / 2;
+            finishedTideMovement = false;
+        }
+        else {
+            initialCellCheck = checkUpToCell;
+            checkUpToCell = cellsToChange.Count;
+        }
 
-                    break;
-                case FloodType.Low:
-                    cell.decreaseTide(oceanTerrain);
-                    break;
-                case FloodType.Normal:
-                    if (tideLevel < halfTideSteps) {
-                        if (!cell.increaseTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-                    else if (tideLevel > halfTideSteps) {
-                        cell.decreaseTide(oceanTerrain);
-                    }
-                    else if (previousTideLevel < tideLevel) {
-                        if (!cell.increaseTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-                    else if (previousTideLevel > tideLevel) { }
-                    else {
-                        if (!cell.changeTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-
-                    break;
+        for (int cellCount = initialCellCheck; cellCount < checkUpToCell; cellCount++) {
+            cellData cell = cellsToChange[cellCount];
+            if (tideIncreasing) {
+                if (!cell.increaseTide(oceanTerrain)) {
+                    failedTidalTiles.Add(cell);
+                }
+            }
+            else {
+                cell.decreaseTide(oceanTerrain);
             }
         }
+
+        if (checkUpToCell != cellsToChange.Count) {
+            return;
+        }
+
+        checkUpToCell = 0;
+        finishedTideMovement = true;
 
         foreach (var cell in failedTidalTiles.InRandomOrder()) {
-            switch (tideType) {
-                case FloodType.High:
-                    if (!cell.increaseTide(oceanTerrain)) {
-                        failedTidalTiles.Add(cell);
-                    }
-
-                    break;
-                case FloodType.Low:
-                    cell.decreaseTide(oceanTerrain);
-                    break;
-                case FloodType.Normal:
-                    if (tideLevel < halfTideSteps) {
-                        if (!cell.increaseTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-                    else if (tideLevel > halfTideSteps) {
-                        cell.decreaseTide(oceanTerrain);
-                    }
-                    else if (previousTideLevel < tideLevel) {
-                        if (!cell.increaseTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-                    else if (previousTideLevel > tideLevel) { }
-                    else {
-                        if (!cell.changeTide(oceanTerrain)) {
-                            failedTidalTiles.Add(cell);
-                        }
-                    }
-
-                    break;
+            if (tideIncreasing) {
+                cell.increaseTide(oceanTerrain);
+            }
+            else {
+                cell.decreaseTide(oceanTerrain);
             }
         }
 
+        failedTidalTiles.Clear();
 
-        switch (tideType) {
-            case FloodType.High: {
-                if (tideLevel < maxTideSteps) {
-                    previousTideLevel = tideLevel;
-                    tideLevel++;
-                }
-
-                break;
-            }
-            case FloodType.Low: {
-                if (tideLevel > 0) {
-                    previousTideLevel = tideLevel;
-                    tideLevel--;
-                }
-
-                break;
-            }
-            case FloodType.Normal when tideLevel > halfTideSteps:
-                previousTideLevel = tideLevel;
-                tideLevel--;
-                break;
-            case FloodType.Normal: {
-                if (tideLevel < halfTideSteps) {
-                    previousTideLevel = tideLevel;
-                    tideLevel++;
-                }
-
-                break;
-            }
+        if (tideIncreasing) {
+            tideLevel++;
+        }
+        else {
+            tideLevel--;
         }
     }
 
