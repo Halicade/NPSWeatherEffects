@@ -13,6 +13,10 @@ public class TileMutatorDefOf
         
         public static TileMutatorDef NPS_StrongOceanTide;
 
+        public static TileMutatorDef NPS_DiurnalTide;
+
+        public static TileMutatorDef NPS_MixedSemidiurnal;
+
         [MayRequire("vanillaexpanded.vexploratione")]
         public static TileMutatorDef VEE_RisingWaters;
         
