@@ -61,12 +61,7 @@ public class HarmonyWeatherEffects
             prefix: new HarmonyMethod(typeof(BiomeDef_CommonalityOfDisease),
                 nameof(BiomeDef_CommonalityOfDisease.Prefix)));
 
-        harmony.Patch(
-            AccessTools.Method(typeof(GenSpawn), nameof(GenSpawn.Spawn),
-            [
-                typeof(Thing), typeof(IntVec3), typeof(Map), typeof(Rot4), typeof(WipeMode), typeof(bool), typeof(bool)
-            ]),
-            postfix: new HarmonyMethod(typeof(GenSpawn_Spawn), nameof(GenSpawn_Spawn.Postfix)));
+
 
         harmony.Patch(AccessTools.Method(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI)),
             postfix: new HarmonyMethod(typeof(MouseoverReadout_MouseoverReadoutOnGUI),
@@ -89,15 +84,12 @@ public class HarmonyWeatherEffects
             postfix: new HarmonyMethod(typeof(Reachability_CanReach),
                 nameof(Reachability_CanReach.Postfix)));
         */
-
-        harmony.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
-            postfix: new HarmonyMethod(typeof(Pawn_SpawnSetup),
-                nameof(Pawn_SpawnSetup.Postfix)));
-/*
+        /*
+         I don't know what this patch does
         harmony.Patch(AccessTools.Method(typeof(WeatherDecider), "CurrentWeatherCommonality"),
             prefix: new HarmonyMethod(typeof(WeatherDecider_CurrentWeatherCommonality),
                 nameof(WeatherDecider_CurrentWeatherCommonality.Prefix)));
-  */      
+        */
         harmony.Patch(
             AccessTools.Method(typeof(JobGiver_SeekSafeTemperature), "TryGiveJob"),
             postfix: new HarmonyMethod(typeof(JobGiver_SeekSafeTemperature_TryGiveJob),

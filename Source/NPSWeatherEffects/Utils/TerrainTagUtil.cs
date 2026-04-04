@@ -10,14 +10,12 @@ public static class TerrainTagUtil
     private static readonly HashSet<TerrainDef> HashTKKN_Swim = [];
     private static readonly HashSet<TerrainDef> HashLava = [];
     private static readonly HashSet<TerrainDef> HashCanBePacked = [];
-    private static readonly HashSet<TerrainDef> HashSaltTerrains = [];
     private static readonly Dictionary<TerrainDef, float> HashAmbientTempReaction = [];
     
     public static FrozenSet<TerrainDef> TKKN_Wet = [];
     public static FrozenSet<TerrainDef> TKKN_Swim = [];
     public static FrozenSet<TerrainDef> Lava = [];
     public static FrozenSet<TerrainDef> CanBePacked = [];
-    public static FrozenSet<TerrainDef> SaltTerrains = [];
     public static FrozenDictionary<TerrainDef, float> AmbientTempReaction = [];
 
     public static void IntializeTerrainTags() {
@@ -57,10 +55,6 @@ public static class TerrainTagUtil
                             $"NPSWeatherEffects: Terrain {terrain} has an extension indicating {weatherExtension.freezeTerrain} is a freeze terrain. But it is not temporary. ");
                     }
                 }
-
-                if (weatherExtension.isSalty) {
-                    HashSaltTerrains.Add(terrain);
-                }
             }
         }
 
@@ -68,14 +62,12 @@ public static class TerrainTagUtil
         TKKN_Swim = HashTKKN_Swim.ToFrozenSet();
         Lava = HashLava.ToFrozenSet();
         CanBePacked = HashCanBePacked.ToFrozenSet();
-        SaltTerrains = HashSaltTerrains.ToFrozenSet();
         AmbientTempReaction = HashAmbientTempReaction.ToFrozenDictionary();
-        //Don't need the original dicts
+        // Don't need the original dicts
         HashTKKN_Wet.Clear();
         HashTKKN_Swim.Clear();
         HashLava.Clear();
         HashCanBePacked.Clear();
-        HashSaltTerrains.Clear();
         HashAmbientTempReaction.Clear();
     }
 }
