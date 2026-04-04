@@ -12,7 +12,8 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
     private static Watcher watcher;
 
     public static void Postfix() {
-        if (!EffectSettings.showDevReadout || Event.current.type != EventType.Repaint || Find.MainTabsRoot.OpenTab != null) {
+        if (!EffectSettings.showDevReadout || Event.current.type != EventType.Repaint ||
+            Find.MainTabsRoot.OpenTab != null) {
             return;
         }
 
@@ -25,7 +26,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
         if (cachedMap != map) {
             cachedMap = map;
             cachedFrostGrid = map.GetComponent<FrostGrid>();
-            watcher= map.GetComponent<Watcher>();
+            watcher = map.GetComponent<Watcher>();
         }
 
         Rect rect;
@@ -65,14 +66,23 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             var cellTemp = $"Temperature: {cell.temperature}";
             Widgets.Label(rect, cellTemp);
             num += 19f;
-            
+            // GetTideLevel
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var labelTideLevel = $"Current Tide height: {watcher.tideLevel} | Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
+            var labelTideLevel =
+                $"Current Tide height: {watcher.tideLevel} | Desired Tide height: {watcher.GetTideLevel()}";
             Widgets.Label(rect, labelTideLevel);
             num += 19f;
-            
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var labelFloodLevel = $"Current Flood height: {watcher.GetRiverLevel().ToString()} | Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
+            var labelCellTideLevel = 
+                $"Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
+            Widgets.Label(rect, labelCellTideLevel);
+            num += 19f;
+
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var labelFloodLevel =
+                $"Current Flood height: {watcher.GetRiverLevel().ToString()} | Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
             Widgets.Label(rect, labelFloodLevel);
             num += 19f;
 
@@ -111,13 +121,13 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             num += 19f;
 
             Widgets.Label(rect, cellWet);
-            
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var frostLabel = $"MaxFrost: {cell.frostNoise} | CurrentFrost: {cell.frostLevel}";
             Widgets.Label(rect, frostLabel);
         }
 
-        
+
         //	Widgets.Label(rect, unused + " " + depth.ToString());
     }
 }

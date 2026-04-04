@@ -509,15 +509,17 @@ public class Watcher(Map map) : MapComponent(map)
 
         switch (tidalVariant) {
             case TideVariant.Weak:
+                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 2;
             case TideVariant.Strong:
+                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 4;
             case TideVariant.SemiDiurnal:
                 // For Desmos
                 // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25/24)*12)*x))+2\right)
-                return (int)(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2);
+                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 3;
             case TideVariant.Diurnal:
                 // For Desmos
                 // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25))*x))+2\right)
-                return (int)(2 * Mathf.Sin(0.25132743f * hoursPassed)) + 2;
+                return Mathf.RoundToInt(2 * Mathf.Sin(0.25132743f * hoursPassed) + 2) * 3;
             case TideVariant.MixedSemiDiurnal:
                 /*
                  For Desmos
@@ -526,11 +528,15 @@ public class Watcher(Map map) : MapComponent(map)
                     (int)(-(1.2 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
                             0.6 * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2);
                 */
-                return (int)(-(1.2 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
-                               0.6 * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2);
+                return Mathf.RoundToInt(-(1.2f * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
+                                          0.6f * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2f) * 3;
+            case TideVariant.None:
             default:
                 Log.Error(
-                    "NPSWeatherEffects: Tried to get a tidal variant but we couldn't find one. Please report this.");
+                    "NPSWeatherEffects: Tried to get a tidal variant but there wasn't one. Please report this with a log" +
+                    " Biome: " + map.Biome +
+                    " Coords: " + map.TileInfo.Layer.LongLatOf(map.Tile) +
+                    " Seed: " + Find.World.info.seedString);
                 throw new ArgumentOutOfRangeException();
         }
     }
@@ -545,37 +551,18 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         if (finishedTideMovement) {
-            int calculatedTide = GetTideLevel();
             checkUpToCell = 0;
-            switch (tidalVariant) {
-                case TideVariant.SemiDiurnal:
-                case TideVariant.Diurnal:
-                case TideVariant.MixedSemiDiurnal:
-                    calculatedTide *= 3;
-                    break;
-                case TideVariant.Strong:
-                    calculatedTide *= 4;
-                    break;
-                case TideVariant.Weak:
-                    calculatedTide *= 2;
-                    break;
-                case TideVariant.None:
-                default:
-                    Log.Error("Trying to get a tidal variant but we couldn't find one");
-                    throw new ArgumentOutOfRangeException();
-            }
+            int calculatedTide = GetTideLevel();
 
-            int tideAsInt = calculatedTide * 3;
-
-            if (tideLevel == tideAsInt) {
+            if (tideLevel == calculatedTide) {
                 return;
             }
 
-            if (tideAsInt >= tideCellsList.Count) {
-                tideAsInt = tideCellsList.Count - 1;
+            if (calculatedTide >= tideCellsList.Count) {
+                calculatedTide = tideCellsList.Count - 1;
             }
 
-            tideIncreasing = tideLevel < tideAsInt;
+            tideIncreasing = tideLevel < calculatedTide;
         }
 
         List<cellData> cellsToChange = tideCellsList[tideLevel];
@@ -749,19 +736,27 @@ public class Watcher(Map map) : MapComponent(map)
             tidalVariant = TideVariant.SemiDiurnal;
 
             howManyTideSteps = 12;
-            if (mutators.Contains(TileMutatorDefOf.NPS_StrongOceanTide)) {
-                howManyTideSteps = 16;
-            }
-            else if (mutators.Contains(TileMutatorDefOf.NPS_WeakOceanTide)) {
-                howManyTideSteps = 8;
-            }
-            else if (mutators.Contains(TileMutatorDefOf.NPS_DiurnalTide)) {
-                tidalVariant = TideVariant.Diurnal;
-            }
-            else if (mutators.Contains(TileMutatorDefOf.NPS_MixedSemidiurnal)) {
-                tidalVariant = TideVariant.MixedSemiDiurnal;
-            }
+            foreach (var mutator in mutators) {
+                if (mutator == TileMutatorDefOf.NPS_StrongOceanTide) {
+                    howManyTideSteps = 16;
+                    break;
+                }
 
+                if (mutator == TileMutatorDefOf.NPS_WeakOceanTide) {
+                    howManyTideSteps = 8;
+                    break;
+                }
+
+                if (mutator == TileMutatorDefOf.NPS_DiurnalTide) {
+                    tidalVariant = TideVariant.Diurnal;
+                    break;
+                }
+
+                if (mutator == TileMutatorDefOf.NPS_MixedSemidiurnal) {
+                    tidalVariant = TideVariant.MixedSemiDiurnal;
+                    break;
+                }
+            }
 
             if (!regenCellLists && tidalVariant != savedTidalVariant) {
                 Log.Warning("NPSWeatherEffects: Tile mutators have changed. We need to regenerate the maps settings");
@@ -1028,6 +1023,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         SetUpTidesBanks();
         SetUpRiverLevel();
+        SetUpWeatherEffects();
         regenCellLists = false;
     }
 
@@ -1086,6 +1082,47 @@ public class Watcher(Map map) : MapComponent(map)
         floodLevel = 0;
         for (int i = 0; i < HowManyRiverSteps; i++) {
             DoRiverModify(force: true);
+        }
+    }
+
+    private void SetUpWeatherEffects() {
+        if (!EffectSettings.showFrostGrid && !EffectSettings.doIce && !EffectSettings.showRain) {
+            return;
+        }
+
+        isRaining = map.weatherManager.RainRate > 0;
+        bool canApplyRainEffects = isRaining && EffectSettings.showRain;
+        bool isSnowing = map.weatherManager.SnowRate > 0;
+
+        foreach (var focusCell in cellWeatherList) {
+            // Can the soil be null? I'm not really sure but Imma check it just in case
+            focusCell.currentTerrain = map.terrainGrid.TerrainAt(focusCell.locationIndex) ?? RimWorld.TerrainDefOf.Soil;
+            focusCell.setCurrentExtension();
+
+            if (canApplyRainEffects) {
+                if (!map.roofGrid.Roofed(focusCell.locationIndex)) {
+                    focusCell.forceTerrainWet();
+                }
+            }
+
+            focusCell.temperature = EffectSettings.useMapTemperature
+                ? map.mapTemperature.OutdoorTemp
+                : focusCell.location.GetTemperature(map);
+
+            if (EffectSettings.doIce) {
+                focusCell.forceTerrainFrozen();
+            }
+
+            if (EffectSettings.showFrostGrid) {
+                if (!isSnowing && focusCell.temperature <= 1) {
+                    if (focusCell.weatherExtension?.holdFrost == true) {
+                        if (map.snowGrid.GetDepth(focusCell.location) == 0) {
+                            focusCell.frostLevel = focusCell.frostNoise;
+                            frostGridComponent.setDepth(focusCell.locationIndex, focusCell.frostNoise);
+                        }
+                    }
+                }
+            }
         }
     }
 

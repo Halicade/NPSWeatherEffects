@@ -459,6 +459,49 @@ public class cellData : IExposable
         }
     }
 
+    public void forceTerrainWet() {
+        //if terrain is temporary we don't want to affect it
+        if (currentTerrain.temporary) {
+            return;
+        }
+
+        if (isWet) {
+            return;
+        }
+
+        if (weatherExtension?.wetTerrain == null) {
+            return;
+        }
+
+        howWet = 4;
+
+        if (howWet > weatherExtension.wetAt) {
+            driedTerrain = currentTerrain;
+            map.terrainGrid.SetTerrain(location, weatherExtension.wetTerrain);
+            currentTerrain = weatherExtension.wetTerrain;
+            setCurrentExtension();
+            isWet = true;
+            rainSpawns();
+        }
+    }
+
+    public void forceTerrainFrozen() {
+        if (isFrozen) {
+            return;
+        }
+
+        if (weatherExtension?.freezeTerrain == null)
+            return;
+
+        if (temperature > weatherExtension.freezeTerrain.freezeAt)
+            return;
+
+        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
+        currentTerrain = weatherExtension.freezeTerrain.terrain;
+        setCurrentExtension();
+        isFrozen = true;
+    }
+
     public void resetCellData() {
         forceRemoveTempTerrain();
         forceUnpack();
