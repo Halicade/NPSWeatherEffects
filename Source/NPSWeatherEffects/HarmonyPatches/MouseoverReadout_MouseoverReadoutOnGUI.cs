@@ -68,17 +68,21 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             num += 19f;
             // GetTideLevel
 
-            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var labelTideLevel =
-                $"Current Tide height: {watcher.tideLevel} | Desired Tide height: {watcher.GetTideLevel()}";
-            Widgets.Label(rect, labelTideLevel);
-            num += 19f;
+            if (watcher.doCoast) {
+                rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+                var labelTideLevel =
+                    $"Current Tide height: {watcher.tideLevel} | Desired Tide height: {watcher.GetTideLevel()}";
+                Widgets.Label(rect, labelTideLevel);
+                num += 19f;
+            }
 
-            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var labelCellTideLevel = 
-                $"Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
-            Widgets.Label(rect, labelCellTideLevel);
-            num += 19f;
+            if (watcher.doRiverFlooding) {
+                rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+                var labelCellTideLevel =
+                    $"Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
+                Widgets.Label(rect, labelCellTideLevel);
+                num += 19f;
+            }
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var labelFloodLevel =

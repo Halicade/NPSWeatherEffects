@@ -35,7 +35,7 @@ public class Watcher(Map map) : MapComponent(map)
     private List<cellData> cellWeatherList = [];
 
     private int cycleIndex;
-    private bool doCoast = true; //false if no coast
+    public bool doCoast = true; //false if no coast
     private List<List<cellData>> riverCellsList = [];
 
     private int floodLevel; // 0 - 3
@@ -90,7 +90,7 @@ public class Watcher(Map map) : MapComponent(map)
     private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
     private TerrainDef shallowRiverTerrain;
-    private bool doRiverFlooding;
+    public bool doRiverFlooding;
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
