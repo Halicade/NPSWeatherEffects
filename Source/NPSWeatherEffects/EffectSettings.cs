@@ -136,8 +136,10 @@ public class EffectSettings : ModSettings
 
         list.Gap();
 
+        Text.Font = GameFont.Medium;
         list.Label("NPS_RequiresRestart".Translate());
-
+        Text.Font = GameFont.Small;
+        
         list.CheckboxLabeled(
             "NPS_doAmbientTemperature_title".Translate(),
             ref terrainAffectTemperature,
@@ -147,6 +149,13 @@ public class EffectSettings : ModSettings
             "NPS_allowPlantEffects_title".Translate(),
             ref allowPlantEffects,
             "NPS_allowPlantEffects_text".Translate());
+        
+        if (allowPawnEffects && !ModsConfig.OdysseyActive) {
+            list.CheckboxLabeled(
+                "NPS_allowPawnsSwim_title".Translate(),
+                ref allowPawnsSwim,
+                "NPS_allowPawnsToSwim_text".Translate());
+        }
 
         list.End();
 
@@ -202,12 +211,6 @@ public class EffectSettings : ModSettings
                 "NPS_allowPawnsToGetWet_title".Translate(),
                 ref allowPawnsToGetWet,
                 "NPS_allowPawnsToGetWet_text".Translate());
-            if (!ModsConfig.OdysseyActive) {
-                list.CheckboxLabeled(
-                    "NPS_allowPawnsSwim_title".Translate(),
-                    ref allowPawnsSwim,
-                    "NPS_allowPawnsToSwim_text".Translate());
-            }
 
             list.CheckboxLabeled(
                 "NPS_allowPawnsToDrown_title".Translate(),
