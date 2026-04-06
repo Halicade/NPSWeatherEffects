@@ -3,7 +3,7 @@
   <WeatherDef>
     <defName>TKKN_WindStorm</defName>
     <label>wind storm</label>
-    <description>A wind storm. High winds and a little rain. Help turbines but tears out plants and hinders shooting.</description>
+    <description>A wind storm. High winds and a little rain. Helps turbines but hinders shooting.</description>
     <repeatable>true</repeatable>
     <favorability>VeryBad</favorability>
     <windSpeedFactor>2</windSpeedFactor>
@@ -11,6 +11,9 @@
     <ambientSounds>
       <li>Ambient_Wind_Storm</li>
     </ambientSounds>
+    <overlayClasses>
+      <li>WeatherOverlay_Rain</li>
+    </overlayClasses>
     <durationRange>
       <min>15000</min>
       <max>40000</max>

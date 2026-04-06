@@ -94,6 +94,10 @@ public class Watcher(Map map) : MapComponent(map)
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
+    private bool checkEvens;
+    public Season season;
+    private Quadrum quadrum;
+    private Quadrum previousQuadrum = Quadrum.Undefined;
 
     private const int EffectIntervalCheck = 625;
     private const int MinimumCellsPerTick = 5;
@@ -151,14 +155,16 @@ public class Watcher(Map map) : MapComponent(map)
                 allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
             }
 
-            // rebuild the list of valid pawns every quadrum
+            checkEvens = !checkEvens;
+
+            // rebuild the dictionary of valid pawns every quadrum
             if (ticks % 900000 == 0) {
                 validPawns.Clear();
             }
 
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
-                    PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks);
+                    PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks, checkEvens);
             }
         }
 
@@ -222,11 +228,6 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Values.Look(ref finishedTideMovement, "finishedTideMovement", true);
         Scribe_Values.Look(ref savedTidalVariant, "savedTidalVariant");
     }
-
-
-    public Season season;
-    private Quadrum quadrum;
-    private Quadrum previousQuadrum = Quadrum.Undefined;
 
 
     private void UpdateBiomeSettings(bool force = false) {
@@ -795,7 +796,8 @@ public class Watcher(Map map) : MapComponent(map)
             savedTidalVariant = tidalVariant;
             finishedTideMovement = true;
             checkUpToCell = 0;
-            savedTidalVariant = tidalVariant;
+            floodLevel = 0;
+            previousQuadrum = Quadrum.Undefined;
 
             // First loop we get stats and build the initial dictionary
             foreach (var focusCell in map.AllCells.InRandomOrder()) {
@@ -1096,6 +1098,10 @@ public class Watcher(Map map) : MapComponent(map)
 
         foreach (var focusCell in cellWeatherList) {
             // Can the soil be null? I'm not really sure but Imma check it just in case
+            if (map.edificeGrid[focusCell.locationIndex] != null) {
+                continue;
+            }
+
             focusCell.currentTerrain = map.terrainGrid.TerrainAt(focusCell.locationIndex) ?? RimWorld.TerrainDefOf.Soil;
             focusCell.setCurrentExtension();
 

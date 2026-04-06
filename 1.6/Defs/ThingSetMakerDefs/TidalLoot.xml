@@ -102,6 +102,7 @@
                                     <li MayRequire="Hali.NPSBiomes">EggRoeFertilized</li>
                                     <li MayRequire="Hali.NPSBiomes">EggRoeUnfertilized</li>
                                     <li MayRequire="Hali.NPSBiomes">TKKN_ShellfishMeat</li>
+                                    <li>Skull</li>
                                 </thingDefs>
                             </filter>
                             <countRange>2~8</countRange>

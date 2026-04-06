@@ -226,6 +226,9 @@
         <defName>TKKN_Ice</defName>
         <label>ice</label>
         <texturePath>TKKN_NPS/Terrain/ice</texturePath>
+        <pollutionOverlayTexturePath>Terrain/Surfaces/PollutionIce</pollutionOverlayTexturePath>
+        <pollutionColor>(1, 1, 1, 1)</pollutionColor>
+        <pollutionCloudColor>(1, 1, 1, 0.66)</pollutionCloudColor>
         <edgeType>FadeRough</edgeType>
         <renderPrecedence>350</renderPrecedence>
         <pathCost>4</pathCost>
@@ -248,6 +251,9 @@
         <defName>TKKN_MuddyIce</defName>
         <label>ice</label>
         <texturePath>TKKN_NPS/Terrain/muddyIce</texturePath>
+        <pollutionOverlayTexturePath>Terrain/Surfaces/PollutionIce</pollutionOverlayTexturePath>
+        <pollutionColor>(1, 1, 1, 1)</pollutionColor>
+        <pollutionCloudColor>(1, 1, 1, 0.66)</pollutionCloudColor>
         <edgeType>FadeRough</edgeType>
         <renderPrecedence>350</renderPrecedence>
         <pathCost>4</pathCost>
@@ -283,7 +289,7 @@
 
     <TerrainDef ParentName="WaterShallow">
         <defName>NPS_WaterRiverFlood</defName>
-        <label>tidal water</label>
+        <label>flood water</label>
         <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
         <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
         <waterDepthShader>Map/WaterDepth</waterDepthShader>
@@ -297,6 +303,10 @@
         <defName>TKKN_WetMossyTerrain</defName>
         <label>wet lichen-covered dirt</label>
         <texturePath>TKKN_NPS/Terrain/wetMossy</texturePath>
+        <pollutionOverlayTexturePath>Terrain/Surfaces/PollutionMossy</pollutionOverlayTexturePath>
+        <pollutionShaderType MayRequire="Ludeon.RimWorld.Biotech">TerrainFadeRoughSoftLight</pollutionShaderType>
+        <pollutionOverlayScale>(0.66, 0.66)</pollutionOverlayScale>
+        <pollutionColor>(1, 1, 1, 1)</pollutionColor>
         <edgeType>FadeRough</edgeType>
         <renderPrecedence>350</renderPrecedence>
         <pathCost>4</pathCost>

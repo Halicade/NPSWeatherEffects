@@ -6,25 +6,40 @@ namespace NPSWeather;
 
 public static class PawnChecks
 {
-    public static void checks(Pawn pawn, Map map, Watcher watcher, bool isRaining, int ticks) {
+    public static void checks(Pawn pawn, Map map, Watcher watcher, bool isRaining, int ticks, bool checkEvens) {
         if (!pawn.Spawned || pawn.Dead) {
             return;
         }
 
-        bool doExtraChecks = (pawn.thingIDNumber + ticks) % 300 == 0;
+        bool doExtraChecks;
+        if (checkEvens) {
+            if (pawn.thingIDNumber % 2 == 0) {
+                return;
+            }
+        }
+        else {
+            if (pawn.thingIDNumber % 2 == 1) {
+                return;
+            }
+        }
+
+        doExtraChecks = (pawn.thingIDNumber + ticks) % 300 == 0;
+
 
         TerrainDef terrain = pawn.Position.GetTerrain(pawn.MapHeld);
 
         makePaths(pawn, watcher, map);
-        makeBreath(pawn, map, doExtraChecks);
         makeWet(pawn, terrain, isRaining, map);
-        if (!drowningCheck(pawn, terrain, doExtraChecks)) {
-            springCheck(pawn, terrain, doExtraChecks);
+        if (doExtraChecks) {
+            makeBreath(pawn, map);
+            if (!drowningCheck(pawn, terrain)) {
+                springCheck(pawn, terrain);
+            }
         }
     }
 
-    private static void springCheck(Pawn pawn, TerrainDef terrain, bool terrainChecks) {
-        if (pawn.needs == null || !terrainChecks) {
+    private static void springCheck(Pawn pawn, TerrainDef terrain) {
+        if (pawn.needs == null) {
             return;
         }
 
@@ -62,9 +77,9 @@ public static class PawnChecks
         }
     }
 
-    private static bool drowningCheck(Pawn pawn, TerrainDef terrain, bool drowningCheck) {
+    private static bool drowningCheck(Pawn pawn, TerrainDef terrain) {
         //drowning == immobile and in water
-        if (!EffectSettings.allowPawnsDrowning && !drowningCheck) return false;
+        if (!EffectSettings.allowPawnsDrowning) return false;
 
         if (!TerrainTagUtil.TKKN_Wet.Contains(terrain) || !pawn.health.Downed) {
             return false;
@@ -77,7 +92,7 @@ public static class PawnChecks
 
         if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.TKKN_Drowning) != null)
             return false;
-            
+
         var hediff = HediffMaker.MakeHediff(HediffDefOf.TKKN_Drowning, pawn);
         hediff.Severity = 0.001f;
         pawn.health.AddHediff(hediff);
@@ -93,11 +108,6 @@ public static class PawnChecks
 
     private static void makeWet(Pawn pawn, TerrainDef currentTerrain, bool isRaining, Map map) {
         if (!EffectSettings.allowPawnsToGetWet) {
-            return;
-        }
-
-        var hediffDef = HediffDefOf.TKKN_Wetness;
-        if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null) {
             return;
         }
 
@@ -124,6 +134,11 @@ public static class PawnChecks
         }
 
         if (HarmonyWeatherEffects.RimBrellasActive && HarmonyWeatherEffects.HasUmbrella(pawn)) {
+            return;
+        }
+
+        var hediffDef = HediffDefOf.TKKN_Wetness;
+        if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null) {
             return;
         }
 
@@ -158,8 +173,8 @@ public static class PawnChecks
 
     private static readonly Vector3 BreathOffset = new(0f, 0f, -0.04f);
 
-    private static void makeBreath(Pawn pawn, Map map, bool doBreathCheck) {
-        if (!doBreathCheck || !EffectSettings.doColdBreath)
+    private static void makeBreath(Pawn pawn, Map map) {
+        if (!EffectSettings.doColdBreath)
             return;
         if (pawn.Position.GetTemperature(map) >= 3f ||
             (ModsConfig.OdysseyActive &&
@@ -169,12 +184,12 @@ public static class PawnChecks
 
         var head = pawn.Drawer.DrawPos + pawn.Drawer.renderer.BaseHeadOffsetAt(pawn.Rotation) +
                    pawn.Rotation.FacingCell.ToVector3() * 0.21f + BreathOffset;
-
         MoteThrown moteThrown = (MoteThrown)ThingMaker.MakeThing(ThingDefOf.TKKN_Mote_ColdBreath);
         moteThrown.Scale = Rand.Range(.5f, 1.5f);
         moteThrown.rotationRate = Rand.Range(-30f, 30f);
         moteThrown.exactPosition = head;
-        moteThrown.SetVelocity(Rand.Range(20, 30), Rand.Range(0.5f, 0.7f));
+
+        moteThrown.SetVelocity(Rand.Range(-20, 30), Rand.Range(0.5f, 0.7f));
         GenSpawn.Spawn(moteThrown, head.ToIntVec3(), map);
     }
 }
