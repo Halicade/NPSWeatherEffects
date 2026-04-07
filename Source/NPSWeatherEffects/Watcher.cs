@@ -12,8 +12,7 @@ namespace NPSWeather;
 public class Watcher(Map map) : MapComponent(map)
 {
     private const int HowManyRiverSteps = 6;
-    private const int MaxRiverSteps = HowManyRiverSteps - 1;
-    private const int HalfRiverSteps = MaxRiverSteps / 2;
+    private const int HalfRiverSteps = HowManyRiverSteps / 2;
 
     private int howManyTideSteps;
 
