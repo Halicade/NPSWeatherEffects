@@ -12,8 +12,8 @@ namespace NPSWeather;
 public class Watcher(Map map) : MapComponent(map)
 {
     private const int HowManyRiverSteps = 6;
-    private readonly int halfRiverSteps = (int)Math.Round((HowManyRiverSteps - 1M) / 2);
     private const int MaxRiverSteps = HowManyRiverSteps - 1;
+    private const int HalfRiverSteps = MaxRiverSteps / 2;
 
     private int howManyTideSteps;
 
@@ -35,10 +35,9 @@ public class Watcher(Map map) : MapComponent(map)
     private List<cellData> cellWeatherList = [];
 
     private int cycleIndex;
-    public bool doCoast = true; //false if no coast
-    private List<List<cellData>> riverCellsList = [];
 
-    private int floodLevel; // 0 - 3
+    private List<List<cellData>> riverCellsList = [];
+    public int floodLevel;
     private int floodThreat;
     private int floodThreatIncrease;
 
@@ -56,6 +55,7 @@ public class Watcher(Map map) : MapComponent(map)
     private int ticks;
 
     //rebuild every save to keep file size down
+    public bool doCoast = true; //false if no coast
     private readonly List<List<cellData>> tideCellsList = [];
     public int tideLevel; // 0 - 13
     private int totalPuddles;
@@ -221,6 +221,7 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Collections.Look(ref cellWeatherAffectsDict, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref floodThreat, "floodThreat");
         Scribe_Values.Look(ref tideLevel, "tideLevel");
+        Scribe_Values.Look(ref floodLevel, "floodLevel");
         Scribe_Values.Look(ref totalPuddles, "totalPuddles", totalPuddles);
         Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding);
         Scribe_Values.Look(ref anyLavaTerrain, "anyLavaTerrain", anyLavaTerrain);
@@ -423,20 +424,18 @@ public class Watcher(Map map) : MapComponent(map)
         }
     }
 
-    public FloodType GetRiverLevel() {
+    public int GetRiverLevel() {
         if (floodThreat > 1000000 || season == Season.Spring) {
-            return FloodType.High;
+            return HowManyRiverSteps;
         }
 
-        if (season == Season.Fall) {
-            return FloodType.Low;
+        if (season == Season.Fall ||
+            map.gameConditionManager.GetActiveCondition<GameCondition_Drought>() != null ||
+            map.GameConditionManager.GetActiveCondition<RimWorld.GameCondition_Drought>() != null) {
+            return 0;
         }
 
-        if (map.gameConditionManager.GetActiveCondition<GameCondition_Drought>() != null) {
-            return FloodType.Low;
-        }
-
-        return FloodType.Normal;
+        return HalfRiverSteps;
     }
 
     private void DoRiverModify(bool force = false) {
@@ -446,24 +445,15 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
-        FloodType riverLevel = GetRiverLevel();
+        int calculatedRiver = GetRiverLevel();
 
-        bool increaseFlood;
-        if (riverLevel == FloodType.High && floodLevel < HowManyRiverSteps)
-            increaseFlood = true;
-        else if (riverLevel == FloodType.Low && floodLevel > 0)
-            increaseFlood = false;
-        else if (riverLevel == FloodType.Normal && floodLevel < halfRiverSteps)
-            increaseFlood = true;
-        else if (riverLevel == FloodType.Normal && floodLevel > halfRiverSteps)
-            increaseFlood = false;
-        else
+        if (floodLevel == calculatedRiver) {
             return;
+        }
 
-        if ((riverLevel == FloodType.High && floodLevel == HowManyRiverSteps) ||
-            (riverLevel == FloodType.Low && floodLevel == 0) ||
-            (riverLevel == FloodType.Normal && floodLevel == halfRiverSteps)) {
-            return;
+        bool increaseFlood = floodLevel < calculatedRiver;
+        if (floodLevel == HowManyRiverSteps) {
+            floodLevel--;
         }
 
         List<cellData> cellsToChange = riverCellsList[floodLevel];
@@ -481,20 +471,15 @@ public class Watcher(Map map) : MapComponent(map)
 
         //Try again with any cells that may have failed because they were reliant on neighboring cells
         if (increaseFlood) {
-            foreach (var failedCell in failedFloodingTiles) {
+            foreach (var failedCell in failedFloodingTiles.InRandomOrder()) {
                 failedCell.increaseRiver(shallowRiverTerrain);
             }
+
+            floodLevel++;
         }
-
-
-        if (riverLevel == FloodType.High && floodLevel < MaxRiverSteps)
-            floodLevel++;
-        else if (riverLevel == FloodType.Low && floodLevel > 0)
+        else {
             floodLevel--;
-        else if (riverLevel == FloodType.Normal && floodLevel < halfRiverSteps)
-            floodLevel++;
-        else if (riverLevel == FloodType.Normal && floodLevel > halfRiverSteps)
-            floodLevel--;
+        }
     }
 
 
@@ -887,8 +872,8 @@ public class Watcher(Map map) : MapComponent(map)
                 }
                 else if (isRiverTerrain(bottomTerrain)) {
                     for (var j = 1; j < HowManyRiverSteps; j++) {
-                        var num = GenRadial.NumCellsInRadius(j);
-                        for (var i = 0; i <= num; i++) {
+                        int riverVariance = GenRadial.NumCellsInRadius(j) - Rand.Range(0, 2);
+                        for (var i = 0; i <= riverVariance; i++) {
                             IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
                             if (!bankCheck.InBounds(map)) {
                                 continue;

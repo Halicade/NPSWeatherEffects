@@ -74,9 +74,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                     $"Current Tide height: {watcher.tideLevel} | Desired Tide height: {watcher.GetTideLevel()}";
                 Widgets.Label(rect, labelTideLevel);
                 num += 19f;
-            }
-
-            if (watcher.doRiverFlooding) {
+                
                 rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
                 var labelCellTideLevel =
                     $"Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
@@ -84,11 +82,19 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                 num += 19f;
             }
 
-            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var labelFloodLevel =
-                $"Current Flood height: {watcher.GetRiverLevel().ToString()} | Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
-            Widgets.Label(rect, labelFloodLevel);
-            num += 19f;
+            if (watcher.doRiverFlooding) {
+                rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+                var labelFloodLevel =
+                    $"Current Flood level: {watcher.floodLevel} | Desired flood level: {watcher.GetRiverLevel()}";
+                Widgets.Label(rect, labelFloodLevel);
+                num += 19f;
+                
+                rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+                var labelCellFloodLevel =
+                    $"Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
+                Widgets.Label(rect, labelCellFloodLevel);
+                num += 19f;
+            }
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var cellTerrain =
