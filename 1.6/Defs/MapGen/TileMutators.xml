@@ -92,7 +92,7 @@
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_DiurnalTide</defName>
         <label>diurnal tide</label>
-        <description>The tidal levels follow a diurnal cycle. There is only one tidal cycke eacg kybar day.</description>
+        <description>The tidal levels follow a diurnal cycle. There is only one tidal cycle each tidal day.</description>
 
     </TileMutatorDef>
 
