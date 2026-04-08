@@ -361,7 +361,7 @@ public class cellData : IExposable
         }
 
         var leaveSomething = Rand.Value;
-        if (leaveSomething < 0.001f) {
+        if (leaveSomething < 0.002f) {
             if (Rand.Bool) {
                 FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
             }
@@ -381,7 +381,7 @@ public class cellData : IExposable
                 }
             }
         }
-        else if (leaveSomething < 0.002f && (location.GetPlant(map) == null && location.GetCover(map) == null)) {
+        else if (leaveSomething < 0.003f && (location.GetPlant(map) == null && location.GetCover(map) == null)) {
             //grow water and shore plants:
             List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
             plants.Shuffle();

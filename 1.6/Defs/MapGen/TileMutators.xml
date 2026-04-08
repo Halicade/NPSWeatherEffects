@@ -77,7 +77,12 @@
         <defName>NPS_WeakOceanTide</defName>
         <label>weak tide</label>
         <description>The tide levels are weaker here. Less resources are likely to show up on the shore as a result.</description>
-
+        
+        <modExtensions>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.75</tideFactor>
+            </li>
+        </modExtensions>
     </TileMutatorDef>
 
     <TileMutatorDef ParentName="NPS_TidalLevels">
@@ -87,20 +92,33 @@
         <biomeBlacklist>
             <li>Desert</li>
         </biomeBlacklist>
+        <modExtensions>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>1.25</tideFactor>
+            </li>
+        </modExtensions>
     </TileMutatorDef>
 
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_DiurnalTide</defName>
         <label>diurnal tide</label>
         <description>The tidal levels follow a diurnal cycle. There is only one tidal cycle each tidal day.</description>
-
+        <modExtensions>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideVariant>Diurnal</tideVariant>
+            </li>
+        </modExtensions>
     </TileMutatorDef>
 
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_MixedSemidiurnal</defName>
         <label>mixed semidiurnal tide</label>
         <description>The tidal levels follow a mixed semidiurnal cycle. It experiences two high and two low tides of different size every lunar day.</description>
-
+        <modExtensions>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideVariant>MixedSemiDiurnal</tideVariant>
+            </li>
+        </modExtensions>
     </TileMutatorDef>
 
 

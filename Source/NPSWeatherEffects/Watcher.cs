@@ -14,7 +14,10 @@ public class Watcher(Map map) : MapComponent(map)
     private const int HowManyRiverSteps = 6;
     private const int HalfRiverSteps = HowManyRiverSteps / 2;
 
+    private const int BaseTideValue = 3;
     private int howManyTideSteps;
+    private int savedHowManyTideSteps = -1;
+
 
     //Every quarter hour
     private const int TideIntervalCheck = 625;
@@ -57,7 +60,9 @@ public class Watcher(Map map) : MapComponent(map)
     public bool doCoast = true; //false if no coast
     private readonly List<List<cellData>> tideCellsList = [];
     public int tideLevel; // 0 - 13
-    private int totalPuddles;
+    public float tideFactor = 1;
+    private Rot4 coastRotation;
+
     private float longCurrentTile;
     private long ticksOffsetFromLongitude;
     private int checkUpToCell;
@@ -66,6 +71,8 @@ public class Watcher(Map map) : MapComponent(map)
     private bool tideIncreasing;
     private TideVariant savedTidalVariant;
     private TideVariant tidalVariant;
+
+    private int totalPuddles;
 
     //Values not in use
     //private float humidity;
@@ -84,7 +91,6 @@ public class Watcher(Map map) : MapComponent(map)
     private float currentSnowRate;
     private int mapArea; //Default area 62500
     private bool isRaining;
-    private Rot4 coastRotation;
     private TerrainDef oceanTerrain;
     private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
@@ -227,6 +233,7 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Values.Look(ref checkUpToCell, "checkUpToCell");
         Scribe_Values.Look(ref finishedTideMovement, "finishedTideMovement", true);
         Scribe_Values.Look(ref savedTidalVariant, "savedTidalVariant");
+        Scribe_Values.Look(ref savedHowManyTideSteps, "savedHowManyTideSteps", -1);
     }
 
 
@@ -483,38 +490,36 @@ public class Watcher(Map map) : MapComponent(map)
 
 
     public int GetTideLevel() {
-        if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse)) {
-            return 4;
-        }
-
         var hoursPassed = GenMath.PositiveModRemap(Find.TickManager.TicksAbs + ticksOffsetFromLongitude, 2500, 24);
 
 
         hoursPassed = GenDate.DaysPassed * 24 + hoursPassed;
+        float calculatedTide;
 
         switch (tidalVariant) {
             case TideVariant.Weak:
-                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 2;
             case TideVariant.Strong:
-                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 4;
             case TideVariant.SemiDiurnal:
                 // For Desmos
-                // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25/24)*12)*x))+2\right)
-                return Mathf.RoundToInt(2 * Mathf.Sin(0.5235988f * hoursPassed) + 2) * 3;
+                // \operatorname{round}\left(1.5\cdot(\sin((2*\pi)/((25/24)*12)*x))+1.5\right)
+                calculatedTide = 1.5f * Mathf.Sin(0.5235988f * hoursPassed) + 1.5f;
+                break;
             case TideVariant.Diurnal:
                 // For Desmos
-                // \operatorname{round}\left(2\cdot(\sin((2*\pi)/((25))*x))+2\right)
-                return Mathf.RoundToInt(2 * Mathf.Sin(0.25132743f * hoursPassed) + 2) * 3;
+                // \operatorname{round}\left(1.5\cdot(\sin((2*\pi)/((25))*x))+1.5\right)
+                calculatedTide = 1.5f * Mathf.Sin(0.25132743f * hoursPassed) + 1.5f;
+                break;
             case TideVariant.MixedSemiDiurnal:
                 /*
                  For Desmos
-                \operatorname{round}\left(-\left(1.2\sin\left(\frac{\pi x}{6.21}\right)+0.6\ \sin\left(\frac{\pi x}{12.42}\right)\right)+2\right)
+                \operatorname{round}\left(-\left(1\sin\left(\frac{\pi x}{6.21}\right)+0.6\ \sin\left(\frac{\pi x}{12.42}\right)\right)+1.5\right)
                 int mixedSemiDiurnalValue =
-                    (int)(-(1.2 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
-                            0.6 * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2);
+                    (int)(-(1 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
+                            0.6 * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 1.5);
                 */
-                return Mathf.RoundToInt(-(1.2f * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
-                                          0.6f * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 2f) * 3;
+                calculatedTide = -(1 * Mathf.Sin(Mathf.PI * hoursPassed / 6.21f) +
+                                   0.6f * Mathf.Sin(Mathf.PI * hoursPassed / 12.42f)) + 1.5f;
+                break;
             case TideVariant.None:
             default:
                 Log.Error(
@@ -524,6 +529,13 @@ public class Watcher(Map map) : MapComponent(map)
                     " Seed: " + Find.World.info.seedString);
                 throw new ArgumentOutOfRangeException();
         }
+
+        if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse)) {
+            calculatedTide++;
+            calculatedTide *= 1.25f;
+        }
+
+        return Mathf.RoundToInt(Mathf.RoundToInt(calculatedTide) * tideFactor * BaseTideValue);
     }
 
 
@@ -539,12 +551,13 @@ public class Watcher(Map map) : MapComponent(map)
             checkUpToCell = 0;
             int calculatedTide = GetTideLevel();
 
-            if (tideLevel == calculatedTide) {
-                return;
-            }
 
             if (calculatedTide >= tideCellsList.Count) {
                 calculatedTide = tideCellsList.Count - 1;
+            }
+
+            if (tideLevel == calculatedTide) {
+                return;
             }
 
             tideIncreasing = tideLevel < calculatedTide;
@@ -646,15 +659,17 @@ public class Watcher(Map map) : MapComponent(map)
                     " Biome name: " + map.Biome.label +
                     " Biome source: " + map.Biome.modContentPack.Name +
                     " Map size: " + map.Size);
-        foreach (var focusCell in allCells) {
-            if (!cellWeatherAffects.TryGetValue(focusCell, out var cellData)) {
-                Log.Error("NPSWeatherEffects: unable to find cellData for " + focusCell);
-                continue;
-            }
+        if (cellWeatherAffects.Count != 0) {
+            foreach (var focusCell in allCells) {
+                if (!cellWeatherAffects.TryGetValue(focusCell, out var cellData)) {
+                    Log.Error("NPSWeatherEffects: unable to find cellData for " + focusCell);
+                    continue;
+                }
 
-            cellData.resetCellData();
-            frostGridComponent.removeDepth(cellData);
-            map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
+                cellData.resetCellData();
+                frostGridComponent.removeDepth(cellData);
+                map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
+            }
         }
 
         cellWeatherAffectsDict.Clear();
@@ -662,6 +677,7 @@ public class Watcher(Map map) : MapComponent(map)
         cellWeatherList.Clear();
         riverCellsList.Clear();
         tideCellsList.Clear();
+        dontRunAnything = true;
     }
 
     public void RebuildCellLists() {
@@ -669,6 +685,7 @@ public class Watcher(Map map) : MapComponent(map)
             regenCellLists = true;
         }
 
+        dontRunAnything = false;
         if (map.IsPocketMap) {
             //Log.Message("This is a pocket map. Nothing is running");
             dontRunAnything = true;
@@ -706,6 +723,13 @@ public class Watcher(Map map) : MapComponent(map)
         deepOceanTerrain = MapGenUtility.DeepOceanWaterTerrainAt(IntVec3.NorthEast, map);
         oceanTerrain = TerrainDefOf.NPS_WaterOceanTide;
         beachTerrain = MapGenUtility.BeachTerrainAt(IntVec3.NorthEast, map);
+
+        tideFactor = biomeSettings?.tideFactor ?? 1;
+
+        if (tideFactor == 0) {
+            doCoast = false;
+        }
+
         if (doCoast) {
             longCurrentTile = Find.WorldGrid.LongLatOf(map.Tile).x;
             ticksOffsetFromLongitude = GenDate.LocalTicksOffsetFromLongitude(longCurrentTile);
@@ -718,34 +742,38 @@ public class Watcher(Map map) : MapComponent(map)
                 doCoast = false;
             }
 
+
             tidalVariant = TideVariant.SemiDiurnal;
 
-            howManyTideSteps = 12;
-            foreach (var mutator in mutators) {
-                if (mutator == TileMutatorDefOf.NPS_StrongOceanTide) {
-                    howManyTideSteps = 16;
-                    break;
+
+            foreach (TileMutatorDef mutator in mutators) {
+                MutatorSettings mutatorExtension = mutator.GetModExtension<MutatorSettings>();
+                if (mutatorExtension == null) {
+                    continue;
                 }
 
-                if (mutator == TileMutatorDefOf.NPS_WeakOceanTide) {
-                    howManyTideSteps = 8;
-                    break;
-                }
-
-                if (mutator == TileMutatorDefOf.NPS_DiurnalTide) {
-                    tidalVariant = TideVariant.Diurnal;
-                    break;
-                }
-
-                if (mutator == TileMutatorDefOf.NPS_MixedSemidiurnal) {
-                    tidalVariant = TideVariant.MixedSemiDiurnal;
-                    break;
+                tideFactor *= mutatorExtension.tideFactor;
+                if (mutatorExtension.tideVariant != TideVariant.None) {
+                    tidalVariant = mutatorExtension.tideVariant;
                 }
             }
 
-            if (!regenCellLists && tidalVariant != savedTidalVariant) {
-                Log.Warning("NPSWeatherEffects: Tile mutators have changed. We need to regenerate the maps settings");
-                regenCellLists = true;
+            howManyTideSteps = Mathf.RoundToInt(BaseTideValue * tideFactor * 3);
+
+            if (howManyTideSteps == 0) {
+                doCoast = false;
+            }
+
+            if (!regenCellLists) {
+                if (tidalVariant != savedTidalVariant) {
+                    Log.Warning("NPSWeatherEffects: Tide variant has changed. Regenerating the map");
+                    regenCellLists = true;
+                }
+
+                if (howManyTideSteps != savedHowManyTideSteps) {
+                    Log.Warning("NPSWeatherEffects: Tide levels have changed. Regenerating the map");
+                    regenCellLists = true;
+                }
             }
         }
 
@@ -778,6 +806,7 @@ public class Watcher(Map map) : MapComponent(map)
             cellWeatherAffects = [];
             cellWeatherList.Clear();
             savedTidalVariant = tidalVariant;
+            savedHowManyTideSteps = howManyTideSteps;
             finishedTideMovement = true;
             checkUpToCell = 0;
             floodLevel = 0;
@@ -822,7 +851,7 @@ public class Watcher(Map map) : MapComponent(map)
             foreach (var focusCell in map.AllCells.InRandomOrder()) {
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
                 if (isOceanicTerrain(bottomTerrain)) {
-                    int tideVariance = howManyTideSteps - Rand.Range(0, 5);
+                    int tideVariance = howManyTideSteps - Rand.Range(0, Mathf.Min(howManyTideSteps, 5));
                     for (var j = 1; j < tideVariance; j++) {
                         var num = GenRadial.NumCellsInRadius(j);
                         for (var i = 0; i <= num; i++) {

@@ -15,6 +15,8 @@ public class BiomeSeasonalSettings : DefModExtension
     public int maxSprings=1;
     public float springSpawnChance=0;
 
+    public float tideFactor = 1;
+
     public List<PawnKindDef> specialHerds;
 
     //disease settings
