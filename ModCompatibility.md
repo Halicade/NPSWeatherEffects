@@ -10,6 +10,8 @@ For `TerrainGrid.SetTerrain`, settings making use of this include `Ground/Water 
 For `GenTemperature.TryGetTemperatureForCell`, there is a setting `Use map-wide temperature` toggle this on and most cell
 calculations will make use of the maps temperature instead. This includes indoors. Pawns will continue to query their current cell for temperature related effects.
 
+Terraforming mods should be compatible. However, if a wet terrain block is terraformed, it will not be affected until save and reload. A warning will appear indicating it has been changed but should otherwise not be an issue.
+
 ### Mods that have compatibility in some way with this mod.
 
 | Mod                                                                                                   | PackageId                     | Notes                                                                                                           |
