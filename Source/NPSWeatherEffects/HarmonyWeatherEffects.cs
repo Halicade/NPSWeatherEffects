@@ -12,23 +12,21 @@ namespace NPSWeather;
 [StaticConstructorOnStartup]
 public class HarmonyWeatherEffects
 {
-    
     // https://steamcommunity.com/sharedfiles/filedetails/?id=2079784964
     public static readonly bool RimBrellasActive;
-    
+
     // https://steamcommunity.com/sharedfiles/filedetails/?id=3555461401
     public static readonly bool DesirePathsActive;
-    
+
     // https://steamcommunity.com/sharedfiles/filedetails/?id=3403972335
     public static readonly bool StorytellerJianghuActive;
-    
+
     public static readonly bool NPSBiomesActive;
 
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
 
     public static HasUmbrellaDelegate HasUmbrella;
-    
-    
+
 
     static HarmonyWeatherEffects() {
         TerrainTagUtil.IntializeTerrainTags();
@@ -38,7 +36,7 @@ public class HarmonyWeatherEffects
 
         DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths") != null;
         RimBrellasActive = ModLister.GetActiveModWithIdentifier("battlemage64.Rimbrellas", true) != null;
-        NPSBiomesActive=ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
+        NPSBiomesActive = ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
         StorytellerJianghuActive = ModLister.GetActiveModWithIdentifier("zal.jianghujin", true) != null;
 
         if (ModsConfig.OdysseyActive) {
@@ -53,14 +51,13 @@ public class HarmonyWeatherEffects
 
 
         var harmony = new Harmony("Hali.NPS_WeatherEffects");
-        
+
         harmony.Patch(AccessTools.Method(typeof(UIRoot_Entry), nameof(UIRoot_Entry.Init)),
             prefix: new HarmonyMethod(typeof(UIRootEntry_Init), nameof(UIRootEntry_Init.Prefix)));
 
         harmony.Patch(AccessTools.Method(typeof(BiomeDef), nameof(BiomeDef.CommonalityOfDisease)),
             prefix: new HarmonyMethod(typeof(BiomeDef_CommonalityOfDisease),
                 nameof(BiomeDef_CommonalityOfDisease.Prefix)));
-
 
 
         harmony.Patch(AccessTools.Method(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI)),
@@ -100,21 +97,21 @@ public class HarmonyWeatherEffects
                 AccessTools.Method(typeof(PawnRenderNodeWorker_Body), nameof(PawnRenderNodeWorker_Body.CanDrawNow)),
                 postfix: new HarmonyMethod(typeof(PawnRenderNodeWorker_Body_CanDrawNow),
                     nameof(PawnRenderNodeWorker_Body_CanDrawNow.Postfix)));
-            
+
             harmony.Patch(
                 AccessTools.Method(typeof(Graphic_Shadow), nameof(Graphic_Shadow.DrawWorker)),
                 prefix: new HarmonyMethod(typeof(Graphic_Shadow_DrawWorker),
                     nameof(Graphic_Shadow_DrawWorker.Prefix)));
         }
 
-        /*
-         Taking this out for now because most things aren't implemented
+        
+        //Taking this out for now because most things aren't implemented
         if (EffectSettings.allowPlantEffects) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.Graphic)),
                 postfix: new HarmonyMethod(typeof(Plant_Graphic),
                     nameof(Plant_Graphic.Postfix)));
         }
-        */
+        
 
         if (EffectSettings.terrainAffectTemperature) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Thing), nameof(Thing.AmbientTemperature)),

@@ -32,7 +32,6 @@
 
     <GameConditionDef>
     <defName>TKKN_Drought</defName>
-    <conditionClass>NPSWeather.GameCondition_Drought</conditionClass>
     <label>drought</label>
     <description>There's no rain in the forecast... for a very long time.</description>
     <endMessage>The drought is ending.</endMessage>
