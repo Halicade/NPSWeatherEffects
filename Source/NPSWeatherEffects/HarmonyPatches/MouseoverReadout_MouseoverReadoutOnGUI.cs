@@ -103,7 +103,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             num += 19f;
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var cellStatus = $"Wet {cell.isWet} | Flooded {cell.isFlooded} | Frozen {cell.isFrozen}";
+            var cellStatus = $"Wet {cell.isWet} | Frozen {cell.isFrozen}";
             Widgets.Label(rect, cellStatus);
             num += 19f;
 

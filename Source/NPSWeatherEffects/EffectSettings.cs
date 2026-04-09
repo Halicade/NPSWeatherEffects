@@ -232,6 +232,7 @@ public class EffectSettings : ModSettings
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
+                watcherComponent.RemoveEffects();
                 watcherComponent.RebuildCellLists();
                 Messages.Message("NPS_RebuildingFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
                 regenCells = false;
@@ -244,7 +245,7 @@ public class EffectSettings : ModSettings
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
-                watcherComponent.removeEffects();
+                watcherComponent.RemoveEffects();
                 Messages.Message("NPS_RemovalFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
                 regenCells = false;
             }

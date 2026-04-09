@@ -25,7 +25,6 @@ public class cellData : IExposable
     private int lastPackedCheck;
     public int howWet;
     public float howWetPlants = 60;
-    public bool isFlooded;
     public bool isFrozen;
     public bool isWet;
     public IntVec3 location;
@@ -55,7 +54,6 @@ public class cellData : IExposable
         Scribe_Values.Look(ref frostLevel, "frostLevel");
         Scribe_Values.Look(ref frostNoise, "frostNoise");
         Scribe_Values.Look(ref isWet, "isWet");
-        Scribe_Values.Look(ref isFlooded, "isFlooded");
         Scribe_Values.Look(ref isFrozen, "isFrozen");
         Scribe_Values.Look(ref location, "location", forceSave: true);
         Scribe_Defs.Look(ref driedTerrain, "driedTerrain");
@@ -506,12 +504,12 @@ public class cellData : IExposable
         forceRemoveTempTerrain();
         forceUnpack();
         forceTerrainDry();
+        removeWetSand();
         forceRemoveFrost();
     }
 
     public void forceRemoveTempTerrain() {
         currentTerrain = location.GetTerrain(map);
-        isFlooded = false;
         isFrozen = false;
         riverFocus = IntVec3.Invalid;
         riverLevel = 999;
@@ -558,6 +556,17 @@ public class cellData : IExposable
         howWet = 0;
         driedTerrain = null;
         setCurrentExtension();
+    }
+
+    public void removeWetSand() {
+        if (map.terrainGrid.BaseTerrainAt(location) == TerrainDefOf.TKKN_SandBeachWetSalt) {
+            if (map.terrainGrid.UnderTerrainAt(location) != null) {
+                map.terrainGrid.SetUnderTerrain(location, RimWorld.TerrainDefOf.Sand);
+            }
+            else {
+                map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Sand);
+            }
+        }
     }
 
     public void forceRemoveFrost() {
