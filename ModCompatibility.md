@@ -1,4 +1,16 @@
-﻿# Mods that have compatibility in some way with this mod.
+﻿
+# General
+
+This mod makes heavy use of `TerrainGrid.SetTerrain` and `GenTemperature.TryGetTemperatureForCell`. There are warnings
+that display the name of mods that are patching these specific methods. It is reccomended to turn off relevant settings if
+there is too much lag. Or remove the mentioned mods.
+
+For `TerrainGrid.SetTerrain`, settings making use of this include `Ground/Water freezes` and `Show rain effects`
+
+For `GenTemperature.TryGetTemperatureForCell`, there is a setting `Use map-wide temperature` toggle this on and most cell
+calculations will make use of the maps temperature instead. This includes indoors. Pawns will continue to query their current cell for temperature related effects.
+
+### Mods that have compatibility in some way with this mod.
 
 | Mod                                                                                                   | PackageId                     | Notes                                                                                                           |
 |-------------------------------------------------------------------------------------------------------|-------------------------------|-----------------------------------------------------------------------------------------------------------------|
@@ -9,13 +21,6 @@
 | [Winter Taiga Biome 2](https://steamcommunity.com/sharedfiles/filedetails/?id=3666855302)             | reel.wintertaigabiome2        | Lowered chance of allergies.                                                                                    |
 | [Yaoma Storytellers - Jianghu Jin](https://steamcommunity.com/sharedfiles/filedetails/?id=3403972335) | zal.jianghujin                | Rebuilds cell map when effect triggers                                                                          |
 
-### General
+### Other mods patching this one:
 
-This mod makes heavy use of `TerrainGrid.SetTerrain` and `GenTemperature.TryGetTemperatureForCell`. There are warnings
-that display the name of mods that are patching these specific methods. It is reccomended to turn off relevant settings if
-there is too much lag. Or remove the mentioned mods.
-
-For `TerrainGrid.SetTerrain`, settings making use of this include `Ground/Water freezes` and `Show rain effects`
-
-For `GenTemperature.TryGetTemperatureForCell`, there is a setting `Use map-wide temperature` toggle this on and most cell
-calculations will make use of the maps temperature instead. This includes indoors. Pawns will continue to query their current cell for temperature related effects.
+- [Ice Is Slippery](https://steamcommunity.com/sharedfiles/filedetails/?id=3317403790) Ice is patched to allow pawns to fall on it.
