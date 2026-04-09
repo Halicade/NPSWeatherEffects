@@ -714,11 +714,6 @@ public class Watcher(Map map) : MapComponent(map)
             doCoast = false;
         }
 
-        IList<TileMutatorDef> mutators = map.TileInfo.Mutators;
-        if (mutators.Contains(TileMutatorDefOf.VEE_RisingWaters)) {
-            doCoast = false;
-        }
-
         //oceanTerrain = MapGenUtility.ShallowOceanWaterTerrainAt(new IntVec3(1, 0, 1), map);
         deepOceanTerrain = MapGenUtility.DeepOceanWaterTerrainAt(IntVec3.NorthEast, map);
         oceanTerrain = TerrainDefOf.NPS_WaterOceanTide;
@@ -744,9 +739,8 @@ public class Watcher(Map map) : MapComponent(map)
 
 
             tidalVariant = TideVariant.SemiDiurnal;
-
-
-            foreach (TileMutatorDef mutator in mutators) {
+            
+            foreach (TileMutatorDef mutator in map.TileInfo.Mutators) {
                 MutatorSettings mutatorExtension = mutator.GetModExtension<MutatorSettings>();
                 if (mutatorExtension == null) {
                     continue;

@@ -11,6 +11,7 @@
     <li IfModActive="Ludeon.Rimworld.Biotech">1.6/DLC/Biotech</li>
     
     <!--Mods-->
+    <li IfModActive="vanillaexpanded.vexploratione">1.6/Mods/LarnmarksExpanded</li>
     <li IfModActive="Hali.NPSBiomes">1.6/Mods/NPSBiomes</li>
     <li IfModActive="reel.wintertaigabiome2">1.6/Mods/WinterTaigaBiome</li>
 
