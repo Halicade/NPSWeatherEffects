@@ -651,7 +651,7 @@ public class Watcher(Map map) : MapComponent(map)
     }
     */
 
-    public void resetCells() {
+    public void removeEffects() {
         IEnumerable<IntVec3> allCells = map.AllCells;
         //IEnumerable<IntVec3> tmpTerrain = map.AllCells.InRandomOrder();
         Log.Message("NPSWeatherEffects: Resetting cells for map: " + map +

@@ -94,11 +94,13 @@
     <NPS_showDevReadout_title>Show dev readout</NPS_showDevReadout_title>
     <NPS_showDevReadout_text>Show dev in the bottom left</NPS_showDevReadout_text>
 
-    <NPS_removeEffects>Remove all effects</NPS_removeEffects>
-    <NPS_removeEffects_text>Remove all effects on the current map.</NPS_removeEffects_text>
-
-    <NPS_resetMap>Reset map</NPS_resetMap>
-    <NPS_resetMap_text>Remove and reset all effects on the map.</NPS_resetMap_text>
+    <NPS_reapplyMap>Reset map</NPS_reapplyMap>
+    <NPS_reapplyMap_text>Remove and reapply all effects on the current map:</NPS_reapplyMap_text>
+    <NPS_RebuildingFinished>Map has been reset</NPS_RebuildingFinished>
+    
+    <NPS_removeEffects>Disable all effects</NPS_removeEffects>
+    <NPS_removeEffects_text>Remove all effects on the current map and prevent new ones from taking effect:</NPS_removeEffects_text>
+    <NPS_RemovalFinished>Weather effect removal has been completed</NPS_RemovalFinished>
 
     <!-- @formatter:on -->
 </LanguageData>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -95,8 +96,8 @@ public class EffectSettings : ModSettings
                 "NPS_makePuddles_title".Translate(),
                 ref makePuddles,
                 "NPS_makePuddles_text".Translate());
-            
-                    
+
+
             if (!ModsConfig.OdysseyActive) {
                 list.CheckboxLabeled(
                     "NPS_doFloods_title".Translate(),
@@ -108,7 +109,7 @@ public class EffectSettings : ModSettings
                 "NPS_doTides_title".Translate(),
                 ref doTides,
                 "NPS_doTides_text".Translate());
-            
+
             list.CheckboxLabeled(
                 "NPS_leaveLoot_title".Translate(),
                 ref leaveLoot,
@@ -120,7 +121,6 @@ public class EffectSettings : ModSettings
                     ref forbidLoot,
                     "NPS_forbidLoot_text".Translate());
             }
-            
         }
 
         list.Gap();
@@ -139,7 +139,7 @@ public class EffectSettings : ModSettings
         Text.Font = GameFont.Medium;
         list.Label("NPS_RequiresRestart".Translate());
         Text.Font = GameFont.Small;
-        
+
         list.CheckboxLabeled(
             "NPS_doAmbientTemperature_title".Translate(),
             ref terrainAffectTemperature,
@@ -149,7 +149,7 @@ public class EffectSettings : ModSettings
             "NPS_allowPlantEffects_title".Translate(),
             ref allowPlantEffects,
             "NPS_allowPlantEffects_text".Translate());
-        
+
         if (allowPawnEffects && !ModsConfig.OdysseyActive) {
             list.CheckboxLabeled(
                 "NPS_allowPawnsSwim_title".Translate(),
@@ -187,7 +187,7 @@ public class EffectSettings : ModSettings
                 "NPS_pawnEffectsOnlyColonists_title".Translate(),
                 ref pawnEffectsOnlyColonists,
                 "NPS_pawnEffectsOnlyColonists_text".Translate());
-            list.Label("NPS_springEffects_title".Translate(),tooltip:"NPS_springEffects_text".Translate());
+            list.Label("NPS_springEffects_title".Translate(), tooltip: "NPS_springEffects_text".Translate());
             if (!HarmonyWeatherEffects.DesirePathsActive) {
                 list.CheckboxLabeled(
                     "NPS_doDirtPath_title".Translate(),
@@ -227,22 +227,25 @@ public class EffectSettings : ModSettings
 
         list.Gap(30f);
         if (Current.Game?.CurrentMap != null) {
-            if (list.ButtonText("NPS_removeEffects".Translate(), "NPS_removeEffects_text".Translate())) {
+            list.Label("NPS_reapplyMap_text".Translate());
+            if (list.ButtonText("NPS_reapplyMap".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
-                watcherComponent.resetCells();
+                watcherComponent.RebuildCellLists();
+                Messages.Message("NPS_RebuildingFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
                 regenCells = false;
             }
 
             list.Gap(30f);
-            
-            if (list.ButtonText("NPS_resetMap".Translate(), "NPS_resetMap_text".Translate())) {
+
+            list.Label("NPS_removeEffects_text".Translate());
+            if (list.ButtonText(label: "NPS_removeEffects".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
                 regenCells = true;
-                watcherComponent.resetCells();
-                watcherComponent.RebuildCellLists();
+                watcherComponent.removeEffects();
+                Messages.Message("NPS_RemovalFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
                 regenCells = false;
             }
         }
