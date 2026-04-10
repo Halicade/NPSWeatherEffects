@@ -103,6 +103,7 @@ public class Watcher(Map map) : MapComponent(map)
     public Season season;
     private Quadrum quadrum;
     private Quadrum previousQuadrum = Quadrum.Undefined;
+    public bool droughtActive;
 
     private const int EffectIntervalCheck = 625;
     private const int MinimumCellsPerTick = 5;
@@ -249,6 +250,15 @@ public class Watcher(Map map) : MapComponent(map)
         quadrum = GenDate.Quadrum(ticks, location.x);
 
         season = GenDate.Season(ticks, location);
+        droughtActive = false;
+        foreach (var gameCondition in map.gameConditionManager.ActiveConditions) {
+            if (gameCondition.def == GameConditionDefOf.TKKN_Drought ||
+                gameCondition.def == RimWorld.GameConditionDefOf.Drought) {
+                droughtActive = true;
+            }
+        }
+
+
         if (biomeSettings == null)
             return;
         if (quadrum == previousQuadrum) {
@@ -530,7 +540,7 @@ public class Watcher(Map map) : MapComponent(map)
                 throw new ArgumentOutOfRangeException();
         }
 
-        if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse)) {
+        if (map.gameConditionManager.ConditionIsActive(RimWorld.GameConditionDefOf.Eclipse)) {
             calculatedTide++;
             calculatedTide *= 1.25f;
         }
