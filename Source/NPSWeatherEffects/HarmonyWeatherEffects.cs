@@ -22,6 +22,8 @@ public class HarmonyWeatherEffects
     public static readonly bool StorytellerJianghuActive;
 
     public static readonly bool NPSBiomesActive;
+    
+    public static readonly bool WaterFreezesActive;
 
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
 
@@ -34,15 +36,20 @@ public class HarmonyWeatherEffects
         PlantReactionUtil.InitializePlantGraphics();
         BiomeUtil.InitializeDefaults();
 
-        DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths") != null;
+        DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths",true) != null;
         RimBrellasActive = ModLister.GetActiveModWithIdentifier("battlemage64.Rimbrellas", true) != null;
         NPSBiomesActive = ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
         StorytellerJianghuActive = ModLister.GetActiveModWithIdentifier("zal.jianghujin", true) != null;
+        WaterFreezesActive = ModLister.GetActiveModWithIdentifier("mlie.waterfreezes", true) != null;
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
             EffectSettings.doFloods = false;
             EffectSettings.allowPawnsSwim = false;
+        }
+
+        if (WaterFreezesActive) {
+            EffectSettings.doIce = false;
         }
 
         if (DesirePathsActive) {
