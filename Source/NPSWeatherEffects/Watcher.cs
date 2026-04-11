@@ -444,7 +444,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         if (season == Season.Fall ||
             map.gameConditionManager.ConditionIsActive(GameConditionDefOf.TKKN_Drought) ||
-            map.GameConditionManager.GetActiveCondition<RimWorld.GameCondition_Drought>() != null) {
+            map.GameConditionManager.GetActiveCondition<GameCondition_Drought>() != null) {
             return 0;
         }
 
