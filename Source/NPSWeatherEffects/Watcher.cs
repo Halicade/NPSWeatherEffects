@@ -779,7 +779,6 @@ public class Watcher(Map map) : MapComponent(map)
             tidalVariant = TideVariant.SemiDiurnal;
 
             foreach (TileMutatorDef mutator in map.TileInfo.Mutators) {
-                Log.Message("Found a mutator " + mutator);
                 MutatorSettings mutatorExtension = mutator.GetModExtension<MutatorSettings>();
                 if (mutatorExtension == null) {
                     continue;
