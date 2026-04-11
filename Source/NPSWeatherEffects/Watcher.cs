@@ -19,7 +19,7 @@ public class Watcher(Map map) : MapComponent(map)
     private int savedHowManyTideSteps = -1;
 
     //Increment in the case of large scale changes that would affect currently generated maps
-    private const int CurrentRevision = 1;
+    private const int CurrentRevision = 2;
     private int savedRevision;
 
     //Every quarter hour
@@ -677,8 +677,13 @@ public class Watcher(Map map) : MapComponent(map)
                     continue;
                 }
 
-                //Need to assign the map in case this is initiated on game load. Map location is not saved here
+                // Need to assign the map and locationIndex in case this is initiated on game load.
+                // Values are not saved
                 cellData.map ??= map;
+                if (cellData.locationIndex == 0) {
+                    cellData.locationIndex = map.cellIndices.CellToIndex(focusCell);
+                }
+
                 cellData.resetCellData();
                 frostGridComponent.removeDepth(cellData);
                 map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);

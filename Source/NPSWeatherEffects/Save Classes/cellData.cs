@@ -528,11 +528,10 @@ public class cellData : IExposable
         currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
         howPacked = 0;
         packed = false;
-        if (currentTerrain == TerrainDefOf.TKKN_DirtPath) {
-            map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Soil);
-        }
-        else if (currentTerrain == TerrainDefOf.TKKN_SandPath) {
-            map.terrainGrid.SetTerrain(location, RimWorld.TerrainDefOf.Sand);
+        
+        if (currentTerrain == TerrainDefOf.TKKN_DirtPath || 
+            currentTerrain == TerrainDefOf.TKKN_SandPath) {
+            map.terrainGrid.RemoveTopLayer(location);
         }
     }
 
