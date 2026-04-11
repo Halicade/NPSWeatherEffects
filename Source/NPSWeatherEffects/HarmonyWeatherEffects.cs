@@ -25,6 +25,8 @@ public class HarmonyWeatherEffects
     
     public static readonly bool WaterFreezesActive;
 
+    public static readonly bool SeasonalWeatherModActive;
+
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
 
     public static HasUmbrellaDelegate HasUmbrella;
@@ -41,6 +43,8 @@ public class HarmonyWeatherEffects
         NPSBiomesActive = ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
         StorytellerJianghuActive = ModLister.GetActiveModWithIdentifier("zal.jianghujin", true) != null;
         WaterFreezesActive = ModLister.GetActiveModWithIdentifier("mlie.waterfreezes", true) != null;
+        SeasonalWeatherModActive = ModLister.GetActiveModWithIdentifier("nightmare.weathercontrol", true) != null ||
+                               ModLister.GetActiveModWithIdentifier("mlie.seasonalweather", true) != null;
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
@@ -54,6 +58,10 @@ public class HarmonyWeatherEffects
 
         if (DesirePathsActive) {
             EffectSettings.doDirtPath = false;
+        }
+
+        if (SeasonalWeatherModActive) {
+            EffectSettings.seasonalWeather = false;
         }
 
 

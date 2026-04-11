@@ -170,10 +170,12 @@ public class EffectSettings : ModSettings
             "NPS_seasonalIncidents_title".Translate(),
             ref seasonalIncidents,
             "NPS_seasonalIncidents_text".Translate());
-        list.CheckboxLabeled(
-            "NPS_seasonalWeather_title".Translate(),
-            ref seasonalWeather,
-            "NPS_seasonalWeather_text".Translate());
+        if (!HarmonyWeatherEffects.SeasonalWeatherModActive) {
+            list.CheckboxLabeled(
+                "NPS_seasonalWeather_title".Translate(),
+                ref seasonalWeather,
+                "NPS_seasonalWeather_text".Translate());
+        }
 
         list.Gap();
 
