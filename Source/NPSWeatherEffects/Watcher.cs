@@ -18,6 +18,9 @@ public class Watcher(Map map) : MapComponent(map)
     private int howManyTideSteps;
     private int savedHowManyTideSteps = -1;
 
+    //Increment in the case of large scale changes that would affect currently generated maps
+    private const int CurrentRevision = 1;
+    private int savedRevision;
 
     //Every quarter hour
     private const int TideIntervalCheck = 625;
@@ -232,6 +235,7 @@ public class Watcher(Map map) : MapComponent(map)
         Scribe_Values.Look(ref finishedTideMovement, "finishedTideMovement", true);
         Scribe_Values.Look(ref savedTidalVariant, "savedTidalVariant");
         Scribe_Values.Look(ref savedHowManyTideSteps, "savedHowManyTideSteps", -1);
+        Scribe_Values.Look(ref savedRevision, "savedRevision");
     }
 
 
@@ -666,20 +670,24 @@ public class Watcher(Map map) : MapComponent(map)
                     " Biome name: " + map.Biome.label +
                     " Biome source: " + map.Biome.modContentPack.Name +
                     " Map size: " + map.Size);
-        if (cellWeatherAffects.Count != 0) {
+        if (cellWeatherAffectsDict?.Count > 0) {
             foreach (var focusCell in allCells) {
-                if (!cellWeatherAffects.TryGetValue(focusCell, out var cellData)) {
+                if (!cellWeatherAffectsDict.TryGetValue(focusCell, out var cellData)) {
                     Log.Error("NPSWeatherEffects: unable to find cellData for " + focusCell);
                     continue;
                 }
 
+                //Need to assign the map in case this is initiated on game load. Map location is not saved here
+                cellData.map ??= map;
                 cellData.resetCellData();
                 frostGridComponent.removeDepth(cellData);
                 map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
             }
+
+            cellWeatherAffectsDict.Clear();
         }
 
-        cellWeatherAffectsDict.Clear();
+        cellWeatherAffectsDict = [];
         cellWeatherAffects = [];
         cellWeatherList.Clear();
         riverCellsList.Clear();
@@ -689,6 +697,29 @@ public class Watcher(Map map) : MapComponent(map)
 
     public void RebuildCellLists() {
         if (EffectSettings.regenCells) {
+            regenCellLists = true;
+        }
+
+        if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
+            beachTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
+        }
+        //rebuild lookup lists.
+
+        shallowRiverTerrain = TerrainDefOf.NPS_WaterRiverFlood;
+        biomeSettings = map.Biome.GetModExtension<BiomeSeasonalSettings>();
+        frostGridComponent = map.GetComponent<FrostGrid>();
+        location = Find.WorldGrid.LongLatOf(map.Tile);
+        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+        UpdateBiomeSettings(true);
+        frostNoise = new Perlin(0.039999999105930328, 2.0, 0.5, 5,
+            map.Tile.tileId, QualityMode.Medium);
+        tideCellsList.Clear();
+        riverCellsList.Clear();
+        Rand.PushState(map.Tile.tileId);
+
+        if (!regenCellLists && CurrentRevision != savedRevision) {
+            Log.Message("NPSWeatherEffects had to make some large changes. Recreating map effects.");
+            RemoveEffects();
             regenCellLists = true;
         }
 
@@ -779,30 +810,8 @@ public class Watcher(Map map) : MapComponent(map)
             }
         }
 
-
-        if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
-            beachTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
-        }
-
-        shallowRiverTerrain = TerrainDefOf.NPS_WaterRiverFlood;
-
-        biomeSettings = map.Biome.GetModExtension<BiomeSeasonalSettings>();
-        frostGridComponent = map.GetComponent<FrostGrid>();
-        location = Find.WorldGrid.LongLatOf(map.Tile);
-        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
-        UpdateBiomeSettings(true);
-
-
-        frostNoise = new Perlin(0.039999999105930328, 2.0, 0.5, 5,
-            map.Tile.tileId, QualityMode.Medium);
-
-        Rand.PushState(map.Tile.tileId);
-
-        //rebuild lookup lists.
-        tideCellsList.Clear();
-        riverCellsList.Clear();
-
         if (regenCellLists) {
+            savedRevision = CurrentRevision;
             cellWeatherAffectsDict.Clear();
             cellWeatherAffects = [];
             cellWeatherList.Clear();
