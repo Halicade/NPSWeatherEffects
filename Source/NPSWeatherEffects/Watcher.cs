@@ -99,7 +99,6 @@ public class Watcher(Map map) : MapComponent(map)
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
-    private bool checkEvens;
     public Season season;
     private Quadrum quadrum;
     private Quadrum previousQuadrum = Quadrum.Undefined;
@@ -116,6 +115,7 @@ public class Watcher(Map map) : MapComponent(map)
         base.FinalizeInit();
         RebuildCellLists();
         mapChecks();
+        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
     }
 
     public override void MapComponentTick() {
@@ -157,12 +157,6 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         if (EffectSettings.allowPawnEffects) {
-            if (ticks % 250 == 0) {
-                allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
-            }
-
-            checkEvens = !checkEvens;
-
             // rebuild the dictionary of valid pawns every quadrum
             if (ticks % 900000 == 0) {
                 validPawns.Clear();
@@ -170,7 +164,7 @@ public class Watcher(Map map) : MapComponent(map)
 
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
-                    PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks, checkEvens);
+                    PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks);
             }
         }
 
@@ -178,7 +172,10 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private bool checkPawnHuman(Pawn pawn) {
-        // Having this check first because it's cheaper than dictionary search 
+        if ((pawn.HashOffsetTicks() + ticks) % 10 != 0) {
+            return false;
+        }
+
         if (EffectSettings.pawnEffectsOnlyColonists && !pawn.IsColonist) {
             return false;
         }
@@ -446,7 +443,7 @@ public class Watcher(Map map) : MapComponent(map)
         }
 
         if (season == Season.Fall ||
-            map.gameConditionManager.GetActiveCondition<GameCondition_Drought>() != null ||
+            map.gameConditionManager.ConditionIsActive(GameConditionDefOf.TKKN_Drought) ||
             map.GameConditionManager.GetActiveCondition<RimWorld.GameCondition_Drought>() != null) {
             return 0;
         }

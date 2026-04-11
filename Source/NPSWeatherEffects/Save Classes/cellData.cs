@@ -9,7 +9,7 @@ namespace NPSWeather;
 
 public class cellData : IExposable
 {
-    private const int PackAt = 750;
+    private const int PackAt = 75;
     private const int PackAtSmooth = PackAt * 10;
 
     private const int UnpackAt = PackAt / 2;
