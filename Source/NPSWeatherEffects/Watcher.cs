@@ -104,7 +104,7 @@ public class Watcher(Map map) : MapComponent(map)
     private Quadrum previousQuadrum = Quadrum.Undefined;
     public bool droughtActive;
 
-    private const int EffectIntervalCheck = 625;
+    private const int MapCheckInterval = 625;
     private const int MinimumCellsPerTick = 5;
     private int cellActionsPerformed;
     private int cellActionsPerTick = 5;
@@ -128,7 +128,7 @@ public class Watcher(Map map) : MapComponent(map)
         isRaining = currentRainRate > 0;
         //environmental changes
         if (EffectSettings.doWeather) {
-            if (ticks % EffectIntervalCheck == 0) {
+            if (ticks % MapCheckInterval == 0) {
                 mapChecks();
 
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
@@ -762,7 +762,7 @@ public class Watcher(Map map) : MapComponent(map)
 
             howManyTideSteps = Mathf.RoundToInt(BaseTideValue * tideFactor * 3);
 
-            if (howManyTideSteps == 0 || tideFactor==0) {
+            if (howManyTideSteps == 0 || tideFactor == 0) {
                 doCoast = false;
             }
 
