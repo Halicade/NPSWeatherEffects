@@ -65,8 +65,8 @@ public class FrostGrid : MapComponent
             return;
         }
 
-        newDepth = Mathf.Clamp(newDepth, 0f, 1f);
-        var num2 = DepthGridDirect_Unsafe[locationIndex];
+        newDepth = Mathf.Clamp01(newDepth);
+        //var num2 = DepthGridDirect_Unsafe[locationIndex];
         DepthGridDirect_Unsafe[locationIndex] = newDepth;
         //checkVisualOrPathCostChange(c, num2, newDepth);
     }
