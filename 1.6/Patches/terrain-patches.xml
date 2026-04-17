@@ -54,11 +54,11 @@
     <xpath>Defs/TerrainDef[defName = "Mud"]</xpath>
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
-        <wetTerrain>WaterShallow</wetTerrain>
+        <wetTerrain>NPS_WaterMuddy</wetTerrain>
+        <floodTerrain>NPS_WaterMuddy</floodTerrain>
         <freezeTerrain>
           <terrain>TKKN_MuddyIce</terrain>
         </freezeTerrain>
-        <tideTerrain>WaterOceanShallow</tideTerrain>
         <wetAt>1</wetAt>
         <holdFrost>True</holdFrost>
       </li>
@@ -92,7 +92,10 @@
     <xpath>Defs/TerrainDef[defName = "Riverbank"]</xpath>
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
+        <!--
+        Would punish you just for putting crops there.
         <floodTerrain>WaterShallow</floodTerrain>
+        -->
         <freezeTerrain>
           <terrain>TKKN_MuddyIce</terrain>
         </freezeTerrain>
@@ -101,21 +104,11 @@
       </li>
     </value>
   </Operation>
-
-    <Operation Class="PatchOperationAddModExtension">
-    <xpath>Defs/TerrainDef[defName = "TKKN_SandBeachWetSalt"]</xpath>
-    <value>
-      <li Class="NPSWeather.TerrainWeatherReactions">
-        <tideTerrain>WaterOceanShallow</tideTerrain>
-      </li>
-    </value>
-  </Operation>
   
   <Operation Class="PatchOperationAddModExtension">
     <xpath>Defs/TerrainDef[defName = "MarshyTerrain"]</xpath>
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
-        <floodTerrain>Marsh</floodTerrain>
         <freezeTerrain>
           <terrain>TKKN_MuddyIce</terrain>
         </freezeTerrain>
@@ -127,7 +120,6 @@
     <xpath>Defs/TerrainDef[defName = "TKKN_WetMossyTerrain"]</xpath>
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
-        <floodTerrain>Marsh</floodTerrain>
         <holdFrost>True</holdFrost>
         <wetAt>0</wetAt>
       </li>

@@ -2,6 +2,7 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
+using NPSWeather.Rain;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -19,7 +20,7 @@ public class Watcher(Map map) : MapComponent(map)
     private int savedHowManyTideSteps = -1;
 
     //Increment in the case of large scale changes that would affect currently generated maps
-    private const int CurrentRevision = 2;
+    private const int CurrentRevision = 3;
     private int savedRevision;
 
     //Every quarter hour
@@ -47,9 +48,11 @@ public class Watcher(Map map) : MapComponent(map)
     private int floodThreatIncrease;
 
     public FrostGrid frostGridComponent;
+    public WetnessGrid wetnessGridComponent;
     private Vector2 location;
 
     private ModuleBase frostNoise;
+    private ModuleBase wetnessNoise;
 
 
     public float outdoorTemp;
@@ -90,10 +93,10 @@ public class Watcher(Map map) : MapComponent(map)
     //Value not in use
     //private bool noHurtPlants;
     public readonly Dictionary<Pawn, bool> validPawns = [];
-    private float currentRainRate;
+    public float currentRainRate;
     private float currentSnowRate;
     private int mapArea; //Default area 62500
-    private bool isRaining;
+    public bool isRaining;
     private TerrainDef oceanTerrain;
     private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
@@ -217,7 +220,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-        doRoofChecks = EffectSettings.showRain || EffectSettings.showFrostGrid;
+        doRoofChecks = EffectSettings.showWetTerrain || EffectSettings.showFrostGrid;
     }
 
     public override void ExposeData() {
@@ -312,7 +315,7 @@ public class Watcher(Map map) : MapComponent(map)
             LavaRockSpecials(c);
         }
 
-        if (EffectSettings.showRain) {
+        if (EffectSettings.showRainEffects) {
             if (!roofed) {
                 //if it's raining in this cell:
                 if (isRaining) {
@@ -321,8 +324,14 @@ public class Watcher(Map map) : MapComponent(map)
                     }
 
                     gettingWet = true;
-                    if (cell.setTerrainWet()) {
+                    if (cell.setTerrainWater()) {
                         cellActionsPerformed++;
+                    }
+
+                    if (EffectSettings.showRainGrid) {
+                        if (wetnessGridComponent.addDepth(cell, currentRainRate * 0.178f)) {
+                            cellActionsPerformed++;
+                        }
                     }
                 }
                 else {
@@ -332,6 +341,19 @@ public class Watcher(Map map) : MapComponent(map)
 
                     //DRY GROUND
                     if (cell.trySetTerrainDry()) {
+                        cellActionsPerformed++;
+                    }
+
+                    if (EffectSettings.showRainGrid) {
+                        if (wetnessGridComponent.subDepth(cell, -0.05f * cell.rainNoise)) {
+                            cellActionsPerformed++;
+                        }
+                    }
+                }
+            }
+            else {
+                if (EffectSettings.showRainGrid) {
+                    if (wetnessGridComponent.subDepth(cell, -0.05f * cell.rainNoise)) {
                         cellActionsPerformed++;
                     }
                 }
@@ -355,6 +377,7 @@ public class Watcher(Map map) : MapComponent(map)
                     if (cell.weatherExtension?.holdFrost == true) {
                         //handle frost based on snowing
                         if (!roofed && currentSnowRate > 0.001f) {
+                            //if it's snowing remove frost slowly
                             if (frostGridComponent.addDepth(cell, currentSnowRate * -.01f)) {
                                 cellActionsPerformed++;
                             }
@@ -409,7 +432,7 @@ public class Watcher(Map map) : MapComponent(map)
         }
         */
 
-        if (EffectSettings.showRain) {
+        if (EffectSettings.showRainEffects) {
             if (cell.wetCheck(gettingWet)) {
                 cellActionsPerformed++;
             }
@@ -686,7 +709,9 @@ public class Watcher(Map map) : MapComponent(map)
 
                 cellData.resetCellData();
                 frostGridComponent.removeDepth(cellData);
+                wetnessGridComponent.removeDepth(cellData);
                 map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Frost);
+                map.mapDrawer.MapMeshDirty(focusCell, MapMeshDefOf.NPS_Rain);
             }
 
             cellWeatherAffectsDict.Clear();
@@ -713,11 +738,15 @@ public class Watcher(Map map) : MapComponent(map)
         shallowRiverTerrain = TerrainDefOf.NPS_WaterRiverFlood;
         biomeSettings = map.Biome.GetModExtension<BiomeSeasonalSettings>();
         frostGridComponent = map.GetComponent<FrostGrid>();
+        wetnessGridComponent = map.GetComponent<WetnessGrid>();
         location = Find.WorldGrid.LongLatOf(map.Tile);
         allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
         UpdateBiomeSettings(true);
         frostNoise = new Perlin(0.039999999105930328, 2.0, 0.5, 5,
             map.Tile.tileId, QualityMode.Medium);
+        wetnessNoise = new Perlin(0.0321182236075401, 2.0, 0.401477873325348, 5,
+            map.Tile.tileId + 1, QualityMode.Medium);
+
         tideCellsList.Clear();
         riverCellsList.Clear();
         Rand.PushState(map.Tile.tileId);
@@ -845,8 +874,7 @@ public class Watcher(Map map) : MapComponent(map)
 
                 cellData cell = new cellData {
                     location = focusCell, currentTerrain = terrain,
-                    locationIndex = map.cellIndices.CellToIndex(focusCell),
-                    frostNoise = Mathf.Clamp(frostNoise.GetValue(focusCell), 0.25f, 1)
+                    locationIndex = map.cellIndices.CellToIndex(focusCell)
                 };
                 cellWeatherAffectsDict[focusCell] = cell;
                 if (doCoast && isOceanicTerrain(bottomTerrain)) {
@@ -972,6 +1000,8 @@ public class Watcher(Map map) : MapComponent(map)
         foreach ((IntVec3 _, cellData cellDataValue) in cellWeatherAffects) {
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
             cellDataValue.map = map;
+            cellDataValue.frostNoise = Mathf.Lerp(0.25f, 0.1f, frostNoise.GetValue(cellDataValue.location));
+            cellDataValue.rainNoise = Mathf.Lerp(0.55f, 0.85f, wetnessNoise.GetValue(cellDataValue.location));
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
@@ -983,6 +1013,9 @@ public class Watcher(Map map) : MapComponent(map)
             else {
                 frostGridComponent.removeDepth(cellDataValue);
             }
+
+            wetnessGridComponent.setDepth(cellDataValue.locationIndex, cellDataValue.rainLevel);
+            
 
             if (cellDataValue.tideLevel != 999 &&
                 cellDataValue.tideLevel != 0) {
@@ -1118,12 +1151,12 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private void SetUpWeatherEffects() {
-        if (!EffectSettings.showFrostGrid && !EffectSettings.doIce && !EffectSettings.showRain) {
+        if (!EffectSettings.showFrostGrid && !EffectSettings.doIce && !EffectSettings.showRainEffects) {
             return;
         }
 
         isRaining = map.weatherManager.RainRate > 0;
-        bool canApplyRainEffects = isRaining && EffectSettings.showRain;
+
         bool isSnowing = map.weatherManager.SnowRate > 0;
 
         foreach (var focusCell in cellWeatherList) {
@@ -1134,12 +1167,20 @@ public class Watcher(Map map) : MapComponent(map)
 
             focusCell.currentTerrain = map.terrainGrid.TerrainAt(focusCell.locationIndex) ?? RimWorld.TerrainDefOf.Soil;
             focusCell.setCurrentExtension();
+            if (isRaining) {
+                if (EffectSettings.showRainEffects) {
+                    if (!map.roofGrid.Roofed(focusCell.locationIndex)) {
+                        focusCell.forceTerrainWater();
+                    }
 
-            if (canApplyRainEffects) {
-                if (!map.roofGrid.Roofed(focusCell.locationIndex)) {
-                    focusCell.forceTerrainWet();
+                    //TODO separate settings for wetness grid, flooding, and wet
+                    focusCell.rainLevel = focusCell.rainNoise;
+                    wetnessGridComponent.setDepth(focusCell.locationIndex, focusCell.rainNoise);
+                    map.mapDrawer.MapMeshDirty(focusCell.location, MapMeshDefOf.NPS_Frost);
+                    map.mapDrawer.MapMeshDirty(focusCell.location, MapMeshDefOf.NPS_Rain);
                 }
             }
+
 
             focusCell.temperature = EffectSettings.useMapTemperature
                 ? map.mapTemperature.OutdoorTemp

@@ -4,4 +4,8 @@
         <defName>NPS_Frost</defName>
     </MapMeshFlagDef>
 
+    <MapMeshFlagDef>
+        <defName>NPS_Rain</defName>
+    </MapMeshFlagDef>
+    
 </Defs>

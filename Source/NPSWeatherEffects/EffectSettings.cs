@@ -25,7 +25,12 @@ public class EffectSettings : ModSettings
     public static bool allowPawnsDrowning = true;
     public static bool allowPawnsSwim = true;
 
-    public static bool showRain = true;
+    public static int rainOptionSelector = 1;
+    public static bool showRainEffects = true;
+    public static bool showWetTerrain = true;
+    public static bool showFloodTerrain = false;
+    public static bool showRainGrid = false;
+    public static bool rainIncreaseFertility = false;
     public static bool makePuddles = true;
     public static bool doWeather = true;
     public static bool onlyPlayerHome = true;
@@ -45,7 +50,7 @@ public class EffectSettings : ModSettings
     public static bool changeGrassGraphics = true;
 
     public static bool terrainAffectTemperature = false;
-    public static string modPackageID;
+    public static ModContentPack modContent;
 
 
     public static void DoWindowContents(Rect inRect) {
@@ -87,10 +92,48 @@ public class EffectSettings : ModSettings
                 ref showFrostGrid,
                 "NPS_FrostGrid_text".Translate());
 
-            list.CheckboxLabeled(
-                "NPS_showRain_title".Translate(),
-                ref showRain,
-                "NPS_showRain_text".Translate());
+            list.CheckboxLabeled("NPS_showRainEffects_title".Translate(),
+                ref showRainEffects,
+                "NPS_showRainEffects_text");
+            if (showRainEffects) {
+                if (list.RadioButton("NPS_showWetTerrain_title".Translate(), rainOptionSelector == 1,
+                        tooltip: "NPS_showWetTerrain_text".Translate())) {
+                    rainOptionSelector = 1;
+                    showWetTerrain = true;
+                    showFloodTerrain = false;
+                    showRainGrid = false;
+                }
+
+                if (list.RadioButton("NPS_showFloodTerrain_title".Translate(), rainOptionSelector == 2,
+                        tooltip: "NPS_showFloodTerrain_text".Translate())) {
+                    rainOptionSelector = 2;
+                    showWetTerrain = false;
+                    showFloodTerrain = true;
+                    showRainGrid = false;
+                }
+
+                if (list.RadioButton("NPS_showRainGrid_title".Translate(), rainOptionSelector == 3,
+                        tooltip: "NPS_showrainGrid_text".Translate())) {
+                    rainOptionSelector = 3;
+                    showWetTerrain = false;
+                    showFloodTerrain = false;
+                    showRainGrid = true;
+                }
+
+                if (list.RadioButton("NPS_showFloodAndRainGrid_title".Translate(), rainOptionSelector == 4,
+                        tooltip: "NPS_showFloodAndRainGrid_text".Translate())) {
+                    rainOptionSelector = 4;
+                    showWetTerrain = false;
+                    showFloodTerrain = true;
+                    showRainGrid = true;
+                }
+
+                if (rainOptionSelector >= 2) {
+                    list.CheckboxLabeled("NPS_rainIncreaseFertility_title".Translate(),
+                        ref rainIncreaseFertility,
+                        "NPS_rainIncreaseFertility_text");
+                }
+            }
 
             list.CheckboxLabeled(
                 "NPS_makePuddles_title".Translate(),
@@ -123,6 +166,7 @@ public class EffectSettings : ModSettings
             }
         }
 
+/*
         list.Gap();
 
         list.CheckboxLabeled(
@@ -133,7 +177,7 @@ public class EffectSettings : ModSettings
             "NPS_spawnLavaOnlyInBiome_title".Translate(),
             ref spawnLavaOnlyInBiome,
             "NPS_spawnLavaOnlyInBiome_text".Translate());
-
+*/
         list.Gap();
 
         Text.Font = GameFont.Medium;
@@ -264,7 +308,13 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref onlyPlayerHome, "onlyPlayerHome", true);
         Scribe_Values.Look(ref doDirtPath, "doDirtPath", true);
         Scribe_Values.Look(ref allowPlantEffects, "allowPlantEffects", false);
-        Scribe_Values.Look(ref showRain, "showRain", true);
+        Scribe_Values.Look(ref rainOptionSelector, "rainOptionSelector", 1);
+        Scribe_Values.Look(ref showRainEffects, "showRainEffects", true);
+        Scribe_Values.Look(ref showWetTerrain, "showWetTerrain", true);
+        Scribe_Values.Look(ref showFloodTerrain, "showFloodTerrain", false);
+        Scribe_Values.Look(ref showRainGrid, "showRainGrid", false);
+        Scribe_Values.Look(ref rainIncreaseFertility, "rainIncreaseFertility", false);
+
         Scribe_Values.Look(ref makePuddles, "makePuddles", true);
         Scribe_Values.Look(ref doTides, "doTides", true);
         Scribe_Values.Look(ref doFloods, "doFloods", true);

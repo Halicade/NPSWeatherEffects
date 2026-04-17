@@ -20,6 +20,9 @@ public class cellData : IExposable
     public float frostLevel;
     public float frostNoise;
 
+    public float rainLevel;
+    public float rainNoise;
+
     public int howPacked;
     private bool packed = false;
     private int lastPackedCheck;
@@ -52,7 +55,7 @@ public class cellData : IExposable
         Scribe_Values.Look(ref howWet, "howWet", -1);
         Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60);
         Scribe_Values.Look(ref frostLevel, "frostLevel");
-        Scribe_Values.Look(ref frostNoise, "frostNoise");
+        Scribe_Values.Look(ref rainLevel, "rainLevel");
         Scribe_Values.Look(ref isWet, "isWet");
         Scribe_Values.Look(ref isFrozen, "isFrozen");
         Scribe_Values.Look(ref location, "location", forceSave: true);
@@ -77,7 +80,49 @@ public class cellData : IExposable
         return false;
     }
 
-    public bool setTerrainWet() {
+    /// <summary>
+    /// Use this to determine how we wet terrain
+    /// </summary>
+    public bool setTerrainWater() {
+        if (EffectSettings.showWetTerrain) {
+            return setTerrainWet();
+        }
+
+        if (EffectSettings.showFloodTerrain) {
+            return setTerrainFlood();
+        }
+
+        return false;
+    }
+
+    private bool setTerrainFlood() {
+        //if terrain is temporary we don't want to affect it
+        if (currentTerrain.temporary) {
+            return false;
+        }
+
+        if (isWet) {
+            return false;
+        }
+
+        if (weatherExtension?.floodTerrain == null) {
+            return false;
+        }
+
+        if (howWet > weatherExtension.wetAt) {
+            driedTerrain = currentTerrain;
+            map.terrainGrid.SetTerrain(location, weatherExtension.floodTerrain);
+            currentTerrain = weatherExtension.floodTerrain;
+            setCurrentExtension();
+            isWet = true;
+            rainSpawns();
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool setTerrainWet() {
         //if terrain is temporary we don't want to affect it
         if (currentTerrain.temporary) {
             return false;
@@ -115,7 +160,7 @@ public class cellData : IExposable
             return;
         }*/
 
-        if (howWet < weatherExtension?.wetAt) {
+        if (howWet < weatherExtension.wetAt) {
             map.terrainGrid.SetTerrain(location, driedTerrain);
             isWet = false;
             howWet = -1;
@@ -198,10 +243,10 @@ public class cellData : IExposable
 
         map.terrainGrid.RemoveTempTerrain(location);
         leaveLoot();
-        if (EffectSettings.showRain) {
+        if (EffectSettings.showRainEffects) {
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
-            setTerrainWet();
+            setTerrainWater();
         }
     }
 
@@ -237,11 +282,11 @@ public class cellData : IExposable
         }
 
         map.terrainGrid.RemoveTempTerrain(location);
-        if (EffectSettings.showRain) {
+        if (EffectSettings.showRainEffects) {
             howWet = 4;
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
-            setTerrainWet();
+            setTerrainFlood();
         }
     }
 
@@ -457,6 +502,18 @@ public class cellData : IExposable
         }
     }
 
+    /// <summary>
+    /// Use this to determine how we wet terrain
+    /// </summary>
+    public void forceTerrainWater() {
+        if (EffectSettings.showWetTerrain) {
+            forceTerrainWet();
+        }
+        else {
+            forceTerrainFlood();
+        }
+    }
+
     public void forceTerrainWet() {
         //if terrain is temporary we don't want to affect it
         if (currentTerrain.temporary) {
@@ -477,6 +534,32 @@ public class cellData : IExposable
             driedTerrain = currentTerrain;
             map.terrainGrid.SetTerrain(location, weatherExtension.wetTerrain);
             currentTerrain = weatherExtension.wetTerrain;
+            setCurrentExtension();
+            isWet = true;
+            rainSpawns();
+        }
+    }
+
+    private void forceTerrainFlood() {
+        //if terrain is temporary we don't want to affect it
+        if (currentTerrain.temporary) {
+            return;
+        }
+
+        if (isWet) {
+            return;
+        }
+
+        if (weatherExtension?.floodTerrain == null) {
+            return;
+        }
+
+        howWet = 4;
+
+        if (howWet > weatherExtension.wetAt) {
+            driedTerrain = currentTerrain;
+            map.terrainGrid.SetTerrain(location, weatherExtension.floodTerrain);
+            currentTerrain = weatherExtension.floodTerrain;
             setCurrentExtension();
             isWet = true;
             rainSpawns();
@@ -505,7 +588,7 @@ public class cellData : IExposable
         forceUnpack();
         forceTerrainDry();
         removeWetSand();
-        forceRemoveFrost();
+        forceRemoveSectionLayers();
     }
 
     public void forceRemoveTempTerrain() {
@@ -519,7 +602,7 @@ public class cellData : IExposable
             return;
         }
 
-        if (currentTerrain?.modContentPack?.PackageId == EffectSettings.modPackageID) {
+        if (currentTerrain?.modContentPack == EffectSettings.modContent) {
             map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
         }
     }
@@ -528,8 +611,8 @@ public class cellData : IExposable
         currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
         howPacked = 0;
         packed = false;
-        
-        if (currentTerrain == TerrainDefOf.TKKN_DirtPath || 
+
+        if (currentTerrain == TerrainDefOf.TKKN_DirtPath ||
             currentTerrain == TerrainDefOf.TKKN_SandPath) {
             map.terrainGrid.RemoveTopLayer(location);
         }
@@ -568,7 +651,8 @@ public class cellData : IExposable
         }
     }
 
-    public void forceRemoveFrost() {
+    public void forceRemoveSectionLayers() {
         frostLevel = 0;
+        rainLevel = 0;
     }
 }

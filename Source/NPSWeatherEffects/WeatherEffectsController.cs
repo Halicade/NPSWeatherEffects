@@ -11,7 +11,7 @@ public class WeatherEffectsController : Mod
     public WeatherEffectsController(ModContentPack content)
         : base(content) {
         GetSettings<EffectSettings>();
-        EffectSettings.modPackageID = content.PackageId;
+        EffectSettings.modContent = content;
     }
 
     public override void DoSettingsWindowContents(Rect inRect) {

@@ -4,7 +4,7 @@ using Verse;
 
 namespace NPSWeather;
 
-[HarmonyPatch(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI))]
+//[HarmonyPatch(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI))]
 internal class MouseoverReadout_MouseoverReadoutOnGUI
 {
     private static Map cachedMap;
@@ -128,13 +128,19 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                 }
             }
 
-            num += 19f;
+            
 
             Widgets.Label(rect, cellWet);
-
+            num += 19f;
+            
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var frostLabel = $"MaxFrost: {cell.frostNoise} | CurrentFrost: {cell.frostLevel}";
             Widgets.Label(rect, frostLabel);
+            num += 19f;
+            
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var rainLabel = $"MaxRain: {cell.rainNoise} | CurrentRain: {cell.rainLevel}";
+            Widgets.Label(rect, rainLabel);
         }
 
 

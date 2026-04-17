@@ -299,6 +299,21 @@
         <temporary>true</temporary>
     </TerrainDef>
 
+    <TerrainDef ParentName="WaterShallow">
+        <defName>NPS_WaterMuddy</defName>
+        <label>muddy water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <tags>
+            <li>Flood</li>
+            <li>WaterMarshy</li>
+        </tags>
+    </TerrainDef>
+
     <TerrainDef ParentName="NaturalTerrainBase">
         <defName>TKKN_WetMossyTerrain</defName>
         <label>wet lichen-covered dirt</label>

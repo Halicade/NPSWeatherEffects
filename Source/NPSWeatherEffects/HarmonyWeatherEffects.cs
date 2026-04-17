@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using HarmonyLib;
+using NPSWeatherEffects;
 using NPSWeatherEffects.HarmonyPatches;
 using RimWorld;
 using TKKN_NPS;
@@ -22,7 +23,7 @@ public class HarmonyWeatherEffects
     public static readonly bool StorytellerJianghuActive;
 
     public static readonly bool NPSBiomesActive;
-    
+
     public static readonly bool WaterFreezesActive;
 
     public static readonly bool SeasonalWeatherModActive;
@@ -38,13 +39,13 @@ public class HarmonyWeatherEffects
         PlantReactionUtil.InitializePlantGraphics();
         BiomeUtil.InitializeDefaults();
 
-        DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths",true) != null;
+        DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths", true) != null;
         RimBrellasActive = ModLister.GetActiveModWithIdentifier("battlemage64.Rimbrellas", true) != null;
         NPSBiomesActive = ModLister.GetActiveModWithIdentifier("Hali.NPSBiomes", true) != null;
         StorytellerJianghuActive = ModLister.GetActiveModWithIdentifier("zal.jianghujin", true) != null;
         WaterFreezesActive = ModLister.GetActiveModWithIdentifier("mlie.waterfreezes", true) != null;
         SeasonalWeatherModActive = ModLister.GetActiveModWithIdentifier("nightmare.weathercontrol", true) != null ||
-                               ModLister.GetActiveModWithIdentifier("mlie.seasonalweather", true) != null;
+                                   ModLister.GetActiveModWithIdentifier("mlie.seasonalweather", true) != null;
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
@@ -78,6 +79,23 @@ public class HarmonyWeatherEffects
         harmony.Patch(AccessTools.Method(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI)),
             postfix: new HarmonyMethod(typeof(MouseoverReadout_MouseoverReadoutOnGUI),
                 nameof(MouseoverReadout_MouseoverReadoutOnGUI.Postfix)));
+        /*
+        //Was way too expensive to calculate from here
+        harmony.Patch(AccessTools.Method(typeof(FertilityGrid), nameof(FertilityGrid.FertilityAt)),
+            postfix: new HarmonyMethod(typeof(FertilityGrid_FertilityAt),
+                nameof(FertilityGrid_FertilityAt.Postfix)));
+        */
+        //Works better
+
+        if (EffectSettings.showRainEffects && EffectSettings.showRainGrid && EffectSettings.rainIncreaseFertility) {
+            harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.GrowthRate)),
+                postfix: new HarmonyMethod(typeof(Plant_GrowthRate),
+                    nameof(Plant_GrowthRate.Postfix)));
+
+            harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.GrowthRateCalcDesc)),
+                postfix: new HarmonyMethod(typeof(Plant_GrowthRateCalcDesc),
+                    nameof(Plant_GrowthRateCalcDesc.Postfix)));
+        }
 
         /*
         //Removed these patches cause this mod shouldn't be the one to do it
@@ -119,14 +137,12 @@ public class HarmonyWeatherEffects
                     nameof(Graphic_Shadow_DrawWorker.Prefix)));
         }
 
-        
-        //Taking this out for now because most things aren't implemented
         if (EffectSettings.allowPlantEffects) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.Graphic)),
                 postfix: new HarmonyMethod(typeof(Plant_Graphic),
                     nameof(Plant_Graphic.Postfix)));
         }
-        
+
 
         if (EffectSettings.terrainAffectTemperature) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Thing), nameof(Thing.AmbientTemperature)),

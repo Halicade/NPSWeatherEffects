@@ -24,7 +24,7 @@ These can all be turned off in settings.
 - Seasonal weather - Most biomes have weather tuned to the current season/month. Expect more rain in the spring than in the summer for example.
 - Seasonal incidents - Heat waves can be more common in the summer and less common in the winter
 - Seasonal diseases - You are less likely to get a cold in the summer and more likely in the fall and winter.
-- Springs - Hot springs appear in colder areas while cold springs appear in warmer. Pawns resting in these springs will gain a mood boost. They can enter springs naturally to relax, or even remove heatstroke in cold springs.
+- Springs - Hot springs appear in colder areas while cold springs appear in warmer. Pawns resting in these springs will gain a mood boost. They can enter springs naturally to relax, or even remove heatstroke in cold springs. Springs inspired by Crystal Springs and Blue Springs, FL.
 - New weather events - Wind storms, overcast, thick fog, dust storms
 - New incidents - herd migrations, droughts, rainbows, wildflower blooms
 
@@ -62,6 +62,7 @@ This should be save compatible. As with any mod that adds items/terrain hash col
 tkkntkkn - Original creator of this mod
 mlie - Continued this mod so I was able to find it
 Paradox - Helped with bugs testing and general balance
+Rogue The Rogue - Helped with bugs and suggested new features
 Rimworld discord - Helped with general balance and comforted me during my descent into madness
 
 ### Bug reports
