@@ -6,9 +6,7 @@ namespace NPSWeather;
 [StaticConstructorOnStartup]
 public static class MatBases
 {
-    private static readonly Texture frostTexture = ContentFinder<Texture2D>.Get("TKKN_NPS/Temperature/Wetness");
-    
-//    public static readonly Material Frost = MatLoader.LoadMat("TKKN_NPS/Temperature/Frost");
+    private static readonly Texture frostTexture = ContentFinder<Texture2D>.Get("TKKN_NPS/Temperature/Frost");
 
     private static Material cachedFrost;
 
@@ -18,7 +16,7 @@ public static class MatBases
         {
             if (cachedFrost == null) {
 
-                cachedFrost = new Material(Verse.MatBases.Darkness) { mainTexture = frostTexture };
+                cachedFrost = new Material(Verse.MatBases.Snow) { mainTexture = frostTexture };
             }
 
             return cachedFrost;
@@ -26,8 +24,6 @@ public static class MatBases
     }
     
     private static readonly Texture wetnessTexture=ContentFinder<Texture2D>.Get("TKKN_NPS/Temperature/Wetness");
-    
-//    public static readonly Material Frost = MatLoader.LoadMat("TKKN_NPS/Temperature/Frost");
 
     private static Material cachedWetness;
 

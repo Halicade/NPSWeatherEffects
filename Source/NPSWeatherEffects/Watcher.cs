@@ -1000,7 +1000,7 @@ public class Watcher(Map map) : MapComponent(map)
         foreach ((IntVec3 _, cellData cellDataValue) in cellWeatherAffects) {
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
             cellDataValue.map = map;
-            cellDataValue.frostNoise = Mathf.Lerp(0.25f, 0.1f, frostNoise.GetValue(cellDataValue.location));
+            cellDataValue.frostNoise = Mathf.Lerp(0.25f, 1f, frostNoise.GetValue(cellDataValue.location));
             cellDataValue.rainNoise = Mathf.Lerp(0.55f, 0.85f, wetnessNoise.GetValue(cellDataValue.location));
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
