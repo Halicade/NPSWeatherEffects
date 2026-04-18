@@ -32,8 +32,21 @@
     <NPS_doIce_text>Terrain can freeze at cold temperatures</NPS_doIce_text>
     <NPS_ShowFrostGrid_title>Show frost</NPS_ShowFrostGrid_title>
     <NPS_FrostGrid_text>When it gets cold, frost can appear on the map. This is purely cosmetic.</NPS_FrostGrid_text>
-    <NPS_showRain_title>Show rain effects</NPS_showRain_title>
-    <NPS_showRain_text>When it rains, the ground will get wet. This can increases soil fertility, or even change terrain entirely.</NPS_showRain_text>
+    <NPS_showRainEffects_title>Show rain effects</NPS_showRainEffects_title>
+    <NPS_showRainEffects_text>showEffects that can occur when it rains</NPS_showRainEffects_text>
+    <NPS_noTerrainEffects_title>No terrain changing</NPS_noTerrainEffects_title>
+    <NPS_noTerrainEffects_text>Terrain will not change when it rains</NPS_noTerrainEffects_text>
+    <NPS_showWetTerrain_title>Show wet terrain</NPS_showWetTerrain_title>
+    <NPS_showWetTerrain_text>Terrain like soil will change to wet variants of itself when it rains</NPS_showWetTerrain_text>
+    <NPS_showFloodTerrain_title>Show flood terrain</NPS_showFloodTerrain_title>
+    <NPS_showFloodTerrain_text>Terrain like mud will change to shallow water when it rains</NPS_showFloodTerrain_text>
+    <NPS_showRainAndFloodTerrain_title>Show wet and flood terrain</NPS_showRainAndFloodTerrain_title>
+    <NPS_showRainAndFloodTerrain_text>both terrains will change when it rains</NPS_showRainAndFloodTerrain_text>
+    <NPS_showRainGrid_title>Show rain grid</NPS_showRainGrid_title>
+    <NPS_showrainGrid_text>When it rains, tiles will gradually get wet. This is purely visual</NPS_showrainGrid_text>
+    <NPS_rainIncreaseFertility_title>Rain increases plant growth</NPS_rainIncreaseFertility_title>
+    <NPS_rainIncreaseFertility_text>When it rains, plants will grow faster</NPS_rainIncreaseFertility_text>
+    
     <NPS_makePuddles_title>Make puddles</NPS_makePuddles_title>
     <NPS_makePuddles_text>Puddles can appear when it rains or when snow melts.</NPS_makePuddles_text>
     <NPS_doFloods_title>Do Floods</NPS_doFloods_title>
