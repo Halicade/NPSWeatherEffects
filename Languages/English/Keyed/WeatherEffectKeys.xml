@@ -33,7 +33,7 @@
     <NPS_ShowFrostGrid_title>Show frost</NPS_ShowFrostGrid_title>
     <NPS_FrostGrid_text>When it gets cold, frost can appear on the map. This is purely cosmetic.</NPS_FrostGrid_text>
     <NPS_showRainEffects_title>Show rain effects</NPS_showRainEffects_title>
-    <NPS_showRainEffects_text>showEffects that can occur when it rains</NPS_showRainEffects_text>
+    <NPS_showRainEffects_text>Show effects that can occur when it rains</NPS_showRainEffects_text>
     <NPS_noTerrainEffects_title>No terrain changing</NPS_noTerrainEffects_title>
     <NPS_noTerrainEffects_text>Terrain will not change when it rains</NPS_noTerrainEffects_text>
     <NPS_showWetTerrain_title>Show wet terrain</NPS_showWetTerrain_title>
