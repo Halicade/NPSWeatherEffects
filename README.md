@@ -61,8 +61,8 @@ This should be save compatible. As with any mod that adds items/terrain hash col
 
 tkkntkkn - Original creator of this mod
 mlie - Continued this mod so I was able to find it
-Paradox - Helped with bugs testing and general balance
-Rogue The Rogue - Helped with bugs and suggested new features
+Paradox - Helped with bugs, testing, and general balance
+Rogue The Rogue - Helped with bugs, testing, and suggested new features
 Rimworld discord - Helped with general balance and comforted me during my descent into madness
 
 ### Bug reports

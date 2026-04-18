@@ -94,51 +94,53 @@ public class EffectSettings : ModSettings
 
             list.CheckboxLabeled("NPS_showRainEffects_title".Translate(),
                 ref showRainEffects,
-                "NPS_showRainEffects_text");
+                "NPS_showRainEffects_text".Translate());
             if (showRainEffects) {
-                if (list.RadioButton("NPS_showWetTerrain_title".Translate(), rainOptionSelector == 1,
+                if (list.RadioButton("NPS_noTerrainEffects_title".Translate(),
+                        rainOptionSelector == 0,
+                        tooltip: "NPS_noTerrainEffects_text".Translate())) {
+                    rainOptionSelector = 0;
+                    showWetTerrain = false;
+                    showFloodTerrain = false;
+                }
+
+                if (list.RadioButton("NPS_showWetTerrain_title".Translate(),
+                        rainOptionSelector == 1,
                         tooltip: "NPS_showWetTerrain_text".Translate())) {
                     rainOptionSelector = 1;
                     showWetTerrain = true;
                     showFloodTerrain = false;
-                    showRainGrid = false;
                 }
 
-                if (list.RadioButton("NPS_showFloodTerrain_title".Translate(), rainOptionSelector == 2,
+                if (list.RadioButton("NPS_showFloodTerrain_title".Translate(),
+                        rainOptionSelector == 2,
                         tooltip: "NPS_showFloodTerrain_text".Translate())) {
                     rainOptionSelector = 2;
                     showWetTerrain = false;
                     showFloodTerrain = true;
-                    showRainGrid = false;
                 }
 
-                if (list.RadioButton("NPS_showRainGrid_title".Translate(), rainOptionSelector == 3,
-                        tooltip: "NPS_showrainGrid_text".Translate())) {
+                if (list.RadioButton("NPS_showRainAndFloodTerrain_title".Translate(),
+                        rainOptionSelector == 3,
+                        tooltip: "NPS_showRainAndFloodTerrain_text".Translate())) {
                     rainOptionSelector = 3;
-                    showWetTerrain = false;
-                    showFloodTerrain = false;
-                    showRainGrid = true;
-                }
-
-                if (list.RadioButton("NPS_showFloodAndRainGrid_title".Translate(), rainOptionSelector == 4,
-                        tooltip: "NPS_showFloodAndRainGrid_text".Translate())) {
-                    rainOptionSelector = 4;
-                    showWetTerrain = false;
+                    showWetTerrain = true;
                     showFloodTerrain = true;
-                    showRainGrid = true;
                 }
 
-                if (rainOptionSelector >= 2) {
-                    list.CheckboxLabeled("NPS_rainIncreaseFertility_title".Translate(),
-                        ref rainIncreaseFertility,
-                        "NPS_rainIncreaseFertility_text");
-                }
+                list.CheckboxLabeled("NPS_showRainGrid_title".Translate(),
+                    ref showRainGrid,
+                    "NPS_showrainGrid_text".Translate());
+
+                list.CheckboxLabeled("NPS_rainIncreaseFertility_title".Translate(),
+                    ref rainIncreaseFertility,
+                    "NPS_rainIncreaseFertility_text".Translate());
+
+                list.CheckboxLabeled(
+                    "NPS_makePuddles_title".Translate(),
+                    ref makePuddles,
+                    "NPS_makePuddles_text".Translate());
             }
-
-            list.CheckboxLabeled(
-                "NPS_makePuddles_title".Translate(),
-                ref makePuddles,
-                "NPS_makePuddles_text".Translate());
 
 
             if (!ModsConfig.OdysseyActive) {

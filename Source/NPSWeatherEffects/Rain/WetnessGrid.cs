@@ -88,13 +88,18 @@ public class WetnessGrid : MapComponent
         return false;
     }
 
-    public bool removeDepth(cellData cell) {
+    public void removeDepth(cellData cell) {
         if (cell.rainLevel == 0) {
-            return false;
+            return;
         }
-
+        
         DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
-        return checkVisualOrPathCostChange(cell, cell.rainLevel, 0f);
+        if (cell.rainLevel < 0.12) {
+            cell.rainLevel = 0;
+            return;
+        }
+        cell.rainLevel = 0;
+        return;
     }
 
     public void setDepth(int locationIndex, float newDepth) {

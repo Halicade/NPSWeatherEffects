@@ -285,6 +285,8 @@ public class Watcher(Map map) : MapComponent(map)
         var c = cell.location;
 
         if (map.edificeGrid[cell.locationIndex] != null) {
+            frostGridComponent.removeDepth(cell);
+            wetnessGridComponent.removeDepth(cell);
             return;
         }
 
@@ -1015,7 +1017,7 @@ public class Watcher(Map map) : MapComponent(map)
             }
 
             wetnessGridComponent.setDepth(cellDataValue.locationIndex, cellDataValue.rainLevel);
-            
+
 
             if (cellDataValue.tideLevel != 999 &&
                 cellDataValue.tideLevel != 0) {

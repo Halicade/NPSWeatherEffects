@@ -54,9 +54,14 @@ public class FrostGrid : MapComponent
         if (cell.frostLevel == 0) {
             return false;
         }
-
+        
         DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
-        return checkVisualOrPathCostChange(cell, cell.frostLevel, 0f);
+        if (cell.frostLevel < 0.12) {
+            cell.frostLevel = 0;
+            return false;
+        }
+        cell.frostLevel = 0;
+        return true;
     }
 
     public void setDepth(int locationIndex, float newDepth) {
@@ -66,9 +71,7 @@ public class FrostGrid : MapComponent
         }
 
         newDepth = Mathf.Clamp01(newDepth);
-        //var num2 = DepthGridDirect_Unsafe[locationIndex];
         DepthGridDirect_Unsafe[locationIndex] = newDepth;
-        //checkVisualOrPathCostChange(c, num2, newDepth);
     }
 
     private bool checkVisualOrPathCostChange(cellData cell, float oldDepth, float newDepth) {
