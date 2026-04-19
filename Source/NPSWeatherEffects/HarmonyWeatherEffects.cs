@@ -87,7 +87,7 @@ public class HarmonyWeatherEffects
         */
         //Works better
 
-        if (EffectSettings.showRainEffects && EffectSettings.showRainGrid && EffectSettings.rainIncreaseFertility) {
+        if (EffectSettings.showRainEffects && EffectSettings.rainIncreaseFertility) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.GrowthRate)),
                 postfix: new HarmonyMethod(typeof(Plant_GrowthRate),
                     nameof(Plant_GrowthRate.Postfix)));
