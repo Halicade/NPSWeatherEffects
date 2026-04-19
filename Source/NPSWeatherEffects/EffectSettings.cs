@@ -7,6 +7,8 @@ namespace NPSWeather;
 
 public class EffectSettings : ModSettings
 {
+    public static int modsPatchingTerrain = 0;
+    public static int modsPatchingTemperature = 0;
     public static bool leaveLoot = true;
     public static bool forbidLoot = true;
 

@@ -1,5 +1,4 @@
-﻿using LudeonTK;
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -7,13 +6,12 @@ namespace NPSWeather;
 
 public class WeatherEffectsController : Mod
 {
-
     public WeatherEffectsController(ModContentPack content)
         : base(content) {
         GetSettings<EffectSettings>();
         EffectSettings.modContent = content;
     }
-    
+
 
     public override void DoSettingsWindowContents(Rect inRect) {
         DoWindowContents(inRect);
@@ -22,9 +20,8 @@ public class WeatherEffectsController : Mod
     public override string SettingsCategory() {
         return "NPS_WeatherEffects".Translate();
     }
-    
-    public override void WriteSettings() {
 
+    public override void WriteSettings() {
         if (!EffectSettings.allowPawnEffects) {
             EffectSettings.pawnEffectsOnlyColonists = false;
             EffectSettings.allowPawnsToGetWet = false;
@@ -33,22 +30,34 @@ public class WeatherEffectsController : Mod
             EffectSettings.doDirtPath = false;
             EffectSettings.doWalkThroughSnow = false;
         }
+
         base.WriteSettings();
-        
+
         if (Current.ProgramState == ProgramState.Playing) {
             foreach (var map in Find.Maps) {
-                var watcher= map.GetComponent<Watcher>();
+                var watcher = map.GetComponent<Watcher>();
                 watcher.validPawns.Clear();
             }
         }
     }
 
-    private static void DoWindowContents(Rect inRect) {
-        Listing_Standard list = new Listing_Standard(GameFont.Small);
 
-        list.Begin(inRect.LeftPart(0.49f));
+    private Vector2 scrollPosition = Vector2.zero;
 
-        //Performance Settings
+    private void DoWindowContents(Rect inRect) {
+        Listing_Standard list = new Listing_Standard();
+        Rect outRect = new(inRect.x, inRect.y, inRect.width, inRect.height - 20);
+        Rect viewRect = new(0f, 0f,
+            width: inRect.width - 30f,
+            height: 800
+        );
+        Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+
+        list.Begin(viewRect.LeftPart(0.49f));
+
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_weatherEffectsHeader".Translate());
+        Text.Font = GameFont.Small;
         list.CheckboxLabeled(
             "NPS_doWeather_title".Translate(),
             ref EffectSettings.doWeather,
@@ -56,7 +65,9 @@ public class WeatherEffectsController : Mod
         if (EffectSettings.doWeather) {
             EffectSettings.maxCellsPerTick = (int)list.SliderLabeled(
                 "NPS_weatherCellUpdateSpeed_title".Translate(EffectSettings.maxCellsPerTick),
-                EffectSettings.maxCellsPerTick, 10, 100, 0.5f, "NPS_weatherCellUpdateSpeed_text".Translate());
+                EffectSettings.maxCellsPerTick, 10, 100, 
+                0.5f, 
+                "NPS_weatherCellUpdateSpeed_text".Translate());
 
             list.CheckboxLabeled(
                 "NPS_OnlyTargetPlayerHome_title".Translate(),
@@ -64,11 +75,23 @@ public class WeatherEffectsController : Mod
                 "NPS_OnlyTargetPlayerHome_text".Translate()
             );
 
+            list.GapLine();
+
+            Text.Font = GameFont.Medium;
+            list.Label("NPS_coldEffects".Translate());
+            Text.Font = GameFont.Small;
 
             list.CheckboxLabeled(
                 "NPS_useMapTemperature_title".Translate(),
                 ref EffectSettings.useMapTemperature,
                 "NPS_useMapTemperature_text".Translate());
+            if (!EffectSettings.useMapTemperature && EffectSettings.modsPatchingTemperature > 0) {
+                Text.Font = GameFont.Tiny;
+                list.Label(
+                    "NPS_numModsPatching".Translate(EffectSettings.modsPatchingTemperature).Colorize(Color.yellow));
+                Text.Font = GameFont.Small;
+            }
+
 
             if (!ModsConfig.OdysseyActive) {
                 list.CheckboxLabeled(
@@ -82,9 +105,16 @@ public class WeatherEffectsController : Mod
                 ref EffectSettings.showFrostGrid,
                 "NPS_FrostGrid_text".Translate());
 
-            list.CheckboxLabeled("NPS_showRainEffects_title".Translate(),
+            list.GapLine();
+            Text.Font = GameFont.Medium;
+            list.Label("NPS_rainEffects".Translate());
+            Text.Font = GameFont.Small;
+
+            list.CheckboxLabeled(
+                "NPS_showRainEffects_title".Translate(),
                 ref EffectSettings.showRainEffects,
                 "NPS_showRainEffects_text".Translate());
+            
             if (EffectSettings.showRainEffects) {
                 if (list.RadioButton("NPS_noTerrainEffects_title".Translate(),
                         EffectSettings.rainOptionSelector == 0,
@@ -118,6 +148,13 @@ public class WeatherEffectsController : Mod
                     EffectSettings.showFloodTerrain = true;
                 }
 
+                if (EffectSettings.rainOptionSelector > 0 && EffectSettings.modsPatchingTerrain > 0) {
+                    Text.Font = GameFont.Tiny;
+                    list.Label("NPS_numModsPatching".Translate(EffectSettings.modsPatchingTerrain)
+                        .Colorize(Color.yellow));
+                    Text.Font = GameFont.Small;
+                }
+
                 list.CheckboxLabeled("NPS_showRainGrid_title".Translate(),
                     ref EffectSettings.showRainGrid,
                     "NPS_showrainGrid_text".Translate());
@@ -125,13 +162,24 @@ public class WeatherEffectsController : Mod
                 list.CheckboxLabeled("NPS_rainIncreaseFertility_title".Translate(),
                     ref EffectSettings.rainIncreaseFertility,
                     "NPS_rainIncreaseFertility_text".Translate());
+                
+                if (EffectSettings.showWetTerrain && EffectSettings.rainIncreaseFertility) {
+                    Text.Font = GameFont.Tiny;
+                    list.Label("NPS_notRecommendedWetFertility".Translate().Colorize(Color.yellow));
+                    Text.Font = GameFont.Small;
+                }
 
                 list.CheckboxLabeled(
                     "NPS_makePuddles_title".Translate(),
                     ref EffectSettings.makePuddles,
                     "NPS_makePuddles_text".Translate());
+
+                list.GapLine();
             }
 
+            Text.Font = GameFont.Medium;
+            list.Label("NPS_waterEffects".Translate());
+            Text.Font = GameFont.Small;
 
             if (!ModsConfig.OdysseyActive) {
                 list.CheckboxLabeled(
@@ -195,17 +243,21 @@ public class WeatherEffectsController : Mod
 
         list.End();
 
-        list.Begin(inRect.RightPart(0.49f));
+        list.Begin(viewRect.RightPart(0.49f));
 
-
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_seasonalEffects".Translate());
+        Text.Font = GameFont.Small;
         list.CheckboxLabeled(
             "NPS_seasonalDiseases_title".Translate(),
             ref EffectSettings.seasonalDiseases,
             "NPS_seasonalDiseases_text".Translate());
+        
         list.CheckboxLabeled(
             "NPS_seasonalIncidents_title".Translate(),
             ref EffectSettings.seasonalIncidents,
             "NPS_seasonalIncidents_text".Translate());
+        
         if (!HarmonyWeatherEffects.SeasonalWeatherModActive) {
             list.CheckboxLabeled(
                 "NPS_seasonalWeather_title".Translate(),
@@ -213,8 +265,11 @@ public class WeatherEffectsController : Mod
                 "NPS_seasonalWeather_text".Translate());
         }
 
-        list.Gap();
-
+        list.GapLine();
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_pawnEffects".Translate());
+        Text.Font = GameFont.Small;
+        
         list.CheckboxLabeled(
             "NPS_allowPawnEffects_title".Translate(),
             ref EffectSettings.allowPawnEffects,
@@ -225,7 +280,10 @@ public class WeatherEffectsController : Mod
                 "NPS_pawnEffectsOnlyColonists_title".Translate(),
                 ref EffectSettings.pawnEffectsOnlyColonists,
                 "NPS_pawnEffectsOnlyColonists_text".Translate());
-            list.Label("NPS_springEffects_title".Translate(), tooltip: "NPS_springEffects_text".Translate());
+            
+            list.Label("NPS_springEffects_title".Translate(),
+                tooltip: "NPS_springEffects_text".Translate());
+            
             if (!HarmonyWeatherEffects.DesirePathsActive) {
                 list.CheckboxLabeled(
                     "NPS_doDirtPath_title".Translate(),
@@ -256,7 +314,11 @@ public class WeatherEffectsController : Mod
                 "NPS_allowPawnsToDrown_text".Translate());
         }
 
-        list.Gap(30f);
+        list.GapLine(30f);
+
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_devTools".Translate());
+        Text.Font = GameFont.Small;
 
         list.CheckboxLabeled(
             "NPS_showDevReadout_title".Translate(),
@@ -290,5 +352,6 @@ public class WeatherEffectsController : Mod
         }
 
         list.End();
+        Widgets.EndScrollView();
     }
 }
