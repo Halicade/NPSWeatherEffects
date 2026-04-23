@@ -4,7 +4,6 @@
     <defName>TKKN_WindStorm</defName>
     <label>wind storm</label>
     <description>A wind storm. High winds and a little rain. Helps turbines but hinders shooting.</description>
-    <repeatable>true</repeatable>
     <favorability>VeryBad</favorability>
     <windSpeedFactor>2</windSpeedFactor>
     <accuracyMultiplier>0.5</accuracyMultiplier>
@@ -49,7 +48,6 @@
     <defName>TKKN_Windy</defName>
     <label>windy</label>
     <description>A blustery day. High winds help turbines but hinders shooting.</description>
-    <repeatable>true</repeatable>
     <favorability>Neutral</favorability>
     <windSpeedFactor>1.5</windSpeedFactor>
     <accuracyMultiplier>0.75</accuracyMultiplier>
@@ -85,9 +83,9 @@
     <defName>TKKN_Overcast</defName>
     <label>Overcast</label>
     <description>Cloudy, but no rain.</description>
-    <repeatable>true</repeatable>
     <favorability>Neutral</favorability>
     <perceivePriority>0</perceivePriority>
+    <maxGlow>0.9</maxGlow>
     <ambientSounds>
       <li>Ambient_Wind_Clear</li>
     </ambientSounds>
@@ -123,6 +121,7 @@
     <windSpeedFactor>0.5</windSpeedFactor>
     <accuracyMultiplier>0.5</accuracyMultiplier>
     <favorability>Neutral</favorability>
+    <maxGlow>0.9</maxGlow>
     <ambientSounds>
       <li>Ambient_Wind_Fog</li>
     </ambientSounds>
