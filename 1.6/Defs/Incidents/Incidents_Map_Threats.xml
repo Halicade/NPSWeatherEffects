@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <!-- ============================== Big threats ==============================-->
+  <!--
   <IncidentDef>
     <defName>TKKN_LavaEruption</defName>
     <label>Lava Eruption!</label>
@@ -10,8 +11,12 @@
     <workerClass>NPSWeather.IncidentWorker_LavaFlow</workerClass>
     <baseChance>2</baseChance>
     <category>ThreatBig</category>
-    <pointsScaleable>true</pointsScaleable>
+    <allowedBiomes>
+      <li>TKKN_VolcanicFlow</li>
+      <li MayRequire="Ludeon.Rimworld.Odyssey">LavaField</li>
+    </allowedBiomes>
   </IncidentDef>
+  -->
   
   <IncidentDef>
     <defName>TKKN_Drought</defName>
