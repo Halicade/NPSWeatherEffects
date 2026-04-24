@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using System;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -21,47 +22,52 @@ public class FrostGrid : MapComponent
 
         return building == null || building.def.category == ThingCategory.Building;
     }
+    
+    private bool canHaveFrost(cellData cell) {
+        return !TerrainTagUtil.TKKN_Wet.Contains(cell.currentTerrain);
+    }
 
-    public bool addDepth(cellData cell, float depthToAdd) {
+    public void addDepth(cellData cell, float depthToAdd) {
         var num = cell.locationIndex;
-        var num2 = DepthGridDirect_Unsafe[num];
-        if (num2 <= 0f && depthToAdd <= 0f) {
-            return false;
+        var oldDepth = DepthGridDirect_Unsafe[num];
+        if ((oldDepth <= 0f && depthToAdd <= 0f) ||
+            (oldDepth >= 0.999f && depthToAdd > MaxDepth)) {
+            return;
         }
 
-        if (num2 >= 0.999f && depthToAdd > MaxDepth) {
-            return false;
-        }
-
-/*
-        if (!canHaveFrost(num)) {
+        if (!canHaveFrost(cell)) {
             DepthGridDirect_Unsafe[num] = 0f;
             return;
         }
-*/
-        var num3 = num2 + depthToAdd;
-        num3 = Mathf.Clamp(num3, 0f, cell.frostNoise);
-        var num4 = num3 - num2;
+
+        var newDepth = oldDepth + depthToAdd;
+        newDepth = Mathf.Clamp(newDepth, 0f, cell.frostNoise);
+        var num4 = newDepth - oldDepth;
         if (!(Mathf.Abs(num4) > 0.0001f)) {
-            return false;
+            return;
         }
 
-        DepthGridDirect_Unsafe[num] = num3;
-        return checkVisualOrPathCostChange(cell, num2, num3);
+        DepthGridDirect_Unsafe[num] = newDepth;
+        cell.frostLevel = newDepth;
+        checkVisualOrPathCostChange(cell, oldDepth, newDepth);
     }
 
-    public bool removeDepth(cellData cell) {
+    public void removeDepth(cellData cell) {
         if (cell.frostLevel == 0) {
-            return false;
+            return;
         }
         
-        DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
+
         if (cell.frostLevel < 0.12) {
+            DepthGridDirect_Unsafe[cell.locationIndex] = 0f;
             cell.frostLevel = 0;
-            return false;
+            return;
         }
+
+        var oldDepth = DepthGridDirect_Unsafe[cell.locationIndex];
+        DepthGridDirect_Unsafe[cell.locationIndex] = 0;
         cell.frostLevel = 0;
-        return true;
+        checkVisualOrPathCostChange(cell, oldDepth, 0);
     }
 
     public void setDepth(int locationIndex, float newDepth) {
@@ -74,19 +80,14 @@ public class FrostGrid : MapComponent
         DepthGridDirect_Unsafe[locationIndex] = newDepth;
     }
 
-    private bool checkVisualOrPathCostChange(cellData cell, float oldDepth, float newDepth) {
-        cell.frostLevel = newDepth;
-        if (Mathf.Approximately(oldDepth, newDepth)) {
-            //Checked in case values didn't change/were 0
-            return false;
+    private void checkVisualOrPathCostChange(cellData cell, float oldDepth, float newDepth) {
+        if (Math.Abs(oldDepth - newDepth) < 1e-6f) {
+            return;
         }
 
         if (newDepth == 0f || Mathf.Abs(oldDepth - newDepth) > 0.12f || Rand.Value < 0.0025f) {
             map.mapDrawer.MapMeshDirty(cell.location, MapMeshDefOf.NPS_Frost, true, false);
-            return true;
         }
-
-        return false;
     }
 
     public float GetDepth(IntVec3 c) => c.InBounds(map) ? DepthGridDirect_Unsafe[map.cellIndices.CellToIndex(c)] : 0f;
