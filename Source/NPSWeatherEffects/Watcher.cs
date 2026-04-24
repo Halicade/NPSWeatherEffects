@@ -39,6 +39,7 @@ public class Watcher(Map map) : MapComponent(map)
     private Dictionary<IntVec3, cellData> cellWeatherAffectsDict = new();
     public FrozenDictionary<IntVec3, cellData> cellWeatherAffects;
     private List<cellData> cellWeatherList = [];
+    private cellData activeCellData;
 
     private int cycleIndex;
 
@@ -114,6 +115,7 @@ public class Watcher(Map map) : MapComponent(map)
     private const int MinimumCellsPerTick = 5;
     private int cellActionsPerformed;
     private int cellActionsPerTick = 5;
+    private bool acceleratedChecks;
 
     /* STANDARD STUFF */
 
@@ -139,11 +141,13 @@ public class Watcher(Map map) : MapComponent(map)
 
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
                     cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
-                    //Log.Warning("New cell per tick value " + cellActionsPerTick);
+                    acceleratedChecks = true;
+                    Log.Warning("New cell per tick value " + cellActionsPerTick);
                 }
                 else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
                     cellActionsPerTick = MinimumCellsPerTick;
-                    //Log.Message("New cell per tick value " + cellActionsPerTick);
+                    acceleratedChecks = false;
+                    Log.Message("New cell per tick value " + cellActionsPerTick);
                 }
 
                 cellActionsPerformed = 0;
@@ -157,7 +161,16 @@ public class Watcher(Map map) : MapComponent(map)
                     cycleIndex = 0;
                 }
 
-                DoCellEnvironment(cellWeatherList[cycleIndex]);
+                activeCellData = cellWeatherList[cycleIndex];
+
+                basicCellChecks();
+                lavaCellChecks();
+                rainCellChecks();
+                if (!acceleratedChecks) {
+                    iceCellChecks();
+                    extraRainChecks();
+                }
+
                 cycleIndex++;
             }
         }
@@ -281,27 +294,24 @@ public class Watcher(Map map) : MapComponent(map)
     private TerrainDef currentTerrain;
 
 
-    private void DoCellEnvironment(cellData cell) {
-        var c = cell.location;
-
-        if (map.edificeGrid[cell.locationIndex] != null) {
-            frostGridComponent.removeDepth(cell);
-            wetnessGridComponent.removeDepth(cell);
+    private void basicCellChecks() {
+        if (map.edificeGrid[activeCellData.locationIndex] != null) {
+            frostGridComponent.removeDepth(activeCellData);
+            wetnessGridComponent.removeDepth(activeCellData);
             return;
         }
 
         if (doUnpacking) {
-            cell.Unpack();
+            activeCellData.Unpack();
         }
 
-        // Can the soil be null? I'm not really sure but Imma check it just in case
-        currentTerrain = map.terrainGrid.TerrainAt(cell.locationIndex) ?? RimWorld.TerrainDefOf.Soil;
-        if (cell.currentTerrain != currentTerrain) {
-            cell.currentTerrain = currentTerrain;
-            cell.setCurrentExtension();
+        currentTerrain = map.terrainGrid.TerrainAt(activeCellData.locationIndex);
+        if (activeCellData.currentTerrain != currentTerrain) {
+            activeCellData.currentTerrain = currentTerrain;
+            activeCellData.setCurrentExtension();
         }
 
-        roofed = doRoofChecks && map.roofGrid.Roofed(cell.locationIndex);
+        roofed = doRoofChecks && map.roofGrid.Roofed(activeCellData.locationIndex);
         gettingWet = false;
 
         /*
@@ -311,12 +321,29 @@ public class Watcher(Map map) : MapComponent(map)
         if (currentTerrain.designationCategory == DesignationCategoryDefOf.Floors) {
             //cell.baseTerrain = currentTerrain;
         }*/
+    }
 
+    private void lavaCellChecks() {
         //spawn special things
-        if (anyLavaTerrain) {
-            LavaRockSpecials(c);
+        if (!anyLavaTerrain) {
+            return;
         }
 
+        if (Rand.Value < .0001f) {
+            if (currentTerrain == TerrainDefOf.TKKN_Lava) {
+                var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock);
+                GenSpawn.Spawn(thing, activeCellData.location, map);
+            }
+            else if (currentTerrain == TerrainDefOf.TKKN_LavaRock_RoughHewn &&
+                     map.Biome == BiomeDefOf.TKKN_VolcanicFlow &&
+                     map.listerThings.ThingsOfDef(ThingDefOf.TKKN_SteamVent).Count < 10) {
+                var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_SteamVent);
+                GenSpawn.Spawn(thing, activeCellData.location, map);
+            }
+        }
+    }
+
+    private void rainCellChecks() {
         if (EffectSettings.showRainEffects) {
             if (!roofed) {
                 //if it's raining in this cell:
@@ -326,12 +353,12 @@ public class Watcher(Map map) : MapComponent(map)
                     }
 
                     gettingWet = true;
-                    if (cell.setTerrainWater()) {
+                    if (activeCellData.setTerrainWater()) {
                         cellActionsPerformed++;
                     }
 
                     if (EffectSettings.showRainGrid) {
-                        if (wetnessGridComponent.addDepth(cell, currentRainRate * 0.178f)) {
+                        if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.178f)) {
                             cellActionsPerformed++;
                         }
                     }
@@ -342,12 +369,12 @@ public class Watcher(Map map) : MapComponent(map)
                     }
 
                     //DRY GROUND
-                    if (cell.trySetTerrainDry()) {
+                    if (activeCellData.trySetTerrainDry()) {
                         cellActionsPerformed++;
                     }
 
                     if (EffectSettings.showRainGrid) {
-                        if (wetnessGridComponent.subDepth(cell, -0.05f * cell.rainNoise)) {
+                        if (wetnessGridComponent.subDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
                             cellActionsPerformed++;
                         }
                     }
@@ -355,116 +382,116 @@ public class Watcher(Map map) : MapComponent(map)
             }
             else {
                 if (EffectSettings.showRainGrid) {
-                    if (wetnessGridComponent.subDepth(cell, -0.05f * cell.rainNoise)) {
+                    if (wetnessGridComponent.subDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
                         cellActionsPerformed++;
                     }
                 }
             }
         }
-        else {
-            cell.trySetTerrainDry();
+    }
+
+    private void iceCellChecks() {
+        if (!iceOrFrostGrid) {
+            return;
         }
+        
+        activeCellData.temperature = EffectSettings.useMapTemperature
+            ? outdoorTemp
+            : activeCellData.location.GetTemperature(map);
 
-        if (iceOrFrostGrid) {
-            cell.temperature = EffectSettings.useMapTemperature ? outdoorTemp : cell.location.GetTemperature(map);
-
-            if (cell.temperature <= 1) {
+        switch (activeCellData.temperature) {
+            case <= 1: {
                 if (EffectSettings.doIce) {
-                    if (cell.SetTerrainFrozen()) {
+                    if (activeCellData.SetTerrainFrozen()) {
                         cellActionsPerformed++;
                     }
                 }
 
                 if (EffectSettings.showFrostGrid) {
-                    if (cell.weatherExtension?.holdFrost == true) {
+                    if (activeCellData.weatherExtension?.holdFrost == true) {
                         //handle frost based on snowing
                         if (!roofed && currentSnowRate > 0.001f) {
                             //if it's snowing remove frost slowly
-                            if (frostGridComponent.addDepth(cell, currentSnowRate * -.01f)) {
-                                cellActionsPerformed++;
-                            }
+                            frostGridComponent.addDepth(activeCellData, currentSnowRate * -.01f);
                         }
                         else {
-                            if (frostGridComponent.addDepth(cell, 0.138f * cell.frostNoise)) {
-                                cellActionsPerformed++;
-                            }
+                            frostGridComponent.addDepth(activeCellData, 0.138f * activeCellData.frostNoise);
                         }
                     }
                     else {
-                        frostGridComponent.setDepth(cell.locationIndex, 0);
+                        frostGridComponent.addDepth(activeCellData, 0.138f * activeCellData.frostNoise);
                     }
                 }
+
+                break;
             }
-            else if (cell.temperature >= 2) {
-                if (cell.TrySetTerrainThawed()) {
+            case <= 3: {
+                if (activeCellData.TrySetTerrainThawed()) {
                     cellActionsPerformed++;
                 }
 
                 if (EffectSettings.showFrostGrid) {
-                    if (frostGridComponent.removeDepth(cell)) {
-                        cellActionsPerformed++;
-                    }
+                    frostGridComponent.addDepth(activeCellData, -0.138f * activeCellData.frostNoise);
                 }
+
+                break;
+            }
+            default: {
+                if (activeCellData.TrySetTerrainThawed()) {
+                    cellActionsPerformed++;
+                }
+
+                if (EffectSettings.showFrostGrid) {
+                    frostGridComponent.addDepth(activeCellData, -0.276f * activeCellData.frostNoise);
+                }
+
+                break;
             }
         }
+    }
 
-
-        //HANDLE PLANT DAMAGES:
-        /*
-         The effect this has on the map is minimal unless on a desert tile or something.
-         Then it just becomes actively harmful
-        if (gettingWet) {
-            //note - removed ismelt because the dirt shouldn't dry out in winter, and snow wets the ground then.
-            if (cell.howWetPlants < 100) {
-                if (currentRainRate > 0) {
-                    cell.howWetPlants += currentRainRate * 2;
-                }
-                else if (currentSnowRate > 0) {
-                    cell.howWetPlants += currentSnowRate * 2;
-                }
+    //HANDLE PLANT DAMAGES:
+    /*
+     The effect this has on the map is minimal unless on a desert tile or something.
+     Then it just becomes actively harmful
+    if (gettingWet) {
+        //note - removed ismelt because the dirt shouldn't dry out in winter, and snow wets the ground then.
+        if (cell.howWetPlants < 100) {
+            if (currentRainRate > 0) {
+                cell.howWetPlants += currentRainRate * 2;
+            }
+            else if (currentSnowRate > 0) {
+                cell.howWetPlants += currentSnowRate * 2;
             }
         }
-        else {
-            if (outdoorTemp > 20) {
-                cell.howWetPlants += wetPlantsValue;
-                if (cell.howWetPlants <= 0) {
-                    HurtPlants(c, false, true);
-                }
+    }
+    else {
+        if (outdoorTemp > 20) {
+            cell.howWetPlants += wetPlantsValue;
+            if (cell.howWetPlants <= 0) {
+                HurtPlants(c, false, true);
             }
         }
-        */
-
+    }
+    */
+    private void extraRainChecks() {
         if (EffectSettings.showRainEffects) {
-            if (cell.wetCheck(gettingWet)) {
+            if (activeCellData.wetCheck(gettingWet)) {
                 cellActionsPerformed++;
             }
         }
 
         if (EffectSettings.makePuddles) {
-            if (cell.howWet == 3 && (outdoorTemp > 2 && MaxPuddles > totalPuddles &&
-                                     currentTerrain != TerrainDefOf.TKKN_SandBeachWetSalt)) {
-                FilthMaker.TryMakeFilth(c, map, ThingDefOf.TKKN_FilthPuddle);
+            if (activeCellData.howWet == 3 &&
+                outdoorTemp > 2 &&
+                MaxPuddles > totalPuddles &&
+                currentTerrain != TerrainDefOf.TKKN_SandBeachWetSalt) {
+                FilthMaker.TryMakeFilth(activeCellData.location, map, ThingDefOf.TKKN_FilthPuddle);
                 totalPuddles++;
             }
         }
     }
 
-    private void LavaRockSpecials(IntVec3 c) {
-        if (Rand.Value < .0001f) {
-            if (c.InBounds(map)) {
-                if (currentTerrain == TerrainDefOf.TKKN_Lava) {
-                    var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock);
-                    GenSpawn.Spawn(thing, c, map);
-                }
-                else if (currentTerrain == TerrainDefOf.TKKN_LavaRock_RoughHewn &&
-                         map.Biome == BiomeDefOf.TKKN_VolcanicFlow &&
-                         map.listerThings.ThingsOfDef(ThingDefOf.TKKN_SteamVent).Count < 10) {
-                    var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_SteamVent);
-                    GenSpawn.Spawn(thing, c, map);
-                }
-            }
-        }
-    }
 
     public int GetRiverLevel() {
         if (floodThreat > 1000000 || season == Season.Spring) {
@@ -693,7 +720,7 @@ public class Watcher(Map map) : MapComponent(map)
         Log.Message("NPSWeatherEffects: Resetting cells for map: " + map +
                     " Biome: " + map.Biome +
                     " Biome name: " + map.Biome.label +
-                    " Biome source: " + map.Biome.modContentPack.Name +
+                    " Biome source: " + map.Biome?.modContentPack?.Name +
                     " Map size: " + map.Size);
         if (cellWeatherAffectsDict?.Count > 0) {
             foreach (var focusCell in allCells) {
@@ -807,7 +834,7 @@ public class Watcher(Map map) : MapComponent(map)
             if (!coastRotation.IsValid) {
                 Log.Error(
                     "NPSWeatherEffects: Tried to generate a coast but could not find coast rotation. This was on the biome " +
-                    map.Biome + " From " + map.Biome.modContentPack?.Name);
+                    map.Biome + " From " + map.Biome?.modContentPack?.Name);
                 doCoast = false;
             }
 
@@ -858,7 +885,7 @@ public class Watcher(Map map) : MapComponent(map)
             previousQuadrum = Quadrum.Undefined;
 
             // First loop we get stats and build the initial dictionary
-            foreach (var focusCell in map.AllCells.InRandomOrder()) {
+            foreach (var focusCell in map.AllCells) {
                 var terrain = focusCell.GetTerrain(map);
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
 
@@ -912,10 +939,22 @@ public class Watcher(Map map) : MapComponent(map)
                                 }
 
                                 if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
+                                    List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
+                                    string mutatorList = "";
+                                    if (mutators?.NullOrEmpty() == true) {
+                                        foreach (var mutator in mutatorList) {
+                                            mutatorList += mutator + ", ";
+                                        }
+                                    }
+
+                                    Log.Error("NPSWeatherEffects: Tile: " + bankCheck +
+                                              " Biome: " + map.Biome +
+                                              (mutatorList.Length > 0 ? " Mutators: " + mutatorList : "") +
+                                              "A new cell is being made for a ocean tile when it should already have been created");
                                     affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
                                 }
 
-                                if (bankCheckTerrain == RimWorld.TerrainDefOf.Sand) {
+                                if (bankCheckTerrain == RimWorld.TerrainDefOf.Sand && EffectSettings.doWetSand) {
                                     if (map.terrainGrid.UnderTerrainAt(bankCheck) != null) {
                                         map.terrainGrid.SetUnderTerrain(bankCheck, TerrainDefOf.TKKN_SandBeachWetSalt);
                                     }
@@ -961,6 +1000,18 @@ public class Watcher(Map map) : MapComponent(map)
                             }
 
                             if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
+                                List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
+                                string mutatorList = "";
+                                if (mutators?.NullOrEmpty() == true) {
+                                    foreach (var mutator in mutatorList) {
+                                        mutatorList += mutator + ", ";
+                                    }
+                                }
+
+                                Log.Error("NPSWeatherEffects: Tile: " + bankCheck +
+                                          " Biome: " + map.Biome +
+                                          (mutatorList.Length > 0 ? " Mutators: " + mutatorList : "") +
+                                          "A new cell is being made for a river tile when it should already have been created");
                                 affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
                             }
 

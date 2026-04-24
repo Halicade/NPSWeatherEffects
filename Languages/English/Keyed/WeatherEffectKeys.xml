@@ -62,6 +62,8 @@
     <NPS_doFloods_text>Rivers will rise and fall due to season or weather. This will impact any crops placed there</NPS_doFloods_text>
     <NPS_doTides_title>Ocean tides</NPS_doTides_title>
     <NPS_doTides_text>Oceans will rise and fall throughout the day</NPS_doTides_text>
+    <NPS_doWetSand_title>Spawn wet sand</NPS_doWetSand_title>
+    <NPS_doWetSand_text>Sand underneath ocean tides will be wet. Requires "Reset map" to add/remove</NPS_doWetSand_text>
     <NPS_leaveLoot_title>Wash up loot</NPS_leaveLoot_title>
     <NPS_leaveLoot_text>After water recedes, items can wash up on land</NPS_leaveLoot_text>
     <NPS_forbidLoot_title>Loot spawns forbidden</NPS_forbidLoot_title>

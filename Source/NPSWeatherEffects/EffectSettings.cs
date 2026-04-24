@@ -39,10 +39,11 @@ public class EffectSettings : ModSettings
     public static bool doDirtPath = true;
     public static bool regenCells;
     public static bool doTides = true;
+    public static bool doWetSand = true;
     public static bool showDevReadout;
 
     public static bool doFloods = true;
-    public static int maxCellsPerTick = 50;
+    public static int maxCellsPerTick = 75;
     public static bool useMapTemperature = false;
 
     public static bool seasonalDiseases = true;
@@ -59,7 +60,7 @@ public class EffectSettings : ModSettings
         base.ExposeData();
 
         Scribe_Values.Look(ref doWeather, "doWeather", true);
-        Scribe_Values.Look(ref maxCellsPerTick, "cellsPerTick", 50);
+        Scribe_Values.Look(ref maxCellsPerTick, "cellsPerTick", 75);
         Scribe_Values.Look(ref onlyPlayerHome, "onlyPlayerHome", true);
         Scribe_Values.Look(ref doDirtPath, "doDirtPath", true);
         Scribe_Values.Look(ref allowPlantEffects, "allowPlantEffects", false);
@@ -72,6 +73,7 @@ public class EffectSettings : ModSettings
 
         Scribe_Values.Look(ref makePuddles, "makePuddles", true);
         Scribe_Values.Look(ref doTides, "doTides", true);
+        Scribe_Values.Look(ref doWetSand, "doWetSand", true);
         Scribe_Values.Look(ref doFloods, "doFloods", true);
         Scribe_Values.Look(ref leaveLoot, "leaveStuff", true);
         Scribe_Values.Look(ref forbidLoot, "forbidLoot", true);

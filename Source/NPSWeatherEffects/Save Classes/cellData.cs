@@ -30,7 +30,7 @@ public class cellData : IExposable
     public float howWetPlants = 60;
     public bool isFrozen;
     public bool isWet;
-    public IntVec3 location;
+    public IntVec3 location = IntVec3.Invalid;
     public int locationIndex;
     public Map map;
     private TerrainDef driedTerrain;
@@ -282,11 +282,12 @@ public class cellData : IExposable
         }
 
         map.terrainGrid.RemoveTempTerrain(location);
+        leaveLoot();
         if (EffectSettings.showRainEffects) {
             howWet = 4;
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
-            setTerrainFlood();
+            setTerrainWet();
         }
     }
 
@@ -451,7 +452,7 @@ public class cellData : IExposable
         }
 
         List<Thing> things = location.GetThingList(map);
-        DamageInfo asdf = new DamageInfo(DamageDefOf.Stab, 9000f);
+        DamageInfo asdf = new DamageInfo(DamageDefOf.Deterioration, 9000f);
 
         for (var i = things.Count - 1; i >= 0; i--) {
             if (things[i].def.category == ThingCategory.Item || things[i].def.category == ThingCategory.Plant) {

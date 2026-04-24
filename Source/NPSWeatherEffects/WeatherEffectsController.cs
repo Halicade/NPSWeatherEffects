@@ -65,7 +65,7 @@ public class WeatherEffectsController : Mod
         if (EffectSettings.doWeather) {
             EffectSettings.maxCellsPerTick = (int)list.SliderLabeled(
                 "NPS_weatherCellUpdateSpeed_title".Translate(EffectSettings.maxCellsPerTick),
-                EffectSettings.maxCellsPerTick, 10, 100, 
+                EffectSettings.maxCellsPerTick, 5, 100, 
                 0.5f, 
                 "NPS_weatherCellUpdateSpeed_text".Translate());
 
@@ -98,6 +98,13 @@ public class WeatherEffectsController : Mod
                     "NPS_doIce_title".Translate(),
                     ref EffectSettings.doIce,
                     "NPS_doIce_text".Translate());
+
+                if (EffectSettings.doIce) {
+                    Text.Font = GameFont.Tiny;
+                    list.Label("NPS_numModsPatching".Translate(EffectSettings.modsPatchingTerrain)
+                        .Colorize(Color.yellow));
+                    Text.Font = GameFont.Small;
+                }
             }
 
             list.CheckboxLabeled(
@@ -193,6 +200,11 @@ public class WeatherEffectsController : Mod
                 ref EffectSettings.doTides,
                 "NPS_doTides_text".Translate());
 
+            list.CheckboxLabeled(
+                "NPS_doWetSand_title".Translate(),
+                ref EffectSettings.doWetSand,
+                "NPS_doWetSand_text".Translate());
+            
             list.CheckboxLabeled(
                 "NPS_leaveLoot_title".Translate(),
                 ref EffectSettings.leaveLoot,
