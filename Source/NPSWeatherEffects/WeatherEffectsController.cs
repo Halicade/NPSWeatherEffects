@@ -99,7 +99,7 @@ public class WeatherEffectsController : Mod
                     ref EffectSettings.doIce,
                     "NPS_doIce_text".Translate());
 
-                if (EffectSettings.doIce) {
+                if (EffectSettings.doIce && EffectSettings.modsPatchingTerrain > 0) {
                     Text.Font = GameFont.Tiny;
                     list.Label("NPS_numModsPatching".Translate(EffectSettings.modsPatchingTerrain)
                         .Colorize(Color.yellow));

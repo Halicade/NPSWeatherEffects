@@ -2,7 +2,6 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
-using NPSWeather.Rain;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -10,7 +9,7 @@ using Verse.Noise;
 
 namespace NPSWeather;
 
-public class Watcher(Map map) : MapComponent(map)
+public class Watcher(Map map) : MapComponent(map), IDisposable
 {
     private const int HowManyRiverSteps = 6;
     private const int HalfRiverSteps = HowManyRiverSteps / 2;
@@ -104,11 +103,12 @@ public class Watcher(Map map) : MapComponent(map)
     private TerrainDef shallowRiverTerrain;
     public bool doRiverFlooding;
     private bool iceOrFrostGrid;
+    private bool waterOrFlood;
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
     public Season season;
-    private Quadrum quadrum;
-    private Quadrum previousQuadrum = Quadrum.Undefined;
+    public Quadrum quadrum;
+    public Quadrum previousQuadrum = Quadrum.Undefined;
     public bool droughtActive;
 
     private const int MapCheckInterval = 625;
@@ -161,17 +161,18 @@ public class Watcher(Map map) : MapComponent(map)
                     cycleIndex = 0;
                 }
 
-                activeCellData = cellWeatherList[cycleIndex];
+                activeCellData = cellWeatherList[cycleIndex++];
 
-                basicCellChecks();
+                if (!basicCellChecks()) {
+                    continue;
+                }
+
                 lavaCellChecks();
                 rainCellChecks();
                 if (!acceleratedChecks) {
                     iceCellChecks();
                     extraRainChecks();
                 }
-
-                cycleIndex++;
             }
         }
 
@@ -233,6 +234,7 @@ public class Watcher(Map map) : MapComponent(map)
 
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
+        waterOrFlood = EffectSettings.showWetTerrain || EffectSettings.showFloodTerrain;
         doRoofChecks = EffectSettings.showWetTerrain || EffectSettings.showFrostGrid;
     }
 
@@ -294,11 +296,12 @@ public class Watcher(Map map) : MapComponent(map)
     private TerrainDef currentTerrain;
 
 
-    private void basicCellChecks() {
-        if (map.edificeGrid[activeCellData.locationIndex] != null) {
+    private bool basicCellChecks() {
+        Building building = map.edificeGrid[activeCellData.locationIndex];
+        if (building?.def?.Fillage == FillCategory.Full) {
             frostGridComponent.removeDepth(activeCellData);
             wetnessGridComponent.removeDepth(activeCellData);
-            return;
+            return false;
         }
 
         if (doUnpacking) {
@@ -321,6 +324,7 @@ public class Watcher(Map map) : MapComponent(map)
         if (currentTerrain.designationCategory == DesignationCategoryDefOf.Floors) {
             //cell.baseTerrain = currentTerrain;
         }*/
+        return true;
     }
 
     private void lavaCellChecks() {
@@ -344,47 +348,54 @@ public class Watcher(Map map) : MapComponent(map)
     }
 
     private void rainCellChecks() {
-        if (EffectSettings.showRainEffects) {
-            if (!roofed) {
-                //if it's raining in this cell:
-                if (isRaining) {
-                    if (floodThreat < 1090000) {
-                        floodThreat += floodThreatIncrease;
-                    }
+        if (!EffectSettings.showRainEffects) {
+            return;
+        }
 
-                    gettingWet = true;
-                    if (activeCellData.setTerrainWater()) {
-                        cellActionsPerformed++;
-                    }
-
-                    if (EffectSettings.showRainGrid) {
-                        if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.178f)) {
-                            cellActionsPerformed++;
-                        }
-                    }
-                }
-                else {
-                    if (currentRainRate == 0) {
-                        floodThreat--;
-                    }
-
-                    //DRY GROUND
-                    if (activeCellData.trySetTerrainDry()) {
-                        cellActionsPerformed++;
-                    }
-
-                    if (EffectSettings.showRainGrid) {
-                        if (wetnessGridComponent.subDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
-                            cellActionsPerformed++;
-                        }
-                    }
+        if (roofed) {
+            if (EffectSettings.showRainGrid) {
+                if (wetnessGridComponent.addDepth(activeCellData, -0.005f * activeCellData.rainNoise)) {
+                    cellActionsPerformed++;
                 }
             }
-            else {
-                if (EffectSettings.showRainGrid) {
-                    if (wetnessGridComponent.subDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
-                        cellActionsPerformed++;
-                    }
+
+            if (activeCellData.trySetTerrainDry()) {
+                cellActionsPerformed++;
+            }
+
+            return;
+        }
+
+        //if it's raining in this cell:
+        if (isRaining) {
+            if (floodThreat < 1090000) {
+                floodThreat += floodThreatIncrease;
+            }
+
+            gettingWet = true;
+            if (activeCellData.setTerrainWater()) {
+                cellActionsPerformed++;
+            }
+
+            if (EffectSettings.showRainGrid) {
+                if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.0106f)) {
+                    cellActionsPerformed++;
+                }
+            }
+        }
+        else {
+            if (currentRainRate == 0) {
+                floodThreat--;
+            }
+
+            //DRY GROUND
+            if (activeCellData.trySetTerrainDry()) {
+                cellActionsPerformed++;
+            }
+
+            if (EffectSettings.showRainGrid) {
+                if (wetnessGridComponent.addDepth(activeCellData, -0.005f * activeCellData.rainNoise)) {
+                    cellActionsPerformed++;
                 }
             }
         }
@@ -394,7 +405,7 @@ public class Watcher(Map map) : MapComponent(map)
         if (!iceOrFrostGrid) {
             return;
         }
-        
+
         activeCellData.temperature = EffectSettings.useMapTemperature
             ? outdoorTemp
             : activeCellData.location.GetTemperature(map);
@@ -403,6 +414,7 @@ public class Watcher(Map map) : MapComponent(map)
             case <= 1: {
                 if (EffectSettings.doIce) {
                     if (activeCellData.SetTerrainFrozen()) {
+                        //Keeping this here in order to give terrain setting a break
                         cellActionsPerformed++;
                     }
                 }
@@ -484,8 +496,7 @@ public class Watcher(Map map) : MapComponent(map)
         if (EffectSettings.makePuddles) {
             if (activeCellData.howWet == 3 &&
                 outdoorTemp > 2 &&
-                MaxPuddles > totalPuddles &&
-                currentTerrain != TerrainDefOf.TKKN_SandBeachWetSalt) {
+                MaxPuddles > totalPuddles) {
                 FilthMaker.TryMakeFilth(activeCellData.location, map, ThingDefOf.TKKN_FilthPuddle);
                 totalPuddles++;
             }
@@ -1050,11 +1061,11 @@ public class Watcher(Map map) : MapComponent(map)
             riverCellsList.Add([]);
         }
 
-        foreach ((IntVec3 _, cellData cellDataValue) in cellWeatherAffects) {
+        foreach (cellData cellDataValue in cellWeatherList) {
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
             cellDataValue.map = map;
             cellDataValue.frostNoise = Mathf.Lerp(0.25f, 1f, frostNoise.GetValue(cellDataValue.location));
-            cellDataValue.rainNoise = Mathf.Lerp(0.55f, 0.85f, wetnessNoise.GetValue(cellDataValue.location));
+            cellDataValue.rainNoise = Mathf.Lerp(0.25f, 0.49f, wetnessNoise.GetValue(cellDataValue.location));
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
@@ -1268,5 +1279,11 @@ public class Watcher(Map map) : MapComponent(map)
         return terrain == RimWorld.TerrainDefOf.WaterMovingShallow ||
                terrain == TerrainDefOf.NPS_WaterRiverFlood ||
                terrain == RimWorld.TerrainDefOf.WaterMovingChestDeep;
+    }
+
+    public void Dispose() {
+        wetnessGridComponent?.Dispose();
+        frostNoise?.Dispose();
+        wetnessNoise?.Dispose();
     }
 }

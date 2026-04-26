@@ -141,6 +141,12 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var rainLabel = $"MaxRain: {cell.rainNoise} | CurrentRain: {cell.rainLevel}";
             Widgets.Label(rect, rainLabel);
+            num += 19f;
+            
+            rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
+            var seasonLabel = $"Quadrum: {watcher.quadrum} | Prev quadrum: {watcher.previousQuadrum} | Season: {watcher.season}";
+            Widgets.Label(rect, seasonLabel);
+            
         }
 
 

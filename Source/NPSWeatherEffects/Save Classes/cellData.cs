@@ -26,8 +26,7 @@ public class cellData : IExposable
     public int howPacked;
     private bool packed = false;
     private int lastPackedCheck;
-    public int howWet;
-    public float howWetPlants = 60;
+    public int howWet = -1;
     public bool isFrozen;
     public bool isWet;
     public IntVec3 location = IntVec3.Invalid;
@@ -53,7 +52,6 @@ public class cellData : IExposable
         Scribe_Values.Look(ref packed, "packed");
         Scribe_Values.Look(ref lastPackedCheck, "lastPackedCheck");
         Scribe_Values.Look(ref howWet, "howWet", -1);
-        Scribe_Values.Look(ref howWetPlants, "howWetPlants", 60);
         Scribe_Values.Look(ref frostLevel, "frostLevel");
         Scribe_Values.Look(ref rainLevel, "rainLevel");
         Scribe_Values.Look(ref isWet, "isWet");
@@ -85,11 +83,15 @@ public class cellData : IExposable
     /// </summary>
     public bool setTerrainWater() {
         if (EffectSettings.showWetTerrain) {
-            return setTerrainWet();
+            if (setTerrainWet()) {
+                return true;
+            }
         }
 
         if (EffectSettings.showFloodTerrain) {
-            return setTerrainFlood();
+            if (setTerrainFlood()) {
+                return true;
+            }
         }
 
         return false;
