@@ -118,6 +118,7 @@
         </affordances>
         <tags>
             <li>WetRain</li>
+            <li>Soil</li>
         </tags>
         <statBases>
             <Beauty>1</Beauty>
@@ -148,6 +149,7 @@
         </affordances>
         <tags>
             <li>WetRain</li>
+            <li>Soil</li>
         </tags>
         <statBases>
             <Beauty>1</Beauty>
@@ -332,6 +334,7 @@
         <scatterType>SoftDry</scatterType>
         <tags>
             <li>Wet</li>
+            <li>Soil</li>
         </tags>
         <affordances>
             <li>Light</li>
