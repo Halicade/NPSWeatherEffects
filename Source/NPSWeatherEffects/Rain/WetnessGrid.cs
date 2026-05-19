@@ -3,7 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace NPSWeather.Rain;
+namespace NPSWeather;
 
 public class WetnessGrid : MapComponent
 {
@@ -47,13 +47,17 @@ public class WetnessGrid : MapComponent
         cell.rainLevel = newDepth;
         
         if (newDepth == 0f || depthChange > 0.1f || Rand.Value < 0.0025f) {
-            map.mapDrawer.MapMeshDirty(cell.location, MapMeshDefOf.NPS_Rain, true, false);
+            //map.mapDrawer.MapMeshDirty(cell.location, MapMeshDefOf.NPS_Rain, true, false);
             return true;
         }
 
         return false;
         
         
+    }
+
+    public void refreshAt(IntVec3 cellToRefresh) {
+        map.mapDrawer.MapMeshDirty(cellToRefresh, MapMeshDefOf.NPS_Rain, true, false);
     }
 
     public bool subDepth(cellData cell, float depthToAdd) {

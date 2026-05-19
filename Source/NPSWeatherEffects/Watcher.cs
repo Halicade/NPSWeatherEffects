@@ -135,6 +135,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         isRaining = currentRainRate > 0;
         //environmental changes
+        
         if (EffectSettings.doWeather) {
             if (ticks % MapCheckInterval == 0) {
                 mapChecks();
@@ -155,6 +156,13 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
             DoTides();
             DoRiverModify();
+
+            if (cellstoRainGrid.Count > 1250 || ticks%2000==0) {
+                foreach (var cellBeingRefreshed in cellstoRainGrid) {
+                    wetnessGridComponent.refreshAt(cellBeingRefreshed);
+                }
+                cellstoRainGrid.Clear();
+            }
 
             for (var i = 0; i < cellActionsPerTick; i++) {
                 if (cycleIndex >= mapArea) {
@@ -347,6 +355,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
     }
 
+    private List<IntVec3> cellstoRainGrid = [];
+
     private void rainCellChecks() {
         if (!EffectSettings.showRainEffects) {
             return;
@@ -354,7 +364,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         if (roofed) {
             if (EffectSettings.showRainGrid) {
-                if (wetnessGridComponent.addDepth(activeCellData, -0.005f * activeCellData.rainNoise)) {
+                if (wetnessGridComponent.addDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
                     cellActionsPerformed++;
                 }
             }
@@ -378,7 +388,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
 
             if (EffectSettings.showRainGrid) {
-                if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.0106f)) {
+                if (wetnessGridComponent.addDepth(activeCellData,activeCellData.rainNoise)) {
+                    cellstoRainGrid.Add(activeCellData.location);
                     cellActionsPerformed++;
                 }
             }
@@ -394,7 +405,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
 
             if (EffectSettings.showRainGrid) {
-                if (wetnessGridComponent.addDepth(activeCellData, -0.005f * activeCellData.rainNoise)) {
+                if (wetnessGridComponent.addDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
                     cellActionsPerformed++;
                 }
             }
@@ -489,7 +500,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private void extraRainChecks() {
         if (EffectSettings.showRainEffects) {
             if (activeCellData.wetCheck(gettingWet)) {
-                cellActionsPerformed++;
+                //cellActionsPerformed++;
             }
         }
 
@@ -1065,7 +1076,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             cellDataValue.locationIndex = map.cellIndices.CellToIndex(cellDataValue.location);
             cellDataValue.map = map;
             cellDataValue.frostNoise = Mathf.Lerp(0.25f, 1f, frostNoise.GetValue(cellDataValue.location));
-            cellDataValue.rainNoise = Mathf.Lerp(0.25f, 0.49f, wetnessNoise.GetValue(cellDataValue.location));
+            cellDataValue.rainNoise = Mathf.Lerp(0.55f, 0.85f, wetnessNoise.GetValue(cellDataValue.location));
 
             cellDataValue.currentTerrain = map.terrainGrid.TerrainAt(cellDataValue.locationIndex);
             cellDataValue.setCurrentExtension();
@@ -1282,7 +1293,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
 
     public void Dispose() {
-        wetnessGridComponent?.Dispose();
         frostNoise?.Dispose();
         wetnessNoise?.Dispose();
     }
