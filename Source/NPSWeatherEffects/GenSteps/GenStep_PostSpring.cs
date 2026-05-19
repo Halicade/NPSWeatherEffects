@@ -1,7 +1,6 @@
-﻿using RimWorld;
-using Verse;
+﻿using Verse;
 
-namespace NPSWeather.GenSteps;
+namespace NPSWeather;
 
 public class GenStep_PostSpringPlants : GenStep
 {

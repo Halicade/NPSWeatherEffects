@@ -1,8 +1,7 @@
-﻿using NPSWeather;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
-namespace NPSWeatherEffects.HarmonyPatches;
+namespace NPSWeather;
 
 internal class IncidentWorker_Terraform_Jin
 {

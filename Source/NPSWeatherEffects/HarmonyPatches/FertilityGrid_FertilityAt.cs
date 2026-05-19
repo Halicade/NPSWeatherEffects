@@ -1,7 +1,6 @@
-﻿using NPSWeather;
-using Verse;
+﻿using Verse;
 
-namespace NPSWeatherEffects;
+namespace NPSWeather;
 
 
 /// <summary>

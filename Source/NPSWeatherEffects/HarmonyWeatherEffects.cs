@@ -1,12 +1,7 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using HarmonyLib;
-using NPSWeatherEffects;
-using NPSWeatherEffects.HarmonyPatches;
 using RimWorld;
-using TKKN_NPS;
 using Verse;
-using Verse.AI;
 
 namespace NPSWeather;
 

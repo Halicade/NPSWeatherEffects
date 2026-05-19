@@ -1,8 +1,7 @@
-﻿using NPSWeather;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
-namespace NPSWeatherEffects;
+namespace NPSWeather;
 
 public class Plant_GrowthRate
 {

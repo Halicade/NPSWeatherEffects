@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace NPSWeather.GenSteps;
+namespace NPSWeather;
 
 public static class ValidOasisSoils
 {

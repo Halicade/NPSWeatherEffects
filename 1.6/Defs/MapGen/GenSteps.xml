@@ -5,7 +5,7 @@
     <GenStepDef>
         <defName>NPS_HotSpring</defName>
         <order>224</order>
-        <genStep Class="NPSWeather.GenSteps.GenStep_SpringTerrain">
+        <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_HotSpringsWater</waterTerrain>
             <soilTerrain>Riverbank</soilTerrain>
         </genStep>
@@ -14,7 +14,7 @@
     <GenStepDef>
         <defName>NPS_ColdSpring</defName>
         <order>224</order>
-        <genStep Class="NPSWeather.GenSteps.GenStep_SpringTerrain">
+        <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
             <soilTerrain>Riverbank</soilTerrain>
         </genStep>
@@ -24,7 +24,7 @@
     <GenStepDef>
         <defName>NPS_PostSpringPlants</defName>
         <order>906</order>
-        <genStep Class="NPSWeather.GenSteps.GenStep_PostSpringPlants" />
+        <genStep Class="NPSWeather.GenStep_PostSpringPlants" />
     </GenStepDef>
     
 

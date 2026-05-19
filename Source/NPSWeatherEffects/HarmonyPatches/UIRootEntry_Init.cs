@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using HarmonyLib;
-using NPSWeather;
 using Verse;
 
-namespace TKKN_NPS;
+namespace NPSWeather;
 
 public static class UIRootEntry_Init
 {
