@@ -121,6 +121,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     public override void FinalizeInit() {
         base.FinalizeInit();
+        ticks = Find.TickManager.TicksAbs;
         RebuildCellLists();
         mapChecks();
         allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
@@ -131,7 +132,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
         }
 
-        ticks = Find.TickManager.TicksGame;
+        ticks = Find.TickManager.TicksAbs;
 
         isRaining = currentRainRate > 0;
         //environmental changes
@@ -284,15 +285,15 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 droughtActive = true;
             }
         }
-
-
-        if (biomeSettings == null)
-            return;
         if (quadrum == previousQuadrum) {
             return;
         }
 
         previousQuadrum = quadrum;
+
+        if (biomeSettings == null)
+            return;
+
 
         biomeSettings.setWeatherBySeason(map, season, quadrum);
         biomeSettings.setDiseaseBySeason(map, season, quadrum);
