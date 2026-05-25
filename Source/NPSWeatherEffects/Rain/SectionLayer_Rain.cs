@@ -1,15 +1,29 @@
-﻿using RimWorld;
+﻿using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using Verse;
 
-namespace NPSWeather.Rain;
+namespace NPSWeather;
 
 public class SectionLayer_Rain : SectionLayer
 {
-    private static readonly Color32 ColorClear = new(243, 140, 247, 0); // 194, 219, 249
 
-    private static readonly Color32 ColorWhite = new(243, 140, 247, 180);
-    private readonly float[] vertDepth = new float[9];
+    private readonly float[] adjValuesTmp = new float[9];
+
+    private static readonly List<float> opacityListTmp = [];
+
+    private static readonly List<List<int>> vertexWeights = [
+        [0, 1, 2, 8],
+        [2, 8],
+        [2, 3, 4, 8],
+        [4, 8],
+        [4, 5, 6, 8],
+        [6, 8],
+        [6, 7, 0, 8],
+        [0, 8],
+        [8]
+    ];
 
     public SectionLayer_Rain(Section section) : base(section) {
         relevantChangeTypes = MapMeshDefOf.NPS_Rain;
@@ -29,59 +43,38 @@ public class SectionLayer_Rain : SectionLayer
 
         subMesh.Clear(MeshParts.Colors);
 
-        float[] depthGridDirect_Unsafe = WetnessGrid.DepthGridDirect_Unsafe;
+        NativeArray<float> depthGrid_Unsafe = WetnessGrid.DepthGridDirect_Unsafe;
         CellRect cellRect = section.CellRect;
-        int sizeZ = Map.Size.z - 1;
-        int sizeX = Map.Size.x - 1;
         bool bigChange = false;
 
         CellIndices cellIndices = Map.cellIndices;
-        for (int i = cellRect.minX; i <= cellRect.maxX; i++)
-        {
+        for (int i = cellRect.minX; i <= cellRect.maxX; i++) {
             for (int j = cellRect.minZ; j <= cellRect.maxZ; j++) {
-                float origin = depthGridDirect_Unsafe[cellIndices.CellToIndex(i, j)];
-                /*
-                 Faster method but does not look as smooth
-                var color = rainDepthColor(num3);
-                subMesh.colors.AddRange([color, color, color, color, color, color, color, color, color]);
+                opacityListTmp.Clear();
+                float num = depthGrid_Unsafe[cellIndices.CellToIndex(i, j)];
                 for (int k = 0; k < 9; k++) {
-
-                    subMesh.colors.Add(color);
+                    IntVec3 c = new IntVec3(i, 0, j) + GenAdj.AdjacentCellsAndInsideForUV[k];
+                    adjValuesTmp[k] = (c.InBounds(Map) ? depthGrid_Unsafe[cellIndices.CellToIndex(c)] : num);
                 }
-                continue;
-                */
 
-                int num4 = cellIndices.CellToIndex(i, j - 1);
-                float south = j <= 0 ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i - 1, j - 1);
-                float southWest = j <= 0 || i <= 0 ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i - 1, j);
-                float west = i <= 0 ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i - 1, j + 1);
-                float northWest = j >= sizeZ || i <= 0 ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i, j + 1);
-                float north = j >= sizeZ ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i + 1, j + 1);
-                float northEast = j >= sizeZ || i >= sizeX ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i + 1, j);
-                float east = i >= sizeX ? origin : depthGridDirect_Unsafe[num4];
-                num4 = cellIndices.CellToIndex(i + 1, j - 1);
-                float southEast = j <= 0 || i >= sizeX ? origin : depthGridDirect_Unsafe[num4];
-                vertDepth[0] = (south + southWest + west + origin) / 4f;
-                vertDepth[1] = (west + origin) / 2f;
-                vertDepth[2] = (west + northWest + north + origin) / 4f;
-                vertDepth[3] = (north + origin) / 2f;
-                vertDepth[4] = (north + northEast + east + origin) / 4f;
-                vertDepth[5] = (east + origin) / 2f;
-                vertDepth[6] = (east + southEast + south + origin) / 4f;
-                vertDepth[7] = (south + origin) / 2f;
-                vertDepth[8] = origin;
-                for (int k = 0; k < 9; k++) {
-                    if (vertDepth[k] > 0.01f) {
+                for (int l = 0; l < 9; l++) {
+                    float num2 = 0f;
+                    for (int m = 0; m < vertexWeights[l].Count; m++) {
+                        num2 += adjValuesTmp[vertexWeights[l][m]];
+                    }
+
+                    num2 /= vertexWeights[l].Count;
+                    if (num2 > 0.01f) {
                         bigChange = true;
                     }
 
-                    subMesh.colors.Add(rainDepthColor(vertDepth[k]));
+                    opacityListTmp.Add(num2);
+                }
+
+                for (int num3 = 0; num3 < 9; num3++) {
+                    float num6 = opacityListTmp[num3];
+                    subMesh.colors.Add(new Color32(243, 140, 247,
+                        Convert.ToByte(num6 * 180f)));
                 }
             }
         }
@@ -93,10 +86,5 @@ public class SectionLayer_Rain : SectionLayer
         else {
             subMesh.disabled = true;
         }
-    }
-
-
-    private static Color32 rainDepthColor(float rainDepth) {
-        return ColorWhite.MutateAlpha((byte)(rainDepth * 180));
     }
 }

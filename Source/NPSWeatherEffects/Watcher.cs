@@ -42,7 +42,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private int cycleIndex;
 
-    private List<List<cellData>> riverCellsList = [];
+    private readonly List<List<cellData>> riverCellsList = [];
     public int floodLevel;
     private int floodThreat;
     private int floodThreatIncrease;
@@ -54,15 +54,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private ModuleBase frostNoise;
     private ModuleBase wetnessNoise;
 
-
     public float outdoorTemp;
 
-    //used by weather
     public bool regenCellLists = true;
 
     private int ticks;
 
-    //rebuild every save to keep file size down
     public bool doCoast = true; //false if no coast
     private readonly List<List<cellData>> tideCellsList = [];
     public int tideLevel; // 0 - 13
@@ -72,7 +69,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private float longCurrentTile;
     private long ticksOffsetFromLongitude;
     private int checkUpToCell;
-    private List<cellData> failedTidalTiles = [];
+    private readonly List<cellData> failedTidalTiles = [];
     private bool finishedTideMovement = true;
     private bool tideIncreasing;
     private TideVariant savedTidalVariant;
@@ -89,21 +86,20 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private bool doUnpacking;
 
-    //Not using this value
     //Value not in use
     //private bool noHurtPlants;
     public readonly Dictionary<Pawn, bool> validPawns = [];
-    public float currentRainRate;
+    private float currentRainRate;
     private float currentSnowRate;
     private int mapArea; //Default area 62500
     public bool isRaining;
+    private readonly List<IntVec3> cellstoRainGrid = [];
     private TerrainDef oceanTerrain;
     private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
     private TerrainDef shallowRiverTerrain;
     public bool doRiverFlooding;
     private bool iceOrFrostGrid;
-    private bool waterOrFlood;
     private bool doRoofChecks;
     private IReadOnlyList<Pawn> allPawnsSpawned;
     public Season season;
@@ -112,12 +108,14 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public bool droughtActive;
 
     private const int MapCheckInterval = 625;
+
     private const int MinimumCellsPerTick = 5;
+
+    //Wanted to make this occur at a different time from other intervals
+    private const int RainGridCheckInterval = 450;
     private int cellActionsPerformed;
     private int cellActionsPerTick = 5;
     private bool acceleratedChecks;
-
-    /* STANDARD STUFF */
 
     public override void FinalizeInit() {
         base.FinalizeInit();
@@ -136,7 +134,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         isRaining = currentRainRate > 0;
         //environmental changes
-        
+
         if (EffectSettings.doWeather) {
             if (ticks % MapCheckInterval == 0) {
                 mapChecks();
@@ -144,12 +142,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
                     cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
                     acceleratedChecks = true;
-                    Log.Warning("New cell per tick value " + cellActionsPerTick);
+                    //Log.Warning("New cell per tick value " + cellActionsPerTick);
                 }
                 else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
                     cellActionsPerTick = MinimumCellsPerTick;
                     acceleratedChecks = false;
-                    Log.Message("New cell per tick value " + cellActionsPerTick);
+                    //Log.Message("New cell per tick value " + cellActionsPerTick);
                 }
 
                 cellActionsPerformed = 0;
@@ -158,10 +156,11 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             DoTides();
             DoRiverModify();
 
-            if (cellstoRainGrid.Count > 1250 || ticks%2000==0) {
+            if (ticks % RainGridCheckInterval == 0) {
                 foreach (var cellBeingRefreshed in cellstoRainGrid) {
                     wetnessGridComponent.refreshAt(cellBeingRefreshed);
                 }
+
                 cellstoRainGrid.Clear();
             }
 
@@ -243,7 +242,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-        waterOrFlood = EffectSettings.showWetTerrain || EffectSettings.showFloodTerrain;
         doRoofChecks = EffectSettings.showWetTerrain || EffectSettings.showFrostGrid;
     }
 
@@ -273,7 +271,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 return;
             }
         }
-
         //previousQuadrum = quadrum;
         quadrum = GenDate.Quadrum(ticks, location.x);
 
@@ -307,7 +304,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private bool basicCellChecks() {
         Building building = map.edificeGrid[activeCellData.locationIndex];
-        if (building?.def?.Fillage == FillCategory.Full) {
+        if (building?.def?.Fillage == FillCategory.Full ||
+            map.fogGrid.IsFogged(activeCellData.locationIndex)) {
             frostGridComponent.removeDepth(activeCellData);
             wetnessGridComponent.removeDepth(activeCellData);
             return false;
@@ -342,7 +340,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
         }
 
-        if (Rand.Value < .0001f) {
+        if (Rand.Value < 0.0001f) {
             if (currentTerrain == TerrainDefOf.TKKN_Lava) {
                 var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock);
                 GenSpawn.Spawn(thing, activeCellData.location, map);
@@ -356,7 +354,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
     }
 
-    private List<IntVec3> cellstoRainGrid = [];
 
     private void rainCellChecks() {
         if (!EffectSettings.showRainEffects) {
@@ -388,17 +385,16 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 cellActionsPerformed++;
             }
 
+            //currentRainRate * 0.0106f
             if (EffectSettings.showRainGrid) {
-                if (wetnessGridComponent.addDepth(activeCellData,activeCellData.rainNoise)) {
+                if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.106f)) {
                     cellstoRainGrid.Add(activeCellData.location);
                     cellActionsPerformed++;
                 }
             }
         }
         else {
-            if (currentRainRate == 0) {
-                floodThreat--;
-            }
+            floodThreat--;
 
             //DRY GROUND
             if (activeCellData.trySetTerrainDry()) {
@@ -406,7 +402,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
 
             if (EffectSettings.showRainGrid) {
-                if (wetnessGridComponent.addDepth(activeCellData, -0.05f * activeCellData.rainNoise)) {
+                if (wetnessGridComponent.addDepth(activeCellData, -0.07f * activeCellData.rainNoise)) {
+                    cellstoRainGrid.Add(activeCellData.location);
                     cellActionsPerformed++;
                 }
             }
