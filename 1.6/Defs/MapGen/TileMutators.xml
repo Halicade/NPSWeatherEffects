@@ -42,10 +42,10 @@
             <li>Ocean</li>
             <li>SeaIce</li>
             <li>Desert</li>
-
             <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
+            <li MayRequire="ludeon.Rimworld.Odyssey">LavaField</li>
         </biomeBlacklist>
         <averageTemperatureRange>17.51~999</averageTemperatureRange>
         <coastSidesRange>0~0</coastSidesRange>
