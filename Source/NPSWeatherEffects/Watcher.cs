@@ -200,7 +200,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
 
     private bool checkPawnHuman(Pawn pawn) {
-        if ((pawn.HashOffsetTicks() + ticks) % 10 != 0) {
+        if (pawn.HashOffsetTicks() % 10 != 0) {
             return false;
         }
 

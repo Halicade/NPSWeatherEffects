@@ -34,19 +34,12 @@ public class Hediff_Wetness : HediffWithComps
         }
 
         var wetness = wetnessRate();
-        if (wetness > 0) {
-            Severity += wetness / 1000;
-
-            if (!(Severity > .62) || ageTicks % 1000 != 0) {
-                return;
-            }
-
-            if(FilthMaker.TryMakeFilth(position, map, ThingDefOf.TKKN_FilthPuddle))
+        if (wetness < 0 && Severity > .62 && ageTicks % 1000 == 0) {
+            if (FilthMaker.TryMakeFilth(position, map, ThingDefOf.TKKN_FilthPuddle))
                 Severity -= .3f;
         }
-        else {
-            Severity += wetness / 1000;
-        }
+
+        Severity += wetness / 1000;
     }
 
     private float wetnessRate() {
