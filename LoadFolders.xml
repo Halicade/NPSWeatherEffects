@@ -13,6 +13,7 @@
     <!--Mods-->
     <li IfModActive="vanillaexpanded.vexploratione">1.6/Mods/LandmarksExpanded</li>
     <li IfModActive="Hali.NPSBiomes">1.6/Mods/NPSBiomes</li>
+    <li IfModActive="dismarzero.vgp.vgpgardentools">1.6/Mods/VGPGardenTools</li>
     <li IfModActive="reel.wintertaigabiome2">1.6/Mods/WinterTaigaBiome</li>
 
   </v1.6>
