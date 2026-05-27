@@ -30,7 +30,7 @@
     
     <NPS_coldEffects>Cold Effects</NPS_coldEffects>
     <NPS_useMapTemperature_title>Use map-wide temperature</NPS_useMapTemperature_title>
-    <NPS_useMapTemperature_text>Use the maps outdoor temperature instead of querying each cell. This applies for ice freezing and frost grid generation.\nWill improve performance but can lead to water or frost generating indoors.</NPS_useMapTemperature_text>
+    <NPS_useMapTemperature_text>Use the maps outdoor temperature instead of querying each cell. This applies for ice freezing and frost grid generation.\nWill improve performance but can lead to frost generating indoors.</NPS_useMapTemperature_text>
     <NPS_numModsPatching>{0} mod(s) currently detected patching functions this option uses heavily</NPS_numModsPatching>
     <NPS_doIce_title>Ground / water freezes</NPS_doIce_title>
     <NPS_doIce_text>Terrain can freeze at cold temperatures</NPS_doIce_text>
@@ -52,7 +52,7 @@
     <NPS_showrainGrid_text>When it rains, tiles will gradually darken to simulate rain. This is purely visual</NPS_showrainGrid_text>
     <NPS_rainIncreaseFertility_title>Rain increases plant growth</NPS_rainIncreaseFertility_title>
     <NPS_rainIncreaseFertility_text>When it rains, plants will grow faster\n\nRequires restart</NPS_rainIncreaseFertility_text>
-    <NPS_notRecommendedWetFertility>For balancing reasons, it is not recommended to use this with "Show wet terrain" option"</NPS_notRecommendedWetFertility>
+    <NPS_notRecommendedWetFertility>For balancing reasons, it is not recommended to use this with "Show wet terrain" option</NPS_notRecommendedWetFertility>
     
     <NPS_makePuddles_title>Make puddles</NPS_makePuddles_title>
     <NPS_makePuddles_text>Puddles can appear when it rains or when snow melts.</NPS_makePuddles_text>
