@@ -103,7 +103,7 @@
 
     <TerrainDef ParentName="NaturalTerrainBase">
         <defName>TKKN_SoilWet</defName>
-        <label>wet Soil</label>
+        <label>wet soil</label>
         <texturePath>TKKN_NPS/Terrain/wetSoil</texturePath>
         <edgeType>FadeRough</edgeType>
         <renderPrecedence>375</renderPrecedence>
@@ -128,8 +128,16 @@
         <filthAcceptanceMask />
         <fertility>1.25</fertility>
         <takeFootprints>True</takeFootprints>
-        <avoidWander>True</avoidWander>
-        <driesTo>Soil</driesTo>
+        <tools>
+            <li>
+                <label>mud</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>MudInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools>
     </TerrainDef>
 
     <TerrainDef ParentName="NaturalTerrainBase">
@@ -157,10 +165,18 @@
         </statBases>
         <generatedFilth>Filth_Dirt</generatedFilth>
         <filthAcceptanceMask />
-        <fertility>1.5</fertility>
+        <fertility>1.6</fertility>
         <takeFootprints>True</takeFootprints>
-        <avoidWander>True</avoidWander>
-        <driesTo>SoilRich</driesTo>
+        <tools>
+            <li>
+                <label>mud</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>MudInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools>
     </TerrainDef>
 
     <TerrainDef ParentName="NaturalTerrainBase">
@@ -190,8 +206,16 @@
         <filthAcceptanceMask />
         <fertility>.10</fertility>
         <takeFootprints>True</takeFootprints>
-        <avoidWander>True</avoidWander>
-        <driesTo>Sand</driesTo>
+        <tools>
+            <li>
+                <label>sand</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>SandInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools>
     </TerrainDef>
 
     <TerrainDef ParentName="NaturalTerrainBase">
@@ -221,7 +245,16 @@
         <filthAcceptanceMask />
         <fertility>.1</fertility>
         <takeFootprints>True</takeFootprints>
-        <driesTo>Sand</driesTo>
+        <tools>
+            <li>
+                <label>sand</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>SandInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools>
     </TerrainDef>
 
     <TerrainDef>

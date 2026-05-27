@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>NPS_VG_GardenSoilWet</defName>
+        <label>wet farm soil</label>
+        <texturePath>TKKN_NPS/Mods/VGP/Terrain/wetFarmSoil</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <tags>
+            <li>WetRain</li>
+            <li>Soil</li>
+        </tags>
+        <statBases>
+            <Beauty>1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <generatedFilth>Filth_Dirt</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>1.5</fertility>
+        <takeFootprints>True</takeFootprints>
+        <tools>
+            <li>
+                <label>mud</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>MudInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools> 
+        <modExtensions>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <holdFrost>True</holdFrost>
+                <wetAt>0</wetAt>
+            </li>
+        </modExtensions>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>NPS_VG_PlowSoilWet</defName>
+        <label>wet plowed Soil</label>
+        <texturePath>TKKN_NPS/Mods/VGP/Terrain/wetPlowedSoil</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>375</renderPrecedence>
+        <pathCost>12</pathCost>
+        <scatterType>Rocky</scatterType>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>GrowSoil</li>
+            <li>Diggable</li>
+        </affordances>
+        <tags>
+            <li>WetRain</li>
+            <li>Soil</li>
+        </tags>
+        <statBases>
+            <Beauty>1</Beauty>
+            <Cleanliness>-2</Cleanliness>
+        </statBases>
+        <generatedFilth>Filth_Dirt</generatedFilth>
+        <filthAcceptanceMask />
+        <fertility>1.8</fertility>
+        <takeFootprints>True</takeFootprints>
+        <tools>
+            <li>
+                <label>mud</label>
+                <capacities>
+                    <li>KickMaterialInEyes</li>
+                </capacities>
+                <hediff>MudInEyes</hediff>
+                <cooldownTime>1.5</cooldownTime>
+            </li>
+        </tools>
+        <modExtensions>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <holdFrost>True</holdFrost>
+                <wetAt>0</wetAt>
+            </li>
+        </modExtensions>
+    </TerrainDef>
+
+</Defs>
