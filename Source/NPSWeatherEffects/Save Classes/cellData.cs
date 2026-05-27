@@ -64,18 +64,19 @@ public class cellData : IExposable
         weatherExtension = currentTerrain.GetModExtension<TerrainWeatherReactions>();
     }
 
-    public bool wetCheck(bool gettingWet) {
-        if (howWet < 3 && gettingWet) {
+    public bool wetCheck() {
+        if (howWet < 3) {
             howWet += 2;
             return true;
         }
 
-        if (howWet > -1 && !gettingWet) {
-            howWet--;
-            return true;
-        }
-
         return false;
+    }
+
+    public void dryCheck() {
+        if (howWet > -1) {
+            howWet--;
+        }
     }
 
     /// <summary>
@@ -162,7 +163,7 @@ public class cellData : IExposable
             return;
         }*/
 
-        if (howWet < weatherExtension.wetAt) {
+        if (howWet < weatherExtension?.wetAt) {
             map.terrainGrid.SetTerrain(location, driedTerrain);
             isWet = false;
             howWet = -1;
@@ -320,12 +321,6 @@ public class cellData : IExposable
         }
     }
 
-    /// <summary>
-    /// This method currently has a weird thing where if you remove a packed path
-    /// (You can, and we want the user to do the above)
-    /// It will change back to a packed path after being stepped on
-    /// Unsure how to address this part.
-    /// </summary>
     public void DoPack() {
         var terrain = currentTerrain;
         if (!TerrainTagUtil.CanBePacked.Contains(terrain)) {
@@ -334,6 +329,11 @@ public class cellData : IExposable
 
         //don't pack if there's a growing zone.
         if (map.zoneManager.ZoneAt(location) is Zone_Growing) {
+            return;
+        }
+
+        //don't pack if there's a floor blueprint on it
+        if (map.blueprintGrid[locationIndex] != null) {
             return;
         }
 
@@ -512,7 +512,8 @@ public class cellData : IExposable
         if (EffectSettings.showWetTerrain) {
             forceTerrainWet();
         }
-        else {
+
+        if (EffectSettings.showFloodTerrain) {
             forceTerrainFlood();
         }
     }

@@ -271,6 +271,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 return;
             }
         }
+
         //previousQuadrum = quadrum;
         quadrum = GenDate.Quadrum(ticks, location.x);
 
@@ -282,6 +283,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 droughtActive = true;
             }
         }
+
         if (quadrum == previousQuadrum) {
             return;
         }
@@ -298,6 +300,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
 
     private bool gettingWet;
+    private bool waterChanged;
     private bool roofed;
     private TerrainDef currentTerrain;
 
@@ -323,6 +326,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         roofed = doRoofChecks && map.roofGrid.Roofed(activeCellData.locationIndex);
         gettingWet = false;
+        waterChanged = false;
 
         /*
         //check if the terrain has been floored
@@ -381,32 +385,40 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
 
             gettingWet = true;
+
+
             if (activeCellData.setTerrainWater()) {
-                cellActionsPerformed++;
+                waterChanged = true;
             }
 
             //currentRainRate * 0.0106f
             if (EffectSettings.showRainGrid) {
                 if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.106f)) {
                     cellstoRainGrid.Add(activeCellData.location);
-                    cellActionsPerformed++;
+                    waterChanged = true;
                 }
             }
+
+            activeCellData.wetCheck();
         }
         else {
             floodThreat--;
 
             //DRY GROUND
             if (activeCellData.trySetTerrainDry()) {
-                cellActionsPerformed++;
+                waterChanged = true;
             }
 
             if (EffectSettings.showRainGrid) {
                 if (wetnessGridComponent.addDepth(activeCellData, -0.07f * activeCellData.rainNoise)) {
                     cellstoRainGrid.Add(activeCellData.location);
-                    cellActionsPerformed++;
+                    waterChanged = true;
                 }
             }
+        }
+
+        if (waterChanged) {
+            cellActionsPerformed++;
         }
     }
 
@@ -496,10 +508,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
     */
     private void extraRainChecks() {
-        if (EffectSettings.showRainEffects) {
-            if (activeCellData.wetCheck(gettingWet)) {
-                //cellActionsPerformed++;
-            }
+        if (EffectSettings.showRainEffects && !gettingWet) {
+            //Want terrain to dry slowly
+            activeCellData.dryCheck();
+            //cellActionsPerformed++;
         }
 
         if (EffectSettings.makePuddles) {
