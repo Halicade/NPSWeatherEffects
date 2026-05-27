@@ -4,7 +4,7 @@
     <name>Nature's Pretty Sweet: Weather Effects</name>
     <packageId>Hali.NPSWeatherEffects</packageId>
     <author>tkkntkkn, mlie, halicade</author>
-    <url>https://github.com/emipa606/NaturesPrettySweet</url>
+    <url>https://github.com/halicade/NPSWeatherEffects</url>
     <modVersion IgnoreIfNoMatchingField="True">1.00</modVersion>
     <supportedVersions>
         <li>1.6</li>
@@ -18,9 +18,7 @@
         </li>
     </modDependencies>
     <loadAfter>
-        <li>brrainz.harmony</li>
-        <li>Jaxe.SmartMinify</li>
-        <li>regrowth.botr.core</li>
+        <li>ludeon.rimworld</li>
     </loadAfter>
     <description>
         [img]https://i.postimg.cc/1X4HT06h/Info.png[/img]
