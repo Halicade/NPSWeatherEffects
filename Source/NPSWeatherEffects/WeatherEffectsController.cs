@@ -65,8 +65,8 @@ public class WeatherEffectsController : Mod
         if (EffectSettings.doWeather) {
             EffectSettings.maxCellsPerTick = (int)list.SliderLabeled(
                 "NPS_weatherCellUpdateSpeed_title".Translate(EffectSettings.maxCellsPerTick),
-                EffectSettings.maxCellsPerTick, 5, 100, 
-                0.5f, 
+                EffectSettings.maxCellsPerTick, 5, 100,
+                0.5f,
                 "NPS_weatherCellUpdateSpeed_text".Translate());
 
             list.CheckboxLabeled(
@@ -121,7 +121,7 @@ public class WeatherEffectsController : Mod
                 "NPS_showRainEffects_title".Translate(),
                 ref EffectSettings.showRainEffects,
                 "NPS_showRainEffects_text".Translate());
-            
+
             if (EffectSettings.showRainEffects) {
                 if (list.RadioButton("NPS_noTerrainEffects_title".Translate(),
                         EffectSettings.rainOptionSelector == 0,
@@ -169,7 +169,7 @@ public class WeatherEffectsController : Mod
                 list.CheckboxLabeled("NPS_rainIncreaseFertility_title".Translate(),
                     ref EffectSettings.rainIncreaseFertility,
                     "NPS_rainIncreaseFertility_text".Translate());
-                
+
                 if (EffectSettings.showWetTerrain && EffectSettings.rainIncreaseFertility) {
                     Text.Font = GameFont.Tiny;
                     list.Label("NPS_notRecommendedWetFertility".Translate().Colorize(Color.yellow));
@@ -180,9 +180,9 @@ public class WeatherEffectsController : Mod
                     "NPS_makePuddles_title".Translate(),
                     ref EffectSettings.makePuddles,
                     "NPS_makePuddles_text".Translate());
-
-                list.GapLine();
             }
+
+            list.GapLine();
 
             Text.Font = GameFont.Medium;
             list.Label("NPS_waterEffects".Translate());
@@ -204,7 +204,7 @@ public class WeatherEffectsController : Mod
                 "NPS_doWetSand_title".Translate(),
                 ref EffectSettings.doWetSand,
                 "NPS_doWetSand_text".Translate());
-            
+
             list.CheckboxLabeled(
                 "NPS_leaveLoot_title".Translate(),
                 ref EffectSettings.leaveLoot,
@@ -264,12 +264,12 @@ public class WeatherEffectsController : Mod
             "NPS_seasonalDiseases_title".Translate(),
             ref EffectSettings.seasonalDiseases,
             "NPS_seasonalDiseases_text".Translate());
-        
+
         list.CheckboxLabeled(
             "NPS_seasonalIncidents_title".Translate(),
             ref EffectSettings.seasonalIncidents,
             "NPS_seasonalIncidents_text".Translate());
-        
+
         if (!HarmonyWeatherEffects.SeasonalWeatherModActive) {
             list.CheckboxLabeled(
                 "NPS_seasonalWeather_title".Translate(),
@@ -281,7 +281,7 @@ public class WeatherEffectsController : Mod
         Text.Font = GameFont.Medium;
         list.Label("NPS_pawnEffects".Translate());
         Text.Font = GameFont.Small;
-        
+
         list.CheckboxLabeled(
             "NPS_allowPawnEffects_title".Translate(),
             ref EffectSettings.allowPawnEffects,
@@ -292,10 +292,10 @@ public class WeatherEffectsController : Mod
                 "NPS_pawnEffectsOnlyColonists_title".Translate(),
                 ref EffectSettings.pawnEffectsOnlyColonists,
                 "NPS_pawnEffectsOnlyColonists_text".Translate());
-            
+
             list.Label("NPS_springEffects_title".Translate(),
                 tooltip: "NPS_springEffects_text".Translate());
-            
+
             if (!HarmonyWeatherEffects.DesirePathsActive) {
                 list.CheckboxLabeled(
                     "NPS_doDirtPath_title".Translate(),
