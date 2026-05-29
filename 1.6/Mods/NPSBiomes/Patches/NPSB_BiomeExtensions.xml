@@ -43,7 +43,6 @@ Winter: wet.
             <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.5</springSpawnChance>
-                <wetPlantStart>50</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_Healroot</li>
                     <li>Plant_Berry</li>
@@ -304,7 +303,6 @@ Winter: wet.
             <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>3</maxSprings>
                 <springSpawnChance>0.5</springSpawnChance>
-                <wetPlantStart>30</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_PincushionCactus</li>
                     <li>Plant_Dandelion</li>
@@ -386,12 +384,6 @@ Winter: wet.
         <xpath>Defs/BiomeDef[defName = "TKKN_Oasis"]</xpath>
         <value>
             <li Class="NPSWeather.BiomeSeasonalSettings">
-                <specialPlants>
-                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.3</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.5</TKKN_PlantLilypad>
-                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.5</TKKN_PlantWildRice>
-                </specialPlants>	
-                <wetPlantStart>50</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_Agave</li>
                     <li>Plant_Dandelion</li>
@@ -504,12 +496,6 @@ Winter: wet.
                 
                 <maxSprings>3</maxSprings>
                 <springSpawnChance>.8</springSpawnChance>
-                <wetPlantStart>50</wetPlantStart>
-                <specialPlants>
-                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.5</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.7</TKKN_PlantLilypad>
-                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.3</TKKN_PlantWildRice>
-                </specialPlants>		
                 <bloomPlants>
                     <li>Plant_Moss</li>
                     <li>Plant_Berry</li>
@@ -760,12 +746,6 @@ Winter: wet.
             <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>2</maxSprings>
                 <springSpawnChance>0.8</springSpawnChance>
-                <wetPlantStart>50</wetPlantStart>
-                <specialPlants>
-                    <TKKN_PlantCatTails MayRequire="hali.NPSBiomes">.5</TKKN_PlantCatTails>
-                    <TKKN_PlantLilypad MayRequire="hali.NPSBiomes">.7</TKKN_PlantLilypad>
-                    <TKKN_PlantWildRice MayRequire="hali.NPSBiomes">.2</TKKN_PlantWildRice>
-                </specialPlants>	
                 <bloomPlants>
                     <li>Plant_Moss</li>
                     <li>Plant_Berry</li>
@@ -996,7 +976,6 @@ Winter: wet.
             <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>3</maxSprings>
                 <springSpawnChance>0.7</springSpawnChance>
-                <wetPlantStart>50</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_Moss</li>
                     <li>Plant_Berry</li>

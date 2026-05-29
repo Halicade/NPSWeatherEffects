@@ -7,7 +7,6 @@
         <order>224</order>
         <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_HotSpringsWater</waterTerrain>
-            <soilTerrain>Riverbank</soilTerrain>
         </genStep>
     </GenStepDef>
 
@@ -16,7 +15,6 @@
         <order>224</order>
         <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
-            <soilTerrain>Riverbank</soilTerrain>
         </genStep>
     </GenStepDef>
 

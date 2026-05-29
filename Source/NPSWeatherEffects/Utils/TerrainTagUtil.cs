@@ -11,14 +11,14 @@ public static class TerrainTagUtil
     private static readonly HashSet<TerrainDef> HashLava = [];
     private static readonly HashSet<TerrainDef> HashCanBePacked = [];
     private static readonly Dictionary<TerrainDef, float> HashAmbientTempReaction = [];
-    
+
     public static FrozenSet<TerrainDef> TKKN_Wet = [];
     public static FrozenSet<TerrainDef> TKKN_Swim = [];
     public static FrozenSet<TerrainDef> Lava = [];
     public static FrozenSet<TerrainDef> CanBePacked = [];
     public static FrozenDictionary<TerrainDef, float> AmbientTempReaction = [];
 
-    public static void IntializeTerrainTags() {
+    public static void InitializeTerrainTags() {
         List<TerrainDef> allTerrains = DefDatabase<TerrainDef>.AllDefsListForReading;
         HashCanBePacked.Add(RimWorld.TerrainDefOf.Soil);
         HashCanBePacked.Add(RimWorld.TerrainDefOf.Sand);
@@ -26,7 +26,8 @@ public static class TerrainTagUtil
         HashCanBePacked.Add(TerrainDefOf.TKKN_SandPath);
 
         foreach (var terrain in allTerrains) {
-            if (terrain.HasTag("TKKN_Wet")) {
+            if (terrain.HasTag("TKKN_Wet") &&
+                terrain.waterBodyType is WaterBodyType.Freshwater or WaterBodyType.Saltwater) {
                 HashTKKN_Wet.Add(terrain);
             }
 
@@ -49,11 +50,9 @@ public static class TerrainTagUtil
                     HashAmbientTempReaction.Add(terrain, weatherExtension.temperatureAdjust);
                 }
 
-                if (weatherExtension.freezeTerrain?.terrain != null) {
-                    if (!weatherExtension.freezeTerrain.terrain.temporary) {
-                        Log.Error(
-                            $"NPSWeatherEffects: Terrain {terrain} has an extension indicating {weatherExtension.freezeTerrain} is a freeze terrain. But it is not temporary. ");
-                    }
+                if (weatherExtension.freezeTerrain?.terrain is { temporary: false }) {
+                    Log.Error(
+                        $"NPSWeatherEffects: Terrain {terrain} has an extension indicating {weatherExtension.freezeTerrain} is a freeze terrain. But it is not temporary. ");
                 }
             }
         }

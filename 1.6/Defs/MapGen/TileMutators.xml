@@ -9,7 +9,7 @@
         <categories>
             <li>Lake</li>
         </categories>
-        <chanceOnNonLandmarkTile>0.01</chanceOnNonLandmarkTile>
+        <chanceOnNonLandmarkTile>0.02</chanceOnNonLandmarkTile>
         <extraGenSteps>
             <li>NPS_HotSpring</li>
             <li>NPS_PostSpringPlants</li>
@@ -33,7 +33,8 @@
         <categories>
             <li>Lake</li>
         </categories>
-        <chanceOnNonLandmarkTile>0.01</chanceOnNonLandmarkTile>
+        <chanceOnNonLandmarkTile>0.02</chanceOnNonLandmarkTile>
+        <workerClass>NPSWeather.GiveMePlants</workerClass>
         <extraGenSteps>
             <li>NPS_ColdSpring</li>
             <li>NPS_PostSpringPlants</li>
@@ -46,7 +47,11 @@
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
             <li MayRequire="ludeon.Rimworld.Odyssey">LavaField</li>
+            <li MayRewuire="sarg.alphabiomes">AB_PyroclasticConflagration</li>
         </biomeBlacklist>
+        <additionalWildPlants>
+            <NPS_ColdSpringAmbrosia>0.02</NPS_ColdSpringAmbrosia>
+        </additionalWildPlants>
         <averageTemperatureRange>17.51~999</averageTemperatureRange>
         <coastSidesRange>0~0</coastSidesRange>
     </TileMutatorDef>

@@ -15,8 +15,6 @@ public class GenStep_SpringTerrain : GenStep
     private readonly HashSet<IntVec3> soilCells = [];
 
     public TerrainDef waterTerrain;
-    public TerrainDef soilTerrain;
-
 
     private IntVec3 leftCorner;
     private IntVec3 topCorner;
@@ -38,24 +36,22 @@ public class GenStep_SpringTerrain : GenStep
         int springsToSpawn = 1;
 
         var biomeExt = map.Biome.GetModExtension<BiomeSeasonalSettings>();
-        if (biomeExt != null) {
-
-            if (biomeExt.maxSprings > 1) {
-                for (int i = 1; i < biomeExt.maxSprings; i++) {
-                    if (Rand.Chance(biomeExt.springSpawnChance)) {
-                        springsToSpawn++;
-                    }
+        if (biomeExt?.maxSprings > 1) {
+            for (int i = 1; i < biomeExt.maxSprings; i++) {
+                if (Rand.Chance(biomeExt.springSpawnChance)) {
+                    springsToSpawn++;
                 }
             }
         }
+
 
         for (int i = 0; i < springsToSpawn; i++) {
             generateSpringLocations(map);
             cornerPoints.Clear();
             soilLine.Clear();
         }
-        
-        
+
+
         foreach (var water in waterCells) {
             if (!water.InBounds(map))
                 continue;
@@ -71,7 +67,7 @@ public class GenStep_SpringTerrain : GenStep
                 continue;
             if (soil.GetTerrain(map).IsWater)
                 continue;
-            map.terrainGrid.SetTerrain(soil, soilTerrain);
+            map.terrainGrid.SetTerrain(soil, MapGenUtility.RiverbankTerrainAt(soil, map));
             ValidOasisSoils.ValidSoils.Add(soil);
         }
     }
@@ -83,7 +79,6 @@ public class GenStep_SpringTerrain : GenStep
             return;
         }
 
-        soilTerrain = MapGenUtility.RiverbankTerrainAt(center, map);
         center = springPoint;
 
         //center = CellFinderLoose.TryFindCentralCell(map, 10, 15, x => !x.Roofed(map));
@@ -114,8 +109,6 @@ public class GenStep_SpringTerrain : GenStep
         }
 
         encircleSoilCells();
-
-
     }
 
     private void encircleSoilCells() {

@@ -29,7 +29,7 @@ public class HarmonyWeatherEffects
 
 
     static HarmonyWeatherEffects() {
-        TerrainTagUtil.IntializeTerrainTags();
+        TerrainTagUtil.InitializeTerrainTags();
         ThingUtil.InitializeThingUtil();
         PlantReactionUtil.InitializePlantGraphics();
         BiomeUtil.InitializeDefaults();

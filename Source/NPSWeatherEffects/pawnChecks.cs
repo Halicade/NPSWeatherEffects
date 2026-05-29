@@ -33,14 +33,8 @@ public static class PawnChecks
             if (pawn.needs.comfort != null) {
                 pawn.needs.comfort.lastComfortUseTick--;
             }
-
-            var hediffDef = HediffDefOf.TKKN_hotspring_chill_out;
-            if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null) {
-                return;
-            }
-
-            var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-            pawn.health.AddHediff(hediff);
+            HealthUtility.AdjustSeverity(pawn, HediffDefOf.TKKN_hotspring_chill_out, 0.5f);
+            
         }
         else if (terrain == TerrainDefOf.TKKN_ColdSpringsWater) {
             pawn.needs.rest?.TickResting(.05f);
@@ -51,15 +45,7 @@ public static class PawnChecks
             if (heatstroke != null) {
                 pawn.health.RemoveHediff(heatstroke);
             }
-
-
-            var hediffDef = HediffDefOf.TKKN_coldspring_chill_out;
-            if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null) {
-                return;
-            }
-
-            var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-            pawn.health.AddHediff(hediff);
+            HealthUtility.AdjustSeverity(pawn, HediffDefOf.TKKN_coldspring_chill_out, 0.5f);
         }
     }
 
