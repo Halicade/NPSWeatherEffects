@@ -47,7 +47,7 @@
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
             <li MayRequire="ludeon.Rimworld.Odyssey">LavaField</li>
-            <li MayRewuire="sarg.alphabiomes">AB_PyroclasticConflagration</li>
+            <li MayRequire="sarg.alphabiomes">AB_PyroclasticConflagration</li>
         </biomeBlacklist>
         <additionalWildPlants>
             <NPS_ColdSpringAmbrosia>0.02</NPS_ColdSpringAmbrosia>
