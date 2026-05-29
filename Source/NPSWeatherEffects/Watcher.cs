@@ -838,7 +838,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
         }
 
-        ticks = Find.TickManager.TicksGame;
+        ticks = Find.TickManager.TicksAbs;
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
 
