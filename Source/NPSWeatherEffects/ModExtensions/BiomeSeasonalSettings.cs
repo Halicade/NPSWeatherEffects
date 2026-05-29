@@ -37,10 +37,6 @@ public class BiomeSeasonalSettings : DefModExtension
     public List<WeatherCommonalityRecord> fallWeathers;
     public List<WeatherCommonalityRecord> winterWeathers;
 
-    //unused settings
-    public int wetPlantStart = 50;
-    public List<BiomePlantRecord> specialPlants;
-
 
     public void setWeatherBySeason(Map map, Season season, Quadrum quadrum) {
         if (!EffectSettings.seasonalWeather) {

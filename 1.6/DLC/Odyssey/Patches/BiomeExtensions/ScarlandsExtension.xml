@@ -43,7 +43,6 @@ Winter: wet.
             <li Class="NPSWeather.BiomeSeasonalSettings">
                 <maxSprings>0</maxSprings>
                 <springSpawnChance>0</springSpawnChance>
-                <wetPlantStart>40</wetPlantStart>
                 <bloomPlants>
                     <li>Plant_Dandelion</li>
                     <li MayRequire="hali.NPSBiomes">TKKN_PlantSunflower</li>

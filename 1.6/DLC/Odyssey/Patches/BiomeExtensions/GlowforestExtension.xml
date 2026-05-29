@@ -47,7 +47,6 @@ Winter: wet.
 				<maxSprings>0</maxSprings>
 				<springSpawnChance>0</springSpawnChance>
 				
-				<wetPlantStart>50</wetPlantStart>
 				
 			</li>
 		</value>
