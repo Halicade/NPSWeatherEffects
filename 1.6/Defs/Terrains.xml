@@ -99,7 +99,27 @@
             <li>Spring</li>
         </tags>
         <fertility>0.001</fertility>
+        <throwFleckChance>0.25</throwFleckChance>
+        <fleckData>
+            <fleck>NPS_HotSpringSmoke</fleck>
+            <velocitySpeedRange>0.1~0.5</velocitySpeedRange>
+            <velocityAngleRange>-180~180</velocityAngleRange>
+            <solidTicksRange>1~3</solidTicksRange>
+            <scaleRange>1.7~2.8</scaleRange>
+        </fleckData>
     </TerrainDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>NPS_HotSpringSmoke</defName>
+        <graphicData>
+            <texPath>Things/Mote/Smoke</texPath>
+            <renderInstanced>true</renderInstanced>
+        </graphicData>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>1.5</fadeInTime>
+        <solidTime>3</solidTime>
+        <fadeOutTime>1.5</fadeOutTime>
+    </FleckDef>
 
     <TerrainDef ParentName="NaturalTerrainBase">
         <defName>TKKN_SoilWet</defName>
@@ -380,7 +400,6 @@
         <filthAcceptanceMask />
         <fertility>1.35</fertility>
         <takeFootprints>True</takeFootprints>
-        <avoidWander>true</avoidWander>
         <driesTo>MossyTerrain</driesTo>
     </TerrainDef>
 

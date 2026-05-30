@@ -2,58 +2,54 @@
 
 <Defs>
 
-    <TileMutatorDef>
-        <defName>NPS_HotSpringMutator</defName>
-        <label>hot spring</label>
-        <description>Hot springs can be found in the area. These provide rest and improve injuries.</description>
+    <TileMutatorDef Name="NPSSpringMutators" Abstract="True">
         <categories>
             <li>Lake</li>
         </categories>
-        <chanceOnNonLandmarkTile>0.02</chanceOnNonLandmarkTile>
-        <extraGenSteps>
-            <li>NPS_HotSpring</li>
-            <li>NPS_PostSpringPlants</li>
-        </extraGenSteps>
+        <chanceOnNonLandmarkTile>1</chanceOnNonLandmarkTile>
+        <coastSidesRange>0~0</coastSidesRange>
         <biomeBlacklist>
             <li>Ocean</li>
             <li>SeaIce</li>
             <li>Desert</li>
-            <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
+            <li MayRequire="biomesteam.oasis">BMT_ChromaticOasis</li>
+            <li MayRequire="zylle.morevanillabiomes">ZBiome_Badlands</li>
+            <li MayRequire="zylle.morevanillabiomes">ZBiome_DesertOasis</li>
+            <li MayRequire="zylle.morevanillabiomes">ZBiome_Iceberg_NoBeach</li>
         </biomeBlacklist>
+    </TileMutatorDef>
+
+    <TileMutatorDef>
+        <defName>NPS_HotSpringMutator</defName>
+        <label>hot spring</label>
+        <description>Hot springs can be found in the area. These provide rest and improve injuries.</description>
+        <chanceOnNonLandmarkTile>1</chanceOnNonLandmarkTile>
+        <extraGenSteps>
+            <li>NPS_HotSpring</li>
+            <li>NPS_PostSpringPlants</li>
+        </extraGenSteps>
         <averageTemperatureRange>-999~17.5</averageTemperatureRange>
-        <coastSidesRange>0~0</coastSidesRange>
     </TileMutatorDef>
 
     <TileMutatorDef>
         <defName>NPS_ColdSpringMutator</defName>
         <label>cold spring</label>
         <description>Cold springs can be found in the area. These provide rest and improve injuries.</description>
-        <categories>
-            <li>Lake</li>
-        </categories>
-        <chanceOnNonLandmarkTile>0.02</chanceOnNonLandmarkTile>
         <workerClass>NPSWeather.GiveMePlants</workerClass>
         <extraGenSteps>
             <li>NPS_ColdSpring</li>
             <li>NPS_PostSpringPlants</li>
         </extraGenSteps>
-        <biomeBlacklist>
-            <li>Ocean</li>
-            <li>SeaIce</li>
-            <li>Desert</li>
-            <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
-            <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
-            <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
-            <li MayRequire="ludeon.Rimworld.Odyssey">LavaField</li>
-            <li MayRequire="sarg.alphabiomes">AB_PyroclasticConflagration</li>
-        </biomeBlacklist>
         <additionalWildPlants>
             <NPS_ColdSpringAmbrosia>0.02</NPS_ColdSpringAmbrosia>
         </additionalWildPlants>
         <averageTemperatureRange>17.51~999</averageTemperatureRange>
-        <coastSidesRange>0~0</coastSidesRange>
+        <biomeBlacklist>
+            <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
+            <li MayRequire="biomesteam.biomescaverns">BMT_EarthenDepths</li>
+        </biomeBlacklist>
     </TileMutatorDef>
 
 
@@ -73,6 +69,7 @@
             <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
             <li MayRequire="hali.npsbiomes">TKKN_Desert</li>
             <li MayRequire="hali.npsbiomes">TKKN_Oasis</li>
+            <li MayRequire="zylle.morevanillabiomes">ZBiome_Iceberg_NoBeach</li>
         </biomeBlacklist>
         <workerClass>TileMutatorWorker_Coast</workerClass>
         <chanceOnNonLandmarkTile>0.01</chanceOnNonLandmarkTile>
@@ -82,7 +79,7 @@
         <defName>NPS_WeakOceanTide</defName>
         <label>weak tide</label>
         <description>The tide levels are weaker here. Less resources are likely to show up on the shore as a result.</description>
-        
+
         <modExtensions>
             <li Class="NPSWeather.MutatorSettings">
                 <tideFactor>0.75</tideFactor>
@@ -107,7 +104,7 @@
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_DiurnalTide</defName>
         <label>diurnal tide</label>
-        <description>The tidal levels follow a diurnal cycle. There is only one tidal cycle each tidal day.</description>
+        <description>The tidal levels follow a diurnal cycle. There is only one tidal cycle each lunar day.</description>
         <modExtensions>
             <li Class="NPSWeather.MutatorSettings">
                 <tideVariant>Diurnal</tideVariant>
@@ -118,7 +115,7 @@
     <TileMutatorDef ParentName="NPS_TidalLevels">
         <defName>NPS_MixedSemidiurnal</defName>
         <label>mixed semidiurnal tide</label>
-        <description>The tidal levels follow a mixed semidiurnal cycle. It experiences two high and two low tides of different size every lunar day.</description>
+        <description>The tidal levels follow a mixed semidiurnal cycle. It experiences two high and two low tides of different size each lunar day.</description>
         <modExtensions>
             <li Class="NPSWeather.MutatorSettings">
                 <tideVariant>MixedSemiDiurnal</tideVariant>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Patch>
   
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TerrainDef[defName="Riverbank"]/tags</xpath>
+    <value>
+      <li>NPS_SpringDeposit</li>
+    </value>
+  </Operation>
+  
   <Operation Class="PatchOperationAddModExtension">
     <xpath>Defs/TerrainDef[defName = "TKKN_SoilWet"]</xpath>
     <value>

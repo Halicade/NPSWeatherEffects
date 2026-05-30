@@ -74,14 +74,11 @@ public class GenStep_SpringTerrain : GenStep
 
     private void generateSpringLocations(Map map) {
         if (!CellFinder.TryFindRandomCell(map,
-                x => !x.Roofed(map) && !x.GetTerrain(map).IsWater && x.DistanceToEdge(map) > 25, out var springPoint)) {
+                x => x.GetEdifice(map) == null && !x.GetTerrain(map).IsWater && x.DistanceToEdge(map) > 25,
+                out center)) {
             Log.Warning("Unable to find a valid spring position");
             return;
         }
-
-        center = springPoint;
-
-        //center = CellFinderLoose.TryFindCentralCell(map, 10, 15, x => !x.Roofed(map));
 
         if (!center.IsValid || !center.InBounds(map))
             return;

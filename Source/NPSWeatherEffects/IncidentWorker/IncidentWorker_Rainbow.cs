@@ -24,8 +24,8 @@ public class IncidentWorker_Rainbow : IncidentWorker_MakeGameCondition
     }
 
     private bool RainWillNotEndSoon(Map map) {
-        if (map.weatherManager.RainRate > 0.3) {
-            Log.Message("rain rate more than 0.3");
+        if (map.weatherManager.RainRate > 0.9) {
+            Log.Message("rain rate more than 0.9");
             return false;
         }
 
