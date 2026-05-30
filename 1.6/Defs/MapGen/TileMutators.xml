@@ -21,7 +21,7 @@
         </biomeBlacklist>
     </TileMutatorDef>
 
-    <TileMutatorDef>
+    <TileMutatorDef ParentName="NPSSpringMutators">
         <defName>NPS_HotSpringMutator</defName>
         <label>hot spring</label>
         <description>Hot springs can be found in the area. These provide rest and improve injuries.</description>
@@ -33,7 +33,7 @@
         <averageTemperatureRange>-999~17.5</averageTemperatureRange>
     </TileMutatorDef>
 
-    <TileMutatorDef>
+    <TileMutatorDef ParentName="NPSSpringMutators">
         <defName>NPS_ColdSpringMutator</defName>
         <label>cold spring</label>
         <description>Cold springs can be found in the area. These provide rest and improve injuries.</description>
