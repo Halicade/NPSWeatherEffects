@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <!--
+    Makes use of Bradsons Patch Operation collection
+    https://github.com/bbradson/Patch-Operation-Collection/tree/main
+    Takes defName of any biomeDef that has oceanShallowTerrain and is not WaterOceanShallow
+    Adds them to a blacklist so tide based mutators won't appear
+    -->
+    
+    <Operation Class="GeneratorOperationV2.PatchGenerator">
+        <xpath>Defs/BiomeDef[oceanShallowTerrain != "WaterOceanShallow" ]/defName</xpath>
+        <value><![CDATA[
+			<Operation Class="PatchOperationAdd">
+				<xpath>Defs/TileMutatorDef[@Name="NPS_TidalLevels"]/biomeBlacklist</xpath>
+				<value>
+					<li>{text()}</li>
+				</value>
+			</Operation>
+		]]></value>
+    </Operation>
+    
+</Patch>
