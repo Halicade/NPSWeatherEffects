@@ -25,7 +25,6 @@
         <defName>NPS_HotSpringMutator</defName>
         <label>hot spring</label>
         <description>Hot springs can be found in the area. These provide rest and improve injuries.</description>
-        <chanceOnNonLandmarkTile>1</chanceOnNonLandmarkTile>
         <extraGenSteps>
             <li>NPS_HotSpring</li>
             <li>NPS_PostSpringPlants</li>
