@@ -6,7 +6,7 @@
         <categories>
             <li>Lake</li>
         </categories>
-        <chanceOnNonLandmarkTile>1</chanceOnNonLandmarkTile>
+        <chanceOnNonLandmarkTile>0.02</chanceOnNonLandmarkTile>
         <coastSidesRange>0~0</coastSidesRange>
         <biomeBlacklist>
             <li>Ocean</li>
