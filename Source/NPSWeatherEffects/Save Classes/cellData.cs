@@ -83,23 +83,15 @@ public class cellData : IExposable
     /// Use this to determine how we wet terrain
     /// </summary>
     public bool setTerrainWater() {
-        if (EffectSettings.showWetTerrain) {
-            if (setTerrainWet()) {
-                return true;
-            }
-        }
-
-        if (EffectSettings.showFloodTerrain) {
-            if (setTerrainFlood()) {
-                return true;
-            }
-        }
-
-        return false;
+        return setTerrainWet() || setTerrainFlood();
     }
 
     private bool setTerrainFlood() {
         //if terrain is temporary we don't want to affect it
+        if (!EffectSettings.showFloodTerrain) {
+            return false;
+        }
+
         if (currentTerrain.temporary) {
             return false;
         }
@@ -118,7 +110,6 @@ public class cellData : IExposable
             currentTerrain = weatherExtension.floodTerrain;
             setCurrentExtension();
             isWet = true;
-            rainSpawns();
             return true;
         }
 
@@ -127,6 +118,10 @@ public class cellData : IExposable
 
     private bool setTerrainWet() {
         //if terrain is temporary we don't want to affect it
+        if (!EffectSettings.showWetTerrain) {
+            return false;
+        }
+
         if (currentTerrain.temporary) {
             return false;
         }
@@ -372,14 +367,12 @@ public class cellData : IExposable
                 GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock), location, map);
             }
             else if (currentTerrain == TerrainDefOf.TKKN_SandBeachWetSalt
-                     && PawnDefOf.TKKN_crab != null) {
-                var crab = PawnGenerator.GeneratePawn(PawnDefOf.TKKN_crab);
-                GenSpawn.Spawn(crab, location, map);
+                     && !PawnKindUtil.CrabCritters.Empty()) {
+                var animalToSpawn = PawnGenerator.GeneratePawn(PawnKindUtil.CrabCritters.RandomElement());
+                GenSpawn.Spawn(animalToSpawn, location, map);
             }
-            else {
-                if (TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)) {
-                    FleckMaker.WaterSplash(location.ToVector3(), map, 1, 1);
-                }
+            else if (TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)) {
+                FleckMaker.WaterSplash(location.ToVector3(), map, 1, 1);
             }
         }
         else if (Rand.Value < .04 && TerrainTagUtil.Lava.Contains(currentTerrain)) {
@@ -406,12 +399,19 @@ public class cellData : IExposable
             return;
         }
 
-        var leaveSomething = Rand.Value;
-        if (leaveSomething < 0.002f) {
-            if (Rand.Bool) {
-                FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
+        switch (Rand.Value) {
+            case < 0.001f: {
+                if (!PawnKindUtil.BeachAnimals.Empty()) {
+                    var animalToSpawn = PawnGenerator.GeneratePawn(PawnKindUtil.BeachAnimals.RandomElement());
+                    GenSpawn.Spawn(animalToSpawn, location, map);
+                }
+
+                break;
             }
-            else {
+            case < 0.002f when Rand.Bool:
+                FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
+                break;
+            case < 0.002f: {
                 List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
 
                 if (allowed == null) {
@@ -425,24 +425,28 @@ public class cellData : IExposable
                         spawnedThing.SetForbidden(true);
                     }
                 }
+
+                break;
             }
-        }
-        else if (leaveSomething < 0.003f && (location.GetPlant(map) == null && location.GetCover(map) == null)) {
-            //grow water and shore plants:
-            List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
-            plants.Shuffle();
-            for (var i = plants.Count - 1; i >= 0; i--) {
-                //spawn some water plants:
-                var plantDef = plants[i];
-                if (!plantDef.CanEverPlantAt(location, map, checkMapTemperature: false))
-                    continue;
-                var plant = (Plant)ThingMaker.MakeThing(plantDef);
-                plant.Growth = Rand.Range(0.7f, 1f);
-                if (plant.def.plant.LimitedLifespan) {
-                    plant.Age = Rand.Range(0, Mathf.Max(plant.def.plant.LifespanTicks - 50, 0));
+            case < 0.003f when (location.GetPlant(map) == null && location.GetCover(map) == null): {
+                //grow water and shore plants:
+                List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
+                plants.Shuffle();
+                for (var i = plants.Count - 1; i >= 0; i--) {
+                    //spawn some water plants:
+                    var plantDef = plants[i];
+                    if (!plantDef.CanEverPlantAt(location, map, checkMapTemperature: false))
+                        continue;
+                    var plant = (Plant)ThingMaker.MakeThing(plantDef);
+                    plant.Growth = Rand.Range(0.7f, 1f);
+                    if (plant.def.plant.LimitedLifespan) {
+                        plant.Age = Rand.Range(0, Mathf.Max(plant.def.plant.LifespanTicks - 50, 0));
+                    }
+
+                    GenSpawn.Spawn(plant, location, map);
+                    break;
                 }
 
-                GenSpawn.Spawn(plant, location, map);
                 break;
             }
         }

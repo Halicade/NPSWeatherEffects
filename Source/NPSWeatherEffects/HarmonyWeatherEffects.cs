@@ -33,6 +33,7 @@ public class HarmonyWeatherEffects
         ThingUtil.InitializeThingUtil();
         PlantReactionUtil.InitializePlantGraphics();
         BiomeUtil.InitializeDefaults();
+        PawnKindUtil.InitializePawnKindUtil();
 
         DesirePathsActive = ModLister.GetActiveModWithIdentifier("mlie.desirepaths", true) != null;
         RimBrellasActive = ModLister.GetActiveModWithIdentifier("battlemage64.Rimbrellas", true) != null;

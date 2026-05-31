@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="StoneCrab"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach">
+                <isCrabCritter>true</isCrabCritter>
+            </li>
+        </value>
+    </Operation>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="HermitCrab"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach">
+                <isCrabCritter>true</isCrabCritter>
+            </li>
+        </value>
+    </Operation>
+
+</Patch>

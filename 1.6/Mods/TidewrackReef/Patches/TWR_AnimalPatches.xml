@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Bubbler"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach">
+                <isCrabCritter>true</isCrabCritter>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_LemonGrabbler"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach">
+                <isCrabCritter>true</isCrabCritter>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_BananaGraf"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Flumbie"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Knifehead"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_MidnightTang"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Ramari"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_RosyZiggler"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_SpottedShoobler"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach" />
+        </value>
+    </Operation>
+
+
+</Patch>
