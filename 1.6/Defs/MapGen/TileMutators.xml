@@ -18,6 +18,7 @@
             <li MayRequire="zylle.morevanillabiomes">ZBiome_Badlands</li>
             <li MayRequire="zylle.morevanillabiomes">ZBiome_DesertOasis</li>
             <li MayRequire="zylle.morevanillabiomes">ZBiome_Iceberg_NoBeach</li>
+            <li MayRequire="sirmashedpotato.ashlands">Mashed_Ashlands_VolcanicSulphurPitsAshlands</li>
         </biomeBlacklist>
     </TileMutatorDef>
 
@@ -48,6 +49,7 @@
         <biomeBlacklist>
             <li MayRequire="hali.npsbiomes">TKKN_VolcanicFlow</li>
             <li MayRequire="biomesteam.biomescaverns">BMT_EarthenDepths</li>
+            <li MayRequire="sirmashedpotato.ashlands">Mashed_Ashlands_VolcanicAshlands</li>
         </biomeBlacklist>
     </TileMutatorDef>
 
