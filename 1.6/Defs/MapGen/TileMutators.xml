@@ -19,6 +19,7 @@
             <li MayRequire="zylle.morevanillabiomes">ZBiome_DesertOasis</li>
             <li MayRequire="zylle.morevanillabiomes">ZBiome_Iceberg_NoBeach</li>
             <li MayRequire="sirmashedpotato.ashlands">Mashed_Ashlands_VolcanicSulphurPitsAshlands</li>
+            <li MayRequire="sarg.alphabiomes">AB_PyroclasticConflagration</li>
         </biomeBlacklist>
     </TileMutatorDef>
 

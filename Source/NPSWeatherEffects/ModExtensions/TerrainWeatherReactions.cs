@@ -9,9 +9,11 @@ public class TerrainWeatherReactions : DefModExtension
     public bool holdFrost;
     public bool isSalty;
     public float temperatureAdjust;
-    public TerrainDef tideTerrain;
     public int wetAt;
     public TerrainDef wetTerrain;
+    
+    public TerrainDef tideTerrain;
+    public TerrainDef riverTerrain;
 }
 
 public class freezeTerrain

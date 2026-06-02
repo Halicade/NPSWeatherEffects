@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_GU_RedWaterOceanShallow</defName>
+        <label>red tidal water</label>
+        <texturePath>Terrain/Surfaces/AB_WaterShallowRamp_Red</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/AB_WaterShallowRamp_Polluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <waterBodyType>Saltwater</waterBodyType>
+
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>Ocean</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+    </TerrainDef>
+
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_GU_RedWaterMovingShallow</defName>
+        <label>red flood water</label>
+        <texturePath>Terrain/Surfaces/AB_WaterShallowRamp_Red</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/AB_WaterShallowRamp_Polluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>398</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
+        <tags>
+            <li>River</li>
+            <li>WaterFreshShallow</li>
+            <li>WaterFreshShallowMoving</li>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
+        <waterDepthShaderParameters>
+            <_UseWaterOffset>1</_UseWaterOffset>
+        </waterDepthShaderParameters>
+    </TerrainDef>
+</Defs>

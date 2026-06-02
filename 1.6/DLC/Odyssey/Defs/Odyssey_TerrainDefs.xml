@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+
+    <TerrainDef ParentName="ToxicWaterShallowBase">
+        <defName>NPS_ToxicWaterOceanShallow</defName>
+        <label>toxic tidal water</label>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>Ocean</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+
+    </TerrainDef>
+
+
+</Defs>

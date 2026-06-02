@@ -19,5 +19,15 @@
         </value>
     </Operation>
 
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="ToxicWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_ToxicWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
 
 </Patch>

@@ -335,10 +335,12 @@
         <renderPrecedence>396</renderPrecedence>
         <driesTo />
         <canFreeze>false</canFreeze>
-        <waterBodyType>Saltwater</waterBodyType>
         <temporary>true</temporary>
+        <waterBodyType>Saltwater</waterBodyType>
         <tags>
             <li>Ocean</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
         </tags>
     </TerrainDef>
 
@@ -352,6 +354,10 @@
         <driesTo />
         <canFreeze>false</canFreeze>
         <temporary>true</temporary>
+        <tags>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
     </TerrainDef>
 
     <TerrainDef ParentName="WaterShallow">
@@ -403,5 +409,6 @@
         <driesTo>MossyTerrain</driesTo>
     </TerrainDef>
 
+    
 
 </Defs>

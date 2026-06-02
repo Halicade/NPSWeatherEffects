@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_SmolderingWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_SZ_SmolderingWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_SmolderingWaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <riverTerrain>NPS_SZ_SmolderingWaterMovingShallow</riverTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_CrystallineWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_SZ_CrystallineWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_CrystallineWaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <riverTerrain>NPS_SZ_CrystallineWaterMovingShallow</riverTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_RadiantWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_SZ_RadiantWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="SZ_RadiantWaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <riverTerrain>NPS_SZ_RadiantWaterMovingShallow</riverTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+
+</Patch>

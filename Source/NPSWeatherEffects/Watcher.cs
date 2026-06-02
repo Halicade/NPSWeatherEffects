@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.Noise;
@@ -94,10 +95,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private int mapArea; //Default area 62500
     public bool isRaining;
     private readonly List<IntVec3> cellstoRainGrid = [];
-    private TerrainDef oceanTerrain;
-    private TerrainDef deepOceanTerrain;
     private TerrainDef beachTerrain;
-    private TerrainDef shallowRiverTerrain;
     public bool doRiverFlooding;
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
@@ -561,19 +559,19 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         List<cellData> failedFloodingTiles = [];
         foreach (var cell in cellsToChange.InRandomOrder()) {
             if (increaseFlood) {
-                if (!cell.increaseRiver(shallowRiverTerrain)) {
+                if (!cell.increaseRiver()) {
                     failedFloodingTiles.Add(cell);
                 }
             }
             else {
-                cell.decreaseRiver(shallowRiverTerrain);
+                cell.decreaseRiver();
             }
         }
 
         //Try again with any cells that may have failed because they were reliant on neighboring cells
         if (increaseFlood) {
             foreach (var failedCell in failedFloodingTiles.InRandomOrder()) {
-                failedCell.increaseRiver(shallowRiverTerrain);
+                failedCell.increaseRiver();
             }
 
             floodLevel++;
@@ -672,12 +670,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         for (int cellCount = initialCellCheck; cellCount < checkUpToCell; cellCount++) {
             cellData cell = cellsToChange[cellCount];
             if (tideIncreasing) {
-                if (!cell.increaseTide(oceanTerrain)) {
+                if (!cell.increaseTide()) {
                     failedTidalTiles.Add(cell);
                 }
             }
             else {
-                cell.decreaseTide(oceanTerrain);
+                cell.decreaseTide();
             }
         }
 
@@ -690,10 +688,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         foreach (var cell in failedTidalTiles.InRandomOrder()) {
             if (tideIncreasing) {
-                cell.increaseTide(oceanTerrain);
+                cell.increaseTide();
             }
             else {
-                cell.decreaseTide(oceanTerrain);
+                cell.decreaseTide();
             }
         }
 
@@ -791,12 +789,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             regenCellLists = true;
         }
 
-        if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
-            beachTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
-        }
         //rebuild lookup lists.
 
-        shallowRiverTerrain = TerrainDefOf.NPS_WaterRiverFlood;
         biomeSettings = map.Biome.GetModExtension<BiomeSeasonalSettings>();
         frostGridComponent = map.GetComponent<FrostGrid>();
         wetnessGridComponent = map.GetComponent<WetnessGrid>();
@@ -841,16 +835,19 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         ticks = Find.TickManager.TicksAbs;
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
-
-        if (MapGenUtility.ShallowOceanWaterTerrainAt(IntVec3.NorthEast, map) !=
-            RimWorld.TerrainDefOf.WaterOceanShallow) {
-            doCoast = false;
+        SurfaceTile surfaceTile = (SurfaceTile)map.TileInfo;
+        if (surfaceTile == null) {
+            Log.Error("NPSWeatherEffects Looking for a river on a map that isn't a surface tile");
         }
 
-        //oceanTerrain = MapGenUtility.ShallowOceanWaterTerrainAt(new IntVec3(1, 0, 1), map);
-        deepOceanTerrain = MapGenUtility.DeepOceanWaterTerrainAt(IntVec3.NorthEast, map);
-        oceanTerrain = TerrainDefOf.NPS_WaterOceanTide;
+        if (!surfaceTile.Rivers.NullOrEmpty()) {
+            doRiverFlooding = true;
+        }
+
         beachTerrain = MapGenUtility.BeachTerrainAt(IntVec3.NorthEast, map);
+        if (beachTerrain == RimWorld.TerrainDefOf.Sand) {
+            beachTerrain = TerrainDefOf.TKKN_SandBeachWetSalt;
+        }
 
         tideFactor = biomeSettings?.tideFactor ?? 1;
 
@@ -929,8 +926,17 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     anyLavaTerrain = true;
                 }
 
-                if (isRiverTerrain(bottomTerrain)) {
-                    doRiverFlooding = true;
+                if (!TerrainTagUtil.TideHasTempTide.Contains(
+                        MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map))) {
+                    doCoast = false;
+                }
+
+
+                if (isRiverTerrain(focusCell, bottomTerrain)) {
+                    if (!TerrainTagUtil.RiverHasTempRiver.Contains(
+                            MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map))) {
+                        doRiverFlooding = false;
+                    }
                 }
 
                 cellData cell = new cellData {
@@ -938,10 +944,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     locationIndex = map.cellIndices.CellToIndex(focusCell)
                 };
                 cellWeatherAffectsDict[focusCell] = cell;
-                if (doCoast && isOceanicTerrain(bottomTerrain)) {
+                if (doCoast && isOceanicTerrain(focusCell, bottomTerrain)) {
                     cell.tideLevel = 0;
                 }
-                else if (isRiverTerrain(bottomTerrain)) {
+                else if (isRiverTerrain(focusCell, bottomTerrain)) {
                     cell.riverLevel = 0;
                 }
 
@@ -954,11 +960,11 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             foreach (var focusCell in map.AllCells.InRandomOrder()) {
                 var bottomTerrain = map.terrainGrid.BaseTerrainAt(focusCell);
                 if (doCoast) {
-                    if (isOceanicTerrain(bottomTerrain)) {
+                    if (isOceanicTerrain(focusCell, bottomTerrain)) {
                         int tideVariance = howManyTideSteps - Rand.Range(0, Mathf.Min(howManyTideSteps, 5));
-                        for (var j = 1; j < tideVariance; j++) {
-                            var num = GenRadial.NumCellsInRadius(j);
-                            for (var i = 0; i <= num; i++) {
+                        for (int j = 1; j < tideVariance; j++) {
+                            int cellsInRadius = GenRadial.NumCellsInRadius(j);
+                            for (int i = 0; i <= cellsInRadius; i++) {
                                 IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
                                 if (!bankCheck.InBounds(map)) {
                                     continue;
@@ -966,7 +972,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
                                 TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
                                 //Don't want to tide over the river. Or over the ocean...
-                                if (isOceanicTerrain(bankCheckTerrain) || isRiverTerrain(bankCheckTerrain)) {
+                                if (isOceanicTerrain(focusCell, bankCheckTerrain) ||
+                                    isRiverTerrain(focusCell, bankCheckTerrain)) {
                                     continue;
                                 }
 
@@ -995,6 +1002,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                                     }
                                 }
 
+                                affect.tideTerrainAt = MapGenUtility.ShallowOceanWaterTerrainAt(bankCheck, map)
+                                    .GetModExtension<TerrainWeatherReactions>().tideTerrain;
+
                                 //Prefer lower tide levels first. Then go to cardinal direction 
                                 if (j < affect.tideLevel) {
                                     affect.tideLevel = j;
@@ -1016,52 +1026,57 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     }
                 }
 
-                if (isRiverTerrain(bottomTerrain)) {
-                    for (var j = 1; j < HowManyRiverSteps; j++) {
-                        int riverVariance = GenRadial.NumCellsInRadius(j) - Rand.Range(0, 2);
-                        for (var i = 0; i <= riverVariance; i++) {
-                            IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
-                            if (!bankCheck.InBounds(map)) {
-                                continue;
-                            }
-
-                            TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
-                            if (bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
-                                TerrainTagUtil.TKKN_Wet.Contains(bankCheckTerrain)) {
-                                continue;
-                            }
-
-                            if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
-                                List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
-                                string mutatorList = "";
-                                if (mutators?.NullOrEmpty() == true) {
-                                    foreach (var mutator in mutatorList) {
-                                        mutatorList += mutator + ", ";
-                                    }
-                                }
-
-                                Log.Error("NPSWeatherEffects: Tile: " + bankCheck +
-                                          " Biome: " + map.Biome +
-                                          (mutatorList.Length > 0 ? " Mutators: " + mutatorList : "") +
-                                          "A new cell is being made for a river tile when it should already have been created");
-                                affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
-                            }
-
-                            //Prefer lower river levels first. Then go to cardinal direction 
-                            if (j < affect.riverLevel) {
-                                affect.riverLevel = j;
-                                affect.riverFocus = focusCell;
-                                continue;
-                            }
-
-                            if (j == affect.riverLevel) {
-                                affect.riverLevel = j;
-                                if (affect.riverFocus != IntVec3.Invalid &&
-                                    bankCheck.CardinalTo(affect.riverFocus)) {
+                if (doRiverFlooding) {
+                    if (isRiverTerrain(focusCell, bottomTerrain)) {
+                        for (int j = 1; j < HowManyRiverSteps; j++) {
+                            int riverVariance = GenRadial.NumCellsInRadius(j) - Rand.Range(0, 2);
+                            for (int i = 0; i <= riverVariance; i++) {
+                                IntVec3 bankCheck = focusCell + GenRadial.RadialPattern[i];
+                                if (!bankCheck.InBounds(map)) {
                                     continue;
                                 }
 
-                                affect.riverFocus = focusCell;
+                                TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
+                                if (bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
+                                    TerrainTagUtil.TKKN_Wet.Contains(bankCheckTerrain)) {
+                                    continue;
+                                }
+
+                                if (!cellWeatherAffectsDict.TryGetValue(bankCheck, out var affect)) {
+                                    List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
+                                    string mutatorList = "";
+                                    if (mutators?.NullOrEmpty() == true) {
+                                        foreach (var mutator in mutatorList) {
+                                            mutatorList += mutator + ", ";
+                                        }
+                                    }
+
+                                    Log.Error("NPSWeatherEffects: Tile: " + bankCheck +
+                                              " Biome: " + map.Biome +
+                                              (mutatorList.Length > 0 ? " Mutators: " + mutatorList : "") +
+                                              "A new cell is being made for a river tile when it should already have been created");
+                                    affect = new cellData { location = bankCheck, currentTerrain = bankCheckTerrain };
+                                }
+
+                                affect.riverTerrainAt = MapGenUtility.ShallowMovingWaterTerrainAt(bankCheck, map)
+                                    .GetModExtension<TerrainWeatherReactions>().riverTerrain;
+
+                                //Prefer lower river levels first. Then go to cardinal direction 
+                                if (j < affect.riverLevel) {
+                                    affect.riverLevel = j;
+                                    affect.riverFocus = focusCell;
+                                    continue;
+                                }
+
+                                if (j == affect.riverLevel) {
+                                    affect.riverLevel = j;
+                                    if (affect.riverFocus != IntVec3.Invalid &&
+                                        bankCheck.CardinalTo(affect.riverFocus)) {
+                                        continue;
+                                    }
+
+                                    affect.riverFocus = focusCell;
+                                }
                             }
                         }
                     }
@@ -1128,7 +1143,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     if (levelCell.tideLevel >= possiblePotentialCell.tideLevel) {
                         levelCell.tideFocus = cellAround;
                     }
-                    else if (isOceanicTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
+                    else if (isOceanicTerrain(cellAround, map.terrainGrid.BaseTerrainAt(cellAround))) {
                         levelCell.tideFocus = cellAround;
                         break;
                     }
@@ -1154,7 +1169,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     if (levelCell.riverLevel >= possiblePotentialCell.riverLevel) {
                         levelCell.riverFocus = cellAround;
                     }
-                    else if (isRiverTerrain(map.terrainGrid.BaseTerrainAt(cellAround))) {
+                    else if (isRiverTerrain(cellAround, map.terrainGrid.BaseTerrainAt(cellAround))) {
                         levelCell.riverFocus = cellAround;
                         break;
                     }
@@ -1288,18 +1303,38 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
     }
 
-    private bool isOceanicTerrain(TerrainDef terrain) {
-        return terrain == RimWorld.TerrainDefOf.WaterOceanShallow ||
-               terrain == TerrainDefOf.NPS_WaterOceanTide ||
-               terrain == oceanTerrain ||
-               terrain == RimWorld.TerrainDefOf.WaterOceanDeep ||
-               terrain == deepOceanTerrain;
+    private bool isOceanicTerrain(IntVec3 focusCell, TerrainDef terrain) {
+        TerrainDef shallowTerrain = MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map);
+        if (terrain == shallowTerrain) {
+            return true;
+        }
+
+        // Only check mod extension if the terrain is temporary
+        // because the ocean and river terrains should be temporary
+        if (terrain.temporary) {
+            var shallowWeatherReaction = shallowTerrain.GetModExtension<TerrainWeatherReactions>();
+            if (shallowWeatherReaction?.tideTerrain == terrain)
+                return true;
+        }
+
+        return terrain == MapGenUtility.DeepOceanWaterTerrainAt(focusCell, map);
     }
 
-    private bool isRiverTerrain(TerrainDef terrain) {
-        return terrain == RimWorld.TerrainDefOf.WaterMovingShallow ||
-               terrain == TerrainDefOf.NPS_WaterRiverFlood ||
-               terrain == RimWorld.TerrainDefOf.WaterMovingChestDeep;
+    private bool isRiverTerrain(IntVec3 focusCell, TerrainDef terrain) {
+        TerrainDef riverTerrain = MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map);
+        if (terrain == riverTerrain) {
+            return true;
+        }
+
+        // Only check mod extension if the terrain is temporary
+        // because the ocean and river terrains should be temporary
+        if (terrain.temporary) {
+            var shallowWeatherReaction = riverTerrain.GetModExtension<TerrainWeatherReactions>();
+            if (shallowWeatherReaction?.riverTerrain == terrain)
+                return true;
+        }
+
+        return terrain == MapGenUtility.DeepMovingWaterTerrainAt(focusCell, map);
     }
 
     public void Dispose() {

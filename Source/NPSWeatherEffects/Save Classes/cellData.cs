@@ -38,6 +38,9 @@ public class cellData : IExposable
 
     public int tideLevel = 999;
     public IntVec3 tideFocus = IntVec3.Invalid;
+    public TerrainDef tideTerrainAt;
+    public TerrainDef riverTerrainAt;
+
 
     public TerrainDef currentTerrain;
 
@@ -212,8 +215,12 @@ public class cellData : IExposable
         return true;
     }
 
-    public bool increaseTide(TerrainDef tidalTerrain) {
+    public bool increaseTide() {
         if (isFrozen) {
+            return false;
+        }
+
+        if (tideTerrainAt == null) {
             return false;
         }
 
@@ -227,15 +234,19 @@ public class cellData : IExposable
             return false;
         if (!tideFocus.GetTerrain(map).IsWater)
             return false;
-        map.terrainGrid.SetTempTerrain(location, tidalTerrain);
+        map.terrainGrid.SetTempTerrain(location, tideTerrainAt);
         setCurrentExtension();
         clearLoot();
         return true;
     }
 
-    public void decreaseTide(TerrainDef tidalTerrain) {
+    public void decreaseTide() {
+        if (tideTerrainAt == null) {
+            return;
+        }
+
         currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
-        if (currentTerrain != tidalTerrain) {
+        if (currentTerrain != tideTerrainAt) {
             return;
         }
 
@@ -254,8 +265,12 @@ public class cellData : IExposable
     /// If true set terrain to riverTerrain
     /// </summary>
     /// <param name="riverTerrain"></param>
-    public bool increaseRiver(TerrainDef riverTerrain) {
+    public bool increaseRiver() {
         if (isFrozen) {
+            return false;
+        }
+
+        if (riverTerrainAt == null) {
             return false;
         }
 
@@ -269,13 +284,17 @@ public class cellData : IExposable
             return false;
         if (!riverFocus.GetTerrain(map).IsWater)
             return false;
-        map.terrainGrid.SetTempTerrain(location, riverTerrain);
+        map.terrainGrid.SetTempTerrain(location, riverTerrainAt);
         return true;
     }
 
-    public void decreaseRiver(TerrainDef riverTerrain) {
+    public void decreaseRiver() {
+        if (riverTerrainAt == null) {
+            return;
+        }
+
         currentTerrain = map.terrainGrid.TerrainAt(locationIndex);
-        if (currentTerrain != riverTerrain) {
+        if (currentTerrain != riverTerrainAt) {
             return;
         }
 
@@ -458,12 +477,12 @@ public class cellData : IExposable
         }
 
         List<Thing> things = location.GetThingList(map);
-        DamageInfo asdf = new DamageInfo(DamageDefOf.Deterioration, 9000f);
+        DamageInfo destroyThing = new DamageInfo(DamageDefOf.Deterioration, 9000f);
 
         for (var i = things.Count - 1; i >= 0; i--) {
             if (things[i].def.category == ThingCategory.Item || things[i].def.category == ThingCategory.Plant) {
                 if (things[i].def.useHitPoints) {
-                    things[i].TakeDamage(asdf);
+                    things[i].TakeDamage(destroyThing);
                 }
                 else {
                     things[i].Destroy(DestroyMode.KillFinalize);
@@ -610,7 +629,7 @@ public class cellData : IExposable
             return;
         }
 
-        if (currentTerrain?.modContentPack == EffectSettings.modContent) {
+        if (currentTerrain.HasTag("NPS_Tide") || currentTerrain.HasTag("NPS_River")) {
             map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
         }
     }

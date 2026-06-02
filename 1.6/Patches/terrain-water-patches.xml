@@ -50,22 +50,6 @@
         </value>
     </Operation>
     
-    <!--Operation Class="PatchOperationAddModExtension">
-      <xpath>Defs/TerrainDef[defName = "WaterMovingDeep"]</xpath>
-      <value>
-         <li Class="NPSWeather.TerrainWeatherReactions">
-            <tideTerrain />
-            <floodTerrain />
-            <wetTerrain />
-            <freezeTerrain>TKKN_Ice</freezeTerrain>
-            <freezeAt>-4</freezeAt>
-			<wetAt></wetAt>
-            <isSalty>False</isSalty>
-			<holdFrost>False</holdFrost>
-         </li>
-      </value>
-   </Operation -->
-    
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/TerrainDef[defName = "TKKN_ColdSpringsWater"]</xpath>
         <value>
@@ -107,7 +91,7 @@
         <xpath>Defs/TerrainDef[defName = "WaterOceanShallow"]</xpath>
         <value>
             <li Class="NPSWeather.TerrainWeatherReactions">
-                <tideTerrain>TKKN_SandBeachWetSalt</tideTerrain>
+                <tideTerrain>NPS_WaterOceanTide</tideTerrain>
                 <temperatureAdjust>-5</temperatureAdjust>
             </li>
         </value>
