@@ -94,12 +94,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private float currentSnowRate;
     private int mapArea; //Default area 62500
     public bool isRaining;
-    private readonly List<IntVec3> cellstoRainGrid = [];
+    private readonly List<IntVec3> cellsToRainGrid = [];
     private TerrainDef beachTerrain;
     public bool doRiverFlooding;
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
-    private IReadOnlyList<Pawn> allPawnsSpawned;
+    private List<Pawn> allPawnsSpawned;
     public Season season;
     public Quadrum quadrum;
     public Quadrum previousQuadrum = Quadrum.Undefined;
@@ -120,7 +120,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         ticks = Find.TickManager.TicksAbs;
         RebuildCellLists();
         mapChecks();
-        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+        allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
     }
 
     public override void MapComponentTick() {
@@ -155,11 +155,11 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             DoRiverModify();
 
             if (ticks % RainGridCheckInterval == 0) {
-                foreach (var cellBeingRefreshed in cellstoRainGrid) {
+                foreach (var cellBeingRefreshed in cellsToRainGrid) {
                     wetnessGridComponent.refreshAt(cellBeingRefreshed);
                 }
 
-                cellstoRainGrid.Clear();
+                cellsToRainGrid.Clear();
             }
 
             for (var i = 0; i < cellActionsPerTick; i++) {
@@ -188,6 +188,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 validPawns.Clear();
             }
 
+            if (ticks % MapCheckInterval == 0) {
+                allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
+            }
+
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
                     PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks);
@@ -210,8 +214,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return result;
         }
 
-        if (!pawn.RaceProps.Humanlike ||
-            pawn.IsShambler ||
+        if (pawn.IsShambler ||
             pawn.IsMutant ||
             (EffectSettings.pawnEffectsOnlyColonists && !pawn.IsColonist)) {
             validPawns.Add(pawn, false);
@@ -392,7 +395,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             //currentRainRate * 0.0106f
             if (EffectSettings.showRainGrid) {
                 if (wetnessGridComponent.addDepth(activeCellData, currentRainRate * 0.106f)) {
-                    cellstoRainGrid.Add(activeCellData.location);
+                    cellsToRainGrid.Add(activeCellData.location);
                     waterChanged = true;
                 }
             }
@@ -409,7 +412,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
             if (EffectSettings.showRainGrid) {
                 if (wetnessGridComponent.addDepth(activeCellData, -0.07f * activeCellData.rainNoise)) {
-                    cellstoRainGrid.Add(activeCellData.location);
+                    cellsToRainGrid.Add(activeCellData.location);
                     waterChanged = true;
                 }
             }
@@ -795,7 +798,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         frostGridComponent = map.GetComponent<FrostGrid>();
         wetnessGridComponent = map.GetComponent<WetnessGrid>();
         location = Find.WorldGrid.LongLatOf(map.Tile);
-        allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+        allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
         UpdateBiomeSettings(true);
         frostNoise = new Perlin(0.039999999105930328, 2.0, 0.5, 5,
             map.Tile.tileId, QualityMode.Medium);

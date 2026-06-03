@@ -228,7 +228,7 @@ public class cellData : IExposable
         // Then verify
         if (currentTerrain.isFoundation)
             return false;
-        if (location.GetEdifice(map) != null)
+        if (map.edificeGrid[locationIndex] != null)
             return false;
         if (tideFocus.GetEdifice(map) != null)
             return false;
@@ -278,7 +278,7 @@ public class cellData : IExposable
         // Then verify
         if (currentTerrain.isFoundation)
             return false;
-        if (location.GetEdifice(map) != null)
+        if (map.edificeGrid[locationIndex] != null)
             return false;
         if (riverFocus.GetEdifice(map) != null)
             return false;
@@ -413,7 +413,7 @@ public class cellData : IExposable
             return;
         }
 
-        if (location.GetEdifice(map) != null) {
+        if (map.edificeGrid[locationIndex] != null) {
             //Prevent items from spawning if a building was placed there
             return;
         }
@@ -447,7 +447,7 @@ public class cellData : IExposable
 
                 break;
             }
-            case < 0.003f when (location.GetPlant(map) == null && location.GetCover(map) == null): {
+            case < 0.003f when location.GetPlant(map) == null && location.GetCover(map) == null: {
                 //grow water and shore plants:
                 List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
                 plants.Shuffle();
