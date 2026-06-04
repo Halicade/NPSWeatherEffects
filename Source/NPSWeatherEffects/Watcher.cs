@@ -593,8 +593,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         float calculatedTide;
 
         switch (tidalVariant) {
-            case TideVariant.Weak:
-            case TideVariant.Strong:
             case TideVariant.SemiDiurnal:
                 // For Desmos
                 // \operatorname{round}\left(1.5\cdot(\sin((2*\pi)/((25/24)*12)*x))+1.5\right)
@@ -929,15 +927,13 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     anyLavaTerrain = true;
                 }
 
-                if (!TerrainTagUtil.TideHasTempTide.Contains(
-                        MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map))) {
+                if (!MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map).HasTag("NPS_Tide")) {
                     doCoast = false;
                 }
 
 
                 if (isRiverTerrain(focusCell, bottomTerrain)) {
-                    if (!TerrainTagUtil.RiverHasTempRiver.Contains(
-                            MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map))) {
+                    if (!MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map).HasTag("NPS_River")) {
                         doRiverFlooding = false;
                     }
                 }
@@ -1276,7 +1272,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                         focusCell.forceTerrainWater();
                     }
 
-                    //TODO separate settings for wetness grid, flooding, and wet
                     focusCell.rainLevel = focusCell.rainNoise;
                     wetnessGridComponent.setDepth(focusCell.locationIndex, focusCell.rainNoise);
                     map.mapDrawer.MapMeshDirty(focusCell.location, MapMeshDefOf.NPS_Frost);

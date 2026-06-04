@@ -19,6 +19,7 @@
     </modDependencies>
     <loadAfter>
         <li>ludeon.rimworld</li>
+        <li>ludeon.rimworld.odyssey</li>
     </loadAfter>
     <description>
         [img]https://i.postimg.cc/1X4HT06h/Info.png[/img]

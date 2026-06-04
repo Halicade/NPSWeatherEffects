@@ -15,7 +15,6 @@
         <xpath>Defs/TerrainDef[defName = "TKKN_Lava"]</xpath>
         <value>
             <li Class="NPSWeather.TerrainWeatherReactions">
-                <wetAt>2</wetAt>
                 <temperatureAdjust>50</temperatureAdjust>
             </li>
         </value>

@@ -62,7 +62,6 @@
             <li>Diggable</li>
         </affordances>
         <tags>
-            <li>WetRain</li>
             <li>Soil</li>
         </tags>
         <statBases>
@@ -86,7 +85,6 @@
         <modExtensions>
             <li Class="NPSWeather.TerrainWeatherReactions">
                 <holdFrost>True</holdFrost>
-                <wetAt>0</wetAt>
             </li>
         </modExtensions>
     </TerrainDef>

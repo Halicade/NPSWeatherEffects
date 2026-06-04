@@ -2,7 +2,7 @@
 
 namespace NPSWeather;
 
-public class WashUpOnBeach :DefModExtension
+public class WashUpOnBeach : DefModExtension
 {
     public bool isCrabCritter;
 }

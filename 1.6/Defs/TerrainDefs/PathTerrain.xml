@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Defs>
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_SandPath</defName>
+        <label>sand path</label>
+        <texturePath>TKKN_NPS/Terrain/PackedSand</texturePath>
+        <layerable>true</layerable>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>2</pathCost>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>Diggable</li>
+        </affordances>
+        <statBases>
+            <Beauty>0</Beauty>
+            <Cleanliness>0</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>true</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+    </TerrainDef>
+
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>TKKN_DirtPath</defName>
+        <label>dirt path</label>
+        <layerable>true</layerable>
+        <texturePath>TKKN_NPS/Terrain/PackedDirt</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>1</pathCost>
+        <affordances>
+            <li>Light</li>
+            <li>Medium</li>
+            <li>Heavy</li>
+            <li>Diggable</li>
+        </affordances>
+        <statBases>
+            <Beauty>0</Beauty>
+            <Cleanliness>0</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>true</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+    </TerrainDef>
+    
+</Defs>

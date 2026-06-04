@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <TerrainDef>
+        <defName>TKKN_Ice</defName>
+        <label>ice</label>
+        <texturePath>TKKN_NPS/Terrain/ice</texturePath>
+        <pollutionOverlayTexturePath>Terrain/Surfaces/PollutionIce</pollutionOverlayTexturePath>
+        <pollutionColor>(1, 1, 1, 1)</pollutionColor>
+        <pollutionCloudColor>(1, 1, 1, 0.66)</pollutionCloudColor>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>4</pathCost>
+        <temporary>true</temporary>
+        <statBases>
+            <Beauty>-1</Beauty>
+            <Cleanliness>-1</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <holdSnowOrSand>false</holdSnowOrSand>
+        <takeFootprints>False</takeFootprints>
+        <tags>
+            <li>Frozen</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef>
+        <defName>TKKN_MuddyIce</defName>
+        <label>ice</label>
+        <texturePath>TKKN_NPS/Terrain/muddyIce</texturePath>
+        <pollutionOverlayTexturePath>Terrain/Surfaces/PollutionIce</pollutionOverlayTexturePath>
+        <pollutionColor>(1, 1, 1, 1)</pollutionColor>
+        <pollutionCloudColor>(1, 1, 1, 0.66)</pollutionCloudColor>
+        <edgeType>FadeRough</edgeType>
+        <renderPrecedence>350</renderPrecedence>
+        <pathCost>4</pathCost>
+        <temporary>true</temporary>
+        <statBases>
+            <Beauty>-1</Beauty>
+            <Cleanliness>-1</Cleanliness>
+        </statBases>
+        <scatterType>SoftDry</scatterType>
+        <generatedFilth />
+        <fertility>0</fertility>
+        <takeFootprints>False</takeFootprints>
+        <tags>
+            <li>Frozen</li>
+        </tags>
+    </TerrainDef>
+</Defs>

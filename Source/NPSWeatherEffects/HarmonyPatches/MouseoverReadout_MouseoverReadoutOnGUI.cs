@@ -123,8 +123,8 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                     cellWet += $" | T Wet {weatherExt.wetTerrain}";
                 }
 
-                if (weatherExt.freezeTerrain?.terrain != null) {
-                    cellWet += $" | T Freeze {weatherExt.freezeTerrain.terrain}";
+                if (weatherExt.freezeTerrain != null) {
+                    cellWet += $" | T Freeze {weatherExt.freezeTerrain}";
                 }
             }
 

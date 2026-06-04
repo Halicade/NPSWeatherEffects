@@ -186,13 +186,13 @@ public class cellData : IExposable
         if (weatherExtension?.freezeTerrain == null)
             return false;
 
-        if (temperature > weatherExtension.freezeTerrain.freezeAt)
+        if (temperature > weatherExtension.freezeAt)
             return false;
         // Still want the system to count this as a changed tile
         if (!Rand.Chance(0.05f))
             return true;
 
-        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
+        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain);
         setCurrentExtension();
         isFrozen = true;
         return true;
@@ -480,7 +480,8 @@ public class cellData : IExposable
         DamageInfo destroyThing = new DamageInfo(DamageDefOf.Deterioration, 9000f);
 
         for (var i = things.Count - 1; i >= 0; i--) {
-            if (things[i].def.category == ThingCategory.Item || things[i].def.category == ThingCategory.Plant) {
+            if (things[i].def.category == ThingCategory.Item &&
+                !ThingUtil.dontDestroyThings.Contains(things[i].def)) {
                 if (things[i].def.useHitPoints) {
                     things[i].TakeDamage(destroyThing);
                 }
@@ -601,11 +602,11 @@ public class cellData : IExposable
         if (weatherExtension?.freezeTerrain == null)
             return;
 
-        if (temperature > weatherExtension.freezeTerrain.freezeAt)
+        if (temperature > weatherExtension.freezeAt)
             return;
 
-        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain.terrain);
-        currentTerrain = weatherExtension.freezeTerrain.terrain;
+        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain);
+        currentTerrain = weatherExtension.freezeTerrain;
         setCurrentExtension();
         isFrozen = true;
     }

@@ -5,8 +5,5 @@ public enum TideVariant : byte
     None,
     SemiDiurnal,
     Diurnal,
-    MixedSemiDiurnal,
-    Strong,
-    Weak
-    
+    MixedSemiDiurnal
 }

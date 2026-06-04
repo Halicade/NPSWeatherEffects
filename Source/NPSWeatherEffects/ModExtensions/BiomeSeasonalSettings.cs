@@ -9,15 +9,15 @@ public class BiomeSeasonalSettings : DefModExtension
 {
     //incident settings
     public List<ThingDef> bloomPlants;
-    public bool diseaseCacheUpdated;
+    public List<PawnKindDef> specialHerds;
 
     //spring settings
-    public int maxSprings=1;
-    public float springSpawnChance=0;
+    public int maxSprings = 1;
+    public float springSpawnChance = 0;
 
+    //tide setting
     public float tideFactor = 1;
 
-    public List<PawnKindDef> specialHerds;
 
     //disease settings
     public List<BiomeDiseaseRecord> springDiseases;
@@ -37,6 +37,8 @@ public class BiomeSeasonalSettings : DefModExtension
     public List<WeatherCommonalityRecord> fallWeathers;
     public List<WeatherCommonalityRecord> winterWeathers;
 
+    //internal use
+    public bool diseaseCacheUpdated;
 
     public void setWeatherBySeason(Map map, Season season, Quadrum quadrum) {
         if (!EffectSettings.seasonalWeather) {
@@ -73,14 +75,14 @@ public class BiomeSeasonalSettings : DefModExtension
                     case Quadrum.Aprimay:
                         setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, springWeathers);
                         break;
-                    case Quadrum.Decembary:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, winterWeathers);
-                        break;
                     case Quadrum.Jugust:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, fallWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, summerWeathers);
                         break;
                     case Quadrum.Septober:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, summerWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, fallWeathers);
+                        break;
+                    case Quadrum.Decembary:
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, winterWeathers);
                         break;
                     case Quadrum.Undefined:
                     default:
@@ -102,7 +104,7 @@ public class BiomeSeasonalSettings : DefModExtension
     }
 
     /// <summary>
-    /// Set weather commonality without overriding any weathers that are patched in or otherwise originally available
+    /// Set weather commonality without overriding any weathers that are not listed
     /// </summary>
     private static void setWeatherCommonalities(List<WeatherCommonalityRecord> baseWeatherCommonalities, BiomeDef biome,
         List<WeatherCommonalityRecord> newCommonalities) {
@@ -153,14 +155,15 @@ public class BiomeSeasonalSettings : DefModExtension
                     case Quadrum.Aprimay when springDiseases != null:
                         seasonalDiseases = springDiseases;
                         break;
-                    case Quadrum.Decembary when winterDiseases != null:
-                        seasonalDiseases = winterDiseases;
-                        break;
+
                     case Quadrum.Jugust when summerDiseases != null:
                         seasonalDiseases = summerDiseases;
                         break;
                     case Quadrum.Septober when fallDiseases != null:
                         seasonalDiseases = fallDiseases;
+                        break;
+                    case Quadrum.Decembary when winterDiseases != null:
+                        seasonalDiseases = winterDiseases;
                         break;
                     case Quadrum.Undefined:
                     default:
@@ -186,13 +189,14 @@ public class BiomeSeasonalSettings : DefModExtension
         if (!EffectSettings.seasonalIncidents) {
             return;
         }
+
         if (springEvents.NullOrEmpty() ||
             summerEvents.NullOrEmpty() ||
             fallEvents.NullOrEmpty() ||
             winterEvents.NullOrEmpty()) {
             return;
         }
-        
+
         List<TKKN_IncidentCommonalityRecord> seasonalIncidents;
         switch (season) {
             case Season.Spring when springEvents != null:
@@ -215,14 +219,14 @@ public class BiomeSeasonalSettings : DefModExtension
                     case Quadrum.Aprimay when springEvents != null:
                         seasonalIncidents = springEvents;
                         break;
-                    case Quadrum.Decembary when winterEvents != null:
-                        seasonalIncidents = winterEvents;
-                        break;
                     case Quadrum.Jugust when summerEvents != null:
                         seasonalIncidents = summerEvents;
                         break;
                     case Quadrum.Septober when fallEvents != null:
                         seasonalIncidents = fallEvents;
+                        break;
+                    case Quadrum.Decembary when winterEvents != null:
+                        seasonalIncidents = winterEvents;
                         break;
                     case Quadrum.Undefined:
                     default:

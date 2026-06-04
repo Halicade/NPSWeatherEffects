@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_WaterOceanTide</defName>
+        <label>tidal water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <waterBodyType>Saltwater</waterBodyType>
+        <tags>
+            <li>Ocean</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallow">
+        <defName>NPS_WaterRiverFlood</defName>
+        <label>flood water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
+    </TerrainDef>
+</Defs>
