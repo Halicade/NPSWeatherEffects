@@ -927,7 +927,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     anyLavaTerrain = true;
                 }
 
-                if (!MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map).HasTag("NPS_Tide")) {
+                if (!TerrainTagUtil.TideHasTempTide.Contains(
+                        MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map))) {
                     doCoast = false;
                 }
 
