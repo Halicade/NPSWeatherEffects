@@ -19,7 +19,8 @@
     <li IfModActive="dismarzero.vgp.vgpgardentools">1.6/Mods/VGPGardenTools</li>
     <li IfModActive="TW.TangsBiome.RainbowForest">1.6/Mods/RainbowForest</li>
     <li IfModActive="reel.wintertaigabiome2">1.6/Mods/WinterTaigaBiome</li>
-    <li IfModActive="zylle.waywardbiomes.landreef">1.6/Mods/TidewrackReef</li>
+    <li IfModActive="zylle.waywardbiomes.lotuswilds">1.6/Mods/WaywardLotus</li>
+    <li IfModActive="zylle.waywardbiomes.landreef">1.6/Mods/WaywardTidewrack</li>
 
   </v1.6>
 </loadFolders>
