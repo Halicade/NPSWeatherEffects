@@ -29,6 +29,10 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
             watcher = map.GetComponent<Watcher>();
         }
 
+        if (watcher.dontRunAnything) {
+            return;
+        }
+
         Rect rect;
         var botLeft = new Vector2(15f, 65f);
         var num = 38f;
