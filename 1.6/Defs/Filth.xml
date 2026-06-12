@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Defs>
+    <!--
+    Puddles dropped from pawns
+    -->
     <ThingDef ParentName="BaseFilth">
         <defName>TKKN_FilthPuddle</defName>
         <label>Puddle</label>
@@ -11,11 +14,14 @@
         <filth>
             <cleaningWorkToReduceThickness>35</cleaningWorkToReduceThickness>
             <canFilthAttach>true</canFilthAttach>
-            <disappearsInDays>0.3~0.6</disappearsInDays>
+            <disappearsInDays>0.4~0.9</disappearsInDays>
+            <allowsFire>false</allowsFire>
         </filth>
+        <size>(3,3)</size>
         <statBases>
             <Beauty>1</Beauty>
         </statBases>
+        <pathCost>14</pathCost>
     </ThingDef>
 
     <ThingDef ParentName="BaseFilth">

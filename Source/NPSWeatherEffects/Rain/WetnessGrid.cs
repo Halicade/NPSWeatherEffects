@@ -44,7 +44,7 @@ public class WetnessGrid(Map map) : MapComponent(map), IDisposable
     }
 
     public void refreshAt(IntVec3 cellToRefresh) {
-        map.mapDrawer.MapMeshDirty(cellToRefresh, MapMeshDefOf.NPS_Rain, true, false);
+        map.mapDrawer.MapMeshDirty(cellToRefresh, MapMeshDefOf.NPS_Rain, true, true);
     }
 
     public void removeDepth(cellData cell) {

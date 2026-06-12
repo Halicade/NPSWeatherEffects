@@ -15,4 +15,31 @@
       <attachedDrawOffset>(0.45, 0, 0.45)</attachedDrawOffset>
     </mote>
   </ThingDef>
+
+  <!--
+  Puddles made from rain
+  -->
+  <FleckDef ParentName="FleckBase_RandomGraphic">
+    <defName>NPS_PuddleFleck</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>1.5</fadeInTime>
+    <solidTime>1.5</solidTime>
+    <fadeOutTime>1.5</fadeOutTime>
+
+    <randomGraphics>
+      <li>
+        <texPath>TKKN_NPS/Temperature/Puddles/PuddlesA</texPath>
+        <graphicClass>Graphic_FleckPulse</graphicClass>
+        <shaderType>Mote</shaderType>
+        <drawSize>1.5</drawSize>
+      </li>
+      <li>
+        <texPath>TKKN_NPS/Temperature/Puddles/PuddlesB</texPath>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <shaderType>Mote</shaderType>
+        <drawSize>1.5</drawSize>
+      </li>
+    </randomGraphics>
+  </FleckDef>
+
 </Defs>

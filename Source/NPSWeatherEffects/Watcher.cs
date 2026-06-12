@@ -32,8 +32,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     //Every 12 hours
     private const int BiomeUpdateCheck = 30000;
 
-    private const int MaxPuddles = 1000;
-
 
     private BiomeSeasonalSettings biomeSettings;
     private Dictionary<IntVec3, cellData> cellWeatherAffectsDict = new();
@@ -76,8 +74,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private TideVariant savedTidalVariant;
     private TideVariant tidalVariant;
 
-    private int totalPuddles;
-
     //Values not in use
     //private float humidity;
     //private float wetPlantsValue;
@@ -99,6 +95,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public bool doRiverFlooding;
     private bool iceOrFrostGrid;
     private bool doRoofChecks;
+    private int currentSpeed;
+    private float puddleSpawnChance;
     private List<Pawn> allPawnsSpawned;
     public Season season;
     public Quadrum quadrum;
@@ -243,7 +241,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
-        doRoofChecks = EffectSettings.showWetTerrain || EffectSettings.showFrostGrid;
+        doRoofChecks = EffectSettings.showWetTerrain || EffectSettings.showFrostGrid || EffectSettings.makePuddles;
+        currentSpeed = (int)(Find.TickManager.CurTimeSpeed + 3) * 6;
+        puddleSpawnChance = 1f / currentSpeed;
     }
 
     public override void ExposeData() {
@@ -254,7 +254,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         Scribe_Values.Look(ref floodThreat, "floodThreat");
         Scribe_Values.Look(ref tideLevel, "tideLevel");
         Scribe_Values.Look(ref floodLevel, "floodLevel");
-        Scribe_Values.Look(ref totalPuddles, "totalPuddles", totalPuddles);
         Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding);
         Scribe_Values.Look(ref anyLavaTerrain, "anyLavaTerrain", anyLavaTerrain);
         Scribe_Values.Look(ref checkUpToCell, "checkUpToCell");
@@ -300,7 +299,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         biomeSettings.setIncidentsBySeason(map, season, quadrum);
     }
 
-    private bool gettingWet;
     private bool waterChanged;
     private bool roofed;
     private TerrainDef currentTerrain;
@@ -326,7 +324,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
 
         roofed = doRoofChecks && map.roofGrid.Roofed(activeCellData.locationIndex);
-        gettingWet = false;
         waterChanged = false;
 
         /*
@@ -384,8 +381,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             if (floodThreat < 1090000) {
                 floodThreat += floodThreatIncrease;
             }
-
-            gettingWet = true;
 
 
             if (activeCellData.setTerrainWater()) {
@@ -509,18 +504,22 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
     */
     private void extraRainChecks() {
-        if (EffectSettings.showRainEffects && !gettingWet) {
-            //Want terrain to dry slowly
+        if (EffectSettings.showRainEffects && (!isRaining || roofed)) {
             activeCellData.dryCheck();
-            //cellActionsPerformed++;
         }
 
         if (EffectSettings.makePuddles) {
-            if (activeCellData.howWet == 3 &&
+            if (isRaining &&
                 outdoorTemp > 2 &&
-                MaxPuddles > totalPuddles) {
-                FilthMaker.TryMakeFilth(activeCellData.location, map, ThingDefOf.TKKN_FilthPuddle);
-                totalPuddles++;
+                !roofed &&
+                activeCellData.currentTerrain.holdSnowOrSand &&
+                Rand.Chance(puddleSpawnChance)
+               ) {
+                FleckCreationData newPuddle = FleckMaker.GetDataStatic(
+                    activeCellData.location.ToVector3() + Rand.UnitVector3,
+                    map,
+                    FlecksDefOf.NPS_PuddleFleck);
+                map.flecks.CreateFleck(newPuddle);
             }
         }
     }
