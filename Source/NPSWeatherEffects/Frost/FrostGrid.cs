@@ -24,7 +24,7 @@ public class FrostGrid : MapComponent
     }
     
     private bool canHaveFrost(cellData cell) {
-        return !TerrainTagUtil.TKKN_Wet.Contains(cell.currentTerrain);
+        return !TerrainTagUtil.NPS_Water.Contains(cell.currentTerrain);
     }
 
     public void addDepth(cellData cell, float depthToAdd) {

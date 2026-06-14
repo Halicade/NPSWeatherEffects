@@ -11,6 +11,11 @@ public class Hediff_Drowning : HediffWithComps
     private float gearWeight;
     private int gearWeightTick;
     private int currentTicks;
+    
+    public override void ExposeData() {
+        base.ExposeData();
+        Scribe_Values.Look(ref currentTicks, "currentTicks");
+    }
 
     public override void PostAdd(DamageInfo? dinfo) {
         currentTicks = 60;
@@ -37,7 +42,7 @@ public class Hediff_Drowning : HediffWithComps
 
         TerrainDef terrain = position.GetTerrain(map);
 
-        if (!TerrainTagUtil.TKKN_Wet.Contains(terrain)) {
+        if (!TerrainTagUtil.NPS_Water.Contains(terrain)) {
             Severity -= 0.001f;
             return;
         }

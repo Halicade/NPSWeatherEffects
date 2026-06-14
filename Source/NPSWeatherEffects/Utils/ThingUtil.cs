@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace NPSWeather;
@@ -17,18 +18,19 @@ public class ThingUtil
         List<ThingDef> thingList = DefDatabase<ThingDef>.AllDefsListForReading;
 
         foreach (ThingDef thingDef in thingList) {
-            var heater = thingDef.GetCompProperties<CompProperties_HeatPusher>();
-
-            if (heater == null) {
-                continue;
-            }
-
-            if (heater.heatPerSecond != 0) {
-                DictHeatThings.Add(thingDef, heater.heatPerSecond / 400);
-            }
-
             if (thingDef.HasModExtension<DontDestroyTide>()) {
                 hashDontDestroyThings.Add(thingDef);
+            }
+            
+            var heater = thingDef.GetCompProperties<CompProperties_HeatPusher>();
+
+            if (heater is { heatPerSecond: > 0 }) {
+                DictHeatThings.Add(thingDef, heater.heatPerSecond / 6);
+            }
+
+            var tempControl = thingDef.GetCompProperties<CompProperties_TempControl>();
+            if (tempControl is { energyPerSecond: > 0 }) {
+                DictHeatThings.Add(thingDef, tempControl.energyPerSecond / 6);
             }
         }
 

@@ -230,28 +230,6 @@ public class WeatherEffectsController : Mod
             ref spawnLavaOnlyInBiome,
             "NPS_spawnLavaOnlyInBiome_text".Translate());
 */
-        list.Gap();
-
-        Text.Font = GameFont.Medium;
-        list.Label("NPS_RequiresRestart".Translate());
-        Text.Font = GameFont.Small;
-
-        list.CheckboxLabeled(
-            "NPS_doAmbientTemperature_title".Translate(),
-            ref EffectSettings.terrainAffectTemperature,
-            "NPS_doAmbientTemperature_text".Translate());
-
-        list.CheckboxLabeled(
-            "NPS_allowPlantEffects_title".Translate(),
-            ref EffectSettings.allowPlantEffects,
-            "NPS_allowPlantEffects_text".Translate());
-
-        if (EffectSettings.allowPawnEffects && !ModsConfig.OdysseyActive) {
-            list.CheckboxLabeled(
-                "NPS_allowPawnsSwim_title".Translate(),
-                ref EffectSettings.allowPawnsSwim,
-                "NPS_allowPawnsToSwim_text".Translate());
-        }
 
         list.End();
 
@@ -324,6 +302,29 @@ public class WeatherEffectsController : Mod
                 "NPS_allowPawnsToDrown_title".Translate(),
                 ref EffectSettings.allowPawnsDrowning,
                 "NPS_allowPawnsToDrown_text".Translate());
+        }
+        
+        list.Gap();
+
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_MiscPatches".Translate());
+        Text.Font = GameFont.Small;
+
+        list.CheckboxLabeled(
+            "NPS_doAmbientTemperature_title".Translate(),
+            ref EffectSettings.terrainAffectTemperature,
+            "NPS_doAmbientTemperature_text".Translate());
+
+        list.CheckboxLabeled(
+            "NPS_allowPlantEffects_title".Translate(),
+            ref EffectSettings.allowPlantEffects,
+            "NPS_allowPlantEffects_text".Translate());
+
+        if (EffectSettings.allowPawnEffects && !ModsConfig.OdysseyActive) {
+            list.CheckboxLabeled(
+                "NPS_allowPawnsSwim_title".Translate(),
+                ref EffectSettings.allowPawnsSwim,
+                "NPS_allowPawnsToSwim_text".Translate());
         }
 
         list.GapLine(30f);

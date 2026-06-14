@@ -6,11 +6,11 @@
     <hediffClass>NPSWeather.Hediff_Wetness</hediffClass>
     <description>Level of liquid saturation</description>
     <label>wetness</label>
+    <maxSeverity>1</maxSeverity>
     <stages>
       <li>
         <label>dry</label>
         <minSeverity>0</minSeverity>
-
       </li>
       <li>
         <label>damp</label>
@@ -46,6 +46,7 @@
       </li>
     </stages>
   </HediffDef>
+  
   <HediffDef>
     <defName>TKKN_Drowning</defName>
     <label>drowning</label>

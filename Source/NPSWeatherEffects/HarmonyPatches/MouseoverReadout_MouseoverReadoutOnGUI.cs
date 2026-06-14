@@ -113,7 +113,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
 
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var cellWetTags =
-                $"TKKN_Wet {TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)}TKKN_Swim {TerrainTagUtil.TKKN_Swim.Contains(currentTerrain)}";
+                $"NPS_Wet {TerrainTagUtil.NPS_Water.Contains(currentTerrain)}NPS_Deep {TerrainTagUtil.NPS_DeepWater.Contains(currentTerrain)}";
             Widgets.Label(rect, cellWetTags);
             num += 19f;
 

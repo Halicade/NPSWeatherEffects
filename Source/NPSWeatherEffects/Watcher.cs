@@ -89,7 +89,15 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private float currentRainRate;
     private float currentSnowRate;
     private int mapArea; //Default area 62500
+    /// <summary>
+    /// It is not raining if it is snowing
+    /// </summary>
     public bool isRaining;
+    private bool isSnowing;
+    /// <summary>
+    /// Accounts for either rain or snow. Don't care about sand
+    /// </summary>
+    private bool isPrecipitation;
     private readonly List<IntVec3> cellsToRainGrid = [];
     private TerrainDef beachTerrain;
     public bool doRiverFlooding;
@@ -128,27 +136,28 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         ticks = Find.TickManager.TicksAbs;
 
-        isRaining = currentRainRate > 0;
+
         //environmental changes
 
-        if (EffectSettings.doWeather) {
-            if (ticks % MapCheckInterval == 0) {
-                mapChecks();
 
-                if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
-                    cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
-                    acceleratedChecks = true;
-                    //Log.Warning("New cell per tick value " + cellActionsPerTick);
-                }
-                else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
-                    cellActionsPerTick = MinimumCellsPerTick;
-                    acceleratedChecks = false;
-                    //Log.Message("New cell per tick value " + cellActionsPerTick);
-                }
+        if (ticks % MapCheckInterval == 0) {
+            mapChecks();
 
-                cellActionsPerformed = 0;
+            if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
+                cellActionsPerTick = Math.Min(EffectSettings.maxCellsPerTick, cellActionsPerTick + 10);
+                acceleratedChecks = true;
+                //Log.Warning("New cell per tick value " + cellActionsPerTick);
+            }
+            else if (cellActionsPerformed < EffectSettings.maxCellsPerTick / 4) {
+                cellActionsPerTick = MinimumCellsPerTick;
+                acceleratedChecks = false;
+                //Log.Message("New cell per tick value " + cellActionsPerTick);
             }
 
+            cellActionsPerformed = 0;
+        }
+
+        if (EffectSettings.doWeather) {
             DoTides();
             DoRiverModify();
 
@@ -192,7 +201,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
-                    PawnChecks.checks(allPawnsSpawned[i], map, this, isRaining, ticks);
+                    PawnChecks.checks(allPawnsSpawned[i], map, this, isPrecipitation, ticks);
             }
         }
 
@@ -228,6 +237,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         outdoorTemp = map.mapTemperature.OutdoorTemp;
         currentRainRate = map.weatherManager.curWeather.rainRate;
         currentSnowRate = map.weatherManager.curWeather.snowRate;
+        isSnowing = currentSnowRate > 0;
+        isRaining = !isSnowing && currentRainRate > 0;
+        isPrecipitation = isSnowing || isRaining;
         /*
         var baseHumidity = (map.TileInfo.rainfall + 1) * (map.TileInfo.temperature + 1) *
                            (map.TileInfo.swampiness + 1);
@@ -1037,7 +1049,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
                                 TerrainDef bankCheckTerrain = map.terrainGrid.BaseTerrainAt(bankCheck);
                                 if (bottomTerrain == TerrainDefOf.TKKN_SandBeachWetSalt ||
-                                    TerrainTagUtil.TKKN_Wet.Contains(bankCheckTerrain)) {
+                                    TerrainTagUtil.NPS_Water.Contains(bankCheckTerrain)) {
                                     continue;
                                 }
 
@@ -1254,9 +1266,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
         }
 
-        isRaining = map.weatherManager.RainRate > 0;
-
-        bool isSnowing = map.weatherManager.SnowRate > 0;
+        isSnowing = map.weatherManager.SnowRate > 0;
+        isRaining = !isSnowing && map.weatherManager.RainRate > 0;
 
         foreach (var focusCell in cellWeatherList) {
             // Can the soil be null? I'm not really sure but Imma check it just in case

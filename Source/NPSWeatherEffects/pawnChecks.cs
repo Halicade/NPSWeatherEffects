@@ -33,8 +33,8 @@ public static class PawnChecks
             if (pawn.needs.comfort != null) {
                 pawn.needs.comfort.lastComfortUseTick--;
             }
+
             HealthUtility.AdjustSeverity(pawn, HediffDefOf.TKKN_hotspring_chill_out, 0.5f);
-            
         }
         else if (terrain == TerrainDefOf.TKKN_ColdSpringsWater) {
             pawn.needs.rest?.TickResting(.05f);
@@ -45,6 +45,7 @@ public static class PawnChecks
             if (heatstroke != null) {
                 pawn.health.RemoveHediff(heatstroke);
             }
+
             HealthUtility.AdjustSeverity(pawn, HediffDefOf.TKKN_coldspring_chill_out, 0.5f);
         }
     }
@@ -53,7 +54,7 @@ public static class PawnChecks
         //drowning == immobile and in water
         if (!EffectSettings.allowPawnsDrowning) return false;
 
-        if (!TerrainTagUtil.TKKN_Wet.Contains(terrain) || !pawn.health.Downed) {
+        if (!TerrainTagUtil.NPS_Water.Contains(terrain) || !pawn.health.Downed) {
             return false;
         }
 
@@ -90,32 +91,31 @@ public static class PawnChecks
 
         var isWet = false;
         if (isRaining) {
-            var roofed = map.roofGrid.Roofed(c);
-            if (!roofed) {
-                isWet = true;
+            if (!map.roofGrid.Roofed(c)) {
+                //I hate writing it like this, but it's a lot more readable than the inverse
+                if (HarmonyWeatherEffects.RimBrellasActive && HarmonyWeatherEffects.HasUmbrella(pawn)) { }
+                else {
+                    isWet = true;
+                }
             }
         }
-        else {
-            if (TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)) {
-                isWet = true;
-            }
+
+        if (TerrainTagUtil.NPS_Water.Contains(currentTerrain)) {
+            isWet = true;
         }
+
 
         if (!isWet) {
             return;
         }
 
-        if (HarmonyWeatherEffects.RimBrellasActive && HarmonyWeatherEffects.HasUmbrella(pawn)) {
+
+        if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.TKKN_Wetness) != null) {
             return;
         }
 
-        var hediffDef = HediffDefOf.TKKN_Wetness;
-        if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null) {
-            return;
-        }
-
-        var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-        hediff.Severity = 0;
+        var hediff = HediffMaker.MakeHediff(HediffDefOf.TKKN_Wetness, pawn);
+        hediff.Severity = 0.01f;
         pawn.health.AddHediff(hediff);
     }
 

@@ -76,22 +76,22 @@
     <NPS_spawnLavaOnlyInBiome_text>Allow volcanoes to erupt in other biomes. If unchecked, volcanic eruptions will only happen in the Volcanic Fields biome</NPS_spawnLavaOnlyInBiome_text>
 
     <!--Patches-->
-    <NPS_RequiresRestart>Requires Restart:</NPS_RequiresRestart>
+    <NPS_MiscPatches>Miscellaneous Changes:</NPS_MiscPatches>
     <NPS_doAmbientTemperature_title>Apply ambient temperature patch</NPS_doAmbientTemperature_title>
-    <NPS_doAmbientTemperature_text>Temperature of a pawn can be affected by the terrain they are standing on. Note that this can be performance heavy with multiple pawns</NPS_doAmbientTemperature_text>
+    <NPS_doAmbientTemperature_text>Temperature of a pawn can be affected by the terrain they are standing on. Note that this can be performance heavy.\n\nRequires restart</NPS_doAmbientTemperature_text>
     <NPS_allowPlantEffects_title>Allow plant effects</NPS_allowPlantEffects_title>
-    <NPS_allowPlantEffects_text>Plants will have graphical effects applied during different seasons.</NPS_allowPlantEffects_text>
+    <NPS_allowPlantEffects_text>Plants will have graphical effects applied during different seasons.\n\nRequires restart</NPS_allowPlantEffects_text>
 
     <!--Pawn effects-->
 
     <!--Seasonal-->
     <NPS_seasonalEffects>Seasonal Effects:</NPS_seasonalEffects>
     <NPS_seasonalDiseases_title>Seasonal diseases</NPS_seasonalDiseases_title>
-    <NPS_seasonalDiseases_text>Possible diseases can change each month/season.\nRequires restart to reset</NPS_seasonalDiseases_text>
+    <NPS_seasonalDiseases_text>Possible diseases can change each month/season.\n\nRequires restart to reset</NPS_seasonalDiseases_text>
     <NPS_seasonalIncidents_title>Seasonal incidents</NPS_seasonalIncidents_title>
-    <NPS_seasonalIncidents_text>Possible incidents can change each month/season.\nRequires restart to reset</NPS_seasonalIncidents_text>
+    <NPS_seasonalIncidents_text>Possible incidents can change each month/season.\n\nRequires restart to reset</NPS_seasonalIncidents_text>
     <NPS_seasonalWeather_title>Seasonal weather</NPS_seasonalWeather_title>
-    <NPS_seasonalWeather_text>Possible weather can change each month/season.\nRequires restart to reset</NPS_seasonalWeather_text>
+    <NPS_seasonalWeather_text>Possible weather can change each month/season.\n\nRequires restart to reset</NPS_seasonalWeather_text>
 
     <!--Pawn-->
     <NPS_pawnEffects>Pawn Effects:</NPS_pawnEffects>
@@ -110,9 +110,9 @@
     <NPS_DoColdBreath_title>Show cold breath</NPS_DoColdBreath_title>
     <NPS_DoColdBreath_text>When it gets cold, pawns will occasionally emit cold breath effects. This is more noticeable than base game cold breath.</NPS_DoColdBreath_text>
     <NPS_allowPawnsToGetWet_title>Allow pawns to get wet</NPS_allowPawnsToGetWet_title>
-    <NPS_allowPawnsToGetWet_text>Pawns will get a wetness hediff when in water or rain. It will affect their comfortable temperature.</NPS_allowPawnsToGetWet_text>
+    <NPS_allowPawnsToGetWet_text>Pawns will get a wetness hediff when in water or rain. It will affect their comfortable temperature.\nThis will also slightly increase how long the "Soaking wet" thought is applied.\n\nRequires restart to reset.</NPS_allowPawnsToGetWet_text>
     <NPS_allowPawnsSwim_title>Allow pawns to "swim"</NPS_allowPawnsSwim_title>
-    <NPS_allowPawnsToSwim_text>Pawns will have their lower body disappear when in the water. This is purely cosmetic.</NPS_allowPawnsToSwim_text>
+    <NPS_allowPawnsToSwim_text>Pawns will have their lower body disappear when in the water. This is purely cosmetic.\n\nRequires restart</NPS_allowPawnsToSwim_text>
     <NPS_allowPawnsToDrown_title>Allow pawns to drown</NPS_allowPawnsToDrown_title>
     <NPS_allowPawnsToDrown_text>If a pawn is downed in the water, they might drown</NPS_allowPawnsToDrown_text>
 

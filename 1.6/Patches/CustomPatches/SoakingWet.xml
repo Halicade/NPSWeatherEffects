@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+    <Operation Class="NPSWeather.WetnessThought">
+        <xpath>Defs/ThoughtDef[defName = "SoakingWet"]/durationDays</xpath>
+        <value>
+            <durationDays>0.3</durationDays>
+        </value>
+    </Operation>
+
+</Patch>

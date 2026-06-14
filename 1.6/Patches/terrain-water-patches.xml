@@ -105,15 +105,25 @@
     <Operation Class="PatchOperationAdd">
         <xpath>Defs/TerrainDef[@Name = "WaterBase"]/tags</xpath>
         <value>
-            <li>TKKN_Wet</li>
-            <li>TKKN_Swim</li>
+            <li>NPS_Water</li>
         </value>
     </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/TerrainDef[@Name="WaterDeepBase"]/tags</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/TerrainDef[@Name="WaterDeepBase"]</xpath>
+            <value>
+                <tags />
+            </value>
+        </nomatch>
+    </Operation>
+
     
     <Operation Class="PatchOperationAdd">
-        <xpath>Defs/TerrainDef[defName = "Marsh"]/tags</xpath>
+        <xpath>Defs/TerrainDef[@Name="WaterDeepBase"]/tags</xpath>
         <value>
-            <li>TKKN_Wet</li>
+            <li>NPS_DeepWater</li>
         </value>
     </Operation>
     

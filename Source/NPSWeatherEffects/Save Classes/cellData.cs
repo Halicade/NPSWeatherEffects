@@ -390,7 +390,7 @@ public class cellData : IExposable
                 var animalToSpawn = PawnGenerator.GeneratePawn(PawnKindUtil.CrabCritters.RandomElement());
                 GenSpawn.Spawn(animalToSpawn, location, map);
             }
-            else if (TerrainTagUtil.TKKN_Wet.Contains(currentTerrain)) {
+            else if (TerrainTagUtil.NPS_Water.Contains(currentTerrain)) {
                 FleckMaker.WaterSplash(location.ToVector3(), map, 1, 1);
             }
         }
