@@ -1,0 +1,15 @@
+[global]
+unity_version = "2022.3.35f1"
+bundle_name = "Hali.NPSWeatherEffects"
+asset_directory = "Source/Assets"
+output_directory = "AssetBundles/"
+exclude_patterns = ["*.shader","Defs/*"]
+link_method = "junction"  # or "copy", "symlink", "hardlink"
+
+# Note, if you are creating multiple assetbundles for a single mod, they need to have unique bundle_name's
+[bundles.textures]
+bundle_path = "Hali.NPSWeatherEffects"
+bundle_name = "Hali.NPSWeatherEffects_textures"
+filename = "resource_[bundle_name]_textures_[target]"
+exclude_patterns = ["*.shader","Defs/*"]
+targetless = true  # No platform suffix - creates single bundle for all platforms
