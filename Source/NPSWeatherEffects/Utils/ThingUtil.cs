@@ -16,7 +16,6 @@ public class ThingUtil
 
     public static void InitializeThingUtil() {
         List<ThingDef> thingList = DefDatabase<ThingDef>.AllDefsListForReading;
-
         foreach (ThingDef thingDef in thingList) {
             if (thingDef.HasModExtension<DontDestroyTide>()) {
                 hashDontDestroyThings.Add(thingDef);
@@ -27,10 +26,11 @@ public class ThingUtil
             if (heater is { heatPerSecond: > 0 }) {
                 DictHeatThings.Add(thingDef, heater.heatPerSecond / 6);
             }
-
-            var tempControl = thingDef.GetCompProperties<CompProperties_TempControl>();
-            if (tempControl is { energyPerSecond: > 0 }) {
-                DictHeatThings.Add(thingDef, tempControl.energyPerSecond / 6);
+            else {
+                var tempControl = thingDef.GetCompProperties<CompProperties_TempControl>();
+                if (tempControl is { energyPerSecond: > 0 }) {
+                    DictHeatThings.Add(thingDef, tempControl.energyPerSecond / 6);
+                }
             }
         }
 
