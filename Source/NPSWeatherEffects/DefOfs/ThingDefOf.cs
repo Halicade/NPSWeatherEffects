@@ -25,6 +25,7 @@ public static class ThingDefOf
     public static ThingDef TKKN_FilthShells;
     public static ThingDef TKKN_FilthSeaweed;
     public static ThingDef TKKN_FilthDriftwood;
+    public static ThingDef NPS_MessageInABottle;
     
     
     

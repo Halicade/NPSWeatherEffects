@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
@@ -251,12 +250,13 @@ public class cellData : IExposable
         }
 
         map.terrainGrid.RemoveTempTerrain(location);
-        leaveLoot();
         if (EffectSettings.showRainEffects) {
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
             setTerrainWater();
         }
+
+        leaveLoot();
     }
 
     /// <summary>
@@ -264,7 +264,6 @@ public class cellData : IExposable
     /// Then verifies that the tile it's focusing on doesn't have anything on it and is a water tile.
     /// If true set terrain to riverTerrain
     /// </summary>
-    /// <param name="riverTerrain"></param>
     public bool increaseRiver() {
         if (isFrozen) {
             return false;
@@ -299,13 +298,14 @@ public class cellData : IExposable
         }
 
         map.terrainGrid.RemoveTempTerrain(location);
-        leaveLoot();
         if (EffectSettings.showRainEffects) {
             howWet = 4;
             currentTerrain = location.GetTerrain(map);
             setCurrentExtension();
             setTerrainWet();
         }
+
+        leaveLoot();
     }
 
     public void Unpack() {
@@ -413,13 +413,12 @@ public class cellData : IExposable
             return;
         }
 
-        if (map.edificeGrid[locationIndex] != null) {
-            //Prevent items from spawning if a building was placed there
-            return;
-        }
-
         switch (Rand.Value) {
             case < 0.001f: {
+                if (!checkTileValidForLoot()) {
+                    return;
+                }
+
                 if (!PawnKindUtil.BeachAnimals.Empty()) {
                     var animalToSpawn = PawnGenerator.GeneratePawn(PawnKindUtil.BeachAnimals.RandomElement());
                     GenSpawn.Spawn(animalToSpawn, location, map);
@@ -428,9 +427,17 @@ public class cellData : IExposable
                 break;
             }
             case < 0.002f when Rand.Bool:
+                if (!checkTileValidForLoot()) {
+                    return;
+                }
+
                 FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
                 break;
             case < 0.002f: {
+                if (!checkTileValidForLoot()) {
+                    return;
+                }
+
                 List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
 
                 if (allowed == null) {
@@ -438,8 +445,16 @@ public class cellData : IExposable
                 }
 
                 for (int i = 0; i < allowed.Count; i++) {
-                    allowed[i].HitPoints = (int)(allowed[i].HitPoints * Rand.Range(0.1f, 1f));
-                    var spawnedThing = GenSpawn.Spawn(allowed[i], location, map);
+                    Thing thing = allowed[i];
+                    Thing innerThing = thing is MinifiedThing minified ? minified.InnerThing : thing;
+                    // For some reason, if an art thing doesn't have quality it doesn't try to generate an art description.
+                    // Need to do this manually
+                    if (innerThing.def == ThingDefOf.NPS_MessageInABottle) {
+                        innerThing.TryGetComp<BottleMessage>()?.InitializeArt(ArtGenerationContext.Outsider);
+                    }
+
+                    innerThing.HitPoints = (int)(innerThing.HitPoints * Rand.Range(0.1f, 1f));
+                    var spawnedThing = GenSpawn.Spawn(thing, location, map);
                     if (EffectSettings.forbidLoot) {
                         spawnedThing.SetForbidden(true);
                     }
@@ -448,6 +463,10 @@ public class cellData : IExposable
                 break;
             }
             case < 0.003f when location.GetPlant(map) == null && location.GetCover(map) == null: {
+                if (!checkTileValidForLoot()) {
+                    return;
+                }
+
                 //grow water and shore plants:
                 List<ThingDef> plants = map.Biome.AllWildPlants.ToList();
                 plants.Shuffle();
@@ -469,6 +488,19 @@ public class cellData : IExposable
                 break;
             }
         }
+    }
+
+    private bool checkTileValidForLoot() {
+        // Looks weird if items spawn in the middle of a river
+        if (TerrainTagUtil.NPS_Water.Contains(currentTerrain)) {
+            return false;
+        }
+
+        if (map.edificeGrid[locationIndex] != null) {
+            return false;
+        }
+
+        return true;
     }
 
     private void clearLoot() {

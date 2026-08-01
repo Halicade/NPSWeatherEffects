@@ -22,6 +22,9 @@
       <graphicClass>Graphic_Random</graphicClass>
       <texPath>TKKN_NPS/Things/Sculptures/Shells</texPath>
       <drawRotated>false</drawRotated>
+      <damageData>
+        <enabled>false</enabled>
+      </damageData>
     </graphicData>
     <fillPercent>0.15</fillPercent>
     <altitudeLayer>Building</altitudeLayer>
@@ -32,6 +35,10 @@
     <thingCategories>
       <li>BuildingsArt</li>
     </thingCategories>
+    <building>
+      <repairable>false</repairable>
+      <expandHomeArea>false</expandHomeArea>
+    </building>
     <statBases>
       <MaxHitPoints>75</MaxHitPoints>
       <Flammability>1.0</Flammability>
@@ -40,5 +47,51 @@
       <Beauty>50</Beauty>
     </statBases>
   </ThingDef>
-  
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>NPS_MessageInABottle</defName>
+    <label>message in a bottle</label>
+    <description>A weathered bottle that washed up on the shore; it contains a message inside. The bottle is fragile and can't be repaired.</description>
+    <thingClass>Building_Art</thingClass>
+    <inspectorTabs>
+      <li>ITab_Art</li>
+    </inspectorTabs>
+    <graphicData>
+      <graphicClass>Graphic_Random</graphicClass>
+      <texPath>TKKN_NPS/Things/Sculptures/MessageInABottle</texPath>
+      <drawRotated>true</drawRotated>
+      <damageData>
+        <enabled>false</enabled>
+      </damageData>
+      <drawOffset>(0, 1, 0.25)</drawOffset>
+      <shaderType>CutoutComplex</shaderType>
+    </graphicData>
+    <fillPercent>0.15</fillPercent>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsArt</li>
+    </thingCategories>
+    <building>
+      <repairable>false</repairable>
+      <expandHomeArea>false</expandHomeArea>
+      <isEdifice>false</isEdifice>
+    </building>
+    <clearBuildingArea>false</clearBuildingArea>
+    <comps>
+      <li Class="NPSWeather.CompProperties_BottleMessage">
+        <canBeEnjoyedAsArt>true</canBeEnjoyedAsArt>
+      </li>
+    </comps>
+    <statBases>
+      <MaxHitPoints>20</MaxHitPoints>
+      <Flammability>1.0</Flammability>
+      <MarketValue>200</MarketValue>
+      <Mass>7.5</Mass>
+      <Beauty>10</Beauty>
+    </statBases>
+  </ThingDef>
+
 </Defs>

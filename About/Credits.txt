@@ -2,3 +2,10 @@ This document will contain credits for all textures or other resources I (Halica
 Bradsons Patch Operation Collection
 https://github.com/bbradson/Patch-Operation-Collection
 Uses the postInheritance patch
+
+Bottle textures by Myleia, The_Weakness, and SneezingSeal. Were modified by Roque The Rogue.
+Acquired from the Rimworld discords #mod-art resources thread
+Rum texture provided by Zaljerem. Part of Pirates! Gold 
+https://steamcommunity.com/sharedfiles/filedetails/?id=2599107582
+
+Specific textures are indicated in Assets/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle

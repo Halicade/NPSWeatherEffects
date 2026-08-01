@@ -6,6 +6,7 @@
     <description>A wind storm. High winds and a little rain. Helps turbines but hinders shooting.</description>
     <favorability>VeryBad</favorability>
     <windSpeedFactor>2</windSpeedFactor>
+    <windSpeedOffset>2</windSpeedOffset>
     <accuracyMultiplier>0.5</accuracyMultiplier>
     <ambientSounds>
       <li>Ambient_Wind_Storm</li>
@@ -50,6 +51,7 @@
     <description>A blustery day. High winds help turbines but hinders shooting.</description>
     <favorability>Neutral</favorability>
     <windSpeedFactor>1.5</windSpeedFactor>
+    <windSpeedOffset>1.5</windSpeedOffset>
     <accuracyMultiplier>0.75</accuracyMultiplier>
     <ambientSounds>
       <li>Ambient_Wind_Storm</li>

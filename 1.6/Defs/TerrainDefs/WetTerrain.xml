@@ -6,6 +6,7 @@
         <label>wet soil</label>
         <texturePath>TKKN_NPS/Terrain/wetSoil</texturePath>
         <edgeType>FadeRough</edgeType>
+        <categoryType>Soil</categoryType>
         <renderPrecedence>375</renderPrecedence>
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
@@ -44,6 +45,7 @@
         <label>wet rich soil</label>
         <texturePath>TKKN_NPS/Terrain/wetSoilRich</texturePath>
         <edgeType>FadeRough</edgeType>
+        <categoryType>Soil</categoryType>
         <renderPrecedence>375</renderPrecedence>
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
@@ -83,6 +85,7 @@
         <label>wet sand</label>
         <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
         <edgeType>FadeRough</edgeType>
+        <categoryType>Sand</categoryType>
         <renderPrecedence>375</renderPrecedence>
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
@@ -122,6 +125,7 @@
         <label>wet sand</label>
         <texturePath>TKKN_NPS/Terrain/wetSand</texturePath>
         <edgeType>FadeRough</edgeType>
+        <categoryType>Sand</categoryType>
         <renderPrecedence>375</renderPrecedence>
         <pathCost>12</pathCost>
         <scatterType>Rocky</scatterType>
@@ -180,6 +184,7 @@
         <pollutionOverlayScale>(0.66, 0.66)</pollutionOverlayScale>
         <pollutionColor>(1, 1, 1, 1)</pollutionColor>
         <edgeType>FadeRough</edgeType>
+        <categoryType>Soil</categoryType>
         <renderPrecedence>350</renderPrecedence>
         <pathCost>4</pathCost>
         <statBases>

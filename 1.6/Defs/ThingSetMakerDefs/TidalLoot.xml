@@ -141,9 +141,19 @@
                         </fixedParams>
                     </thingSetMaker>
                 </li>
-
-
-
+                <li>
+                    <weight>0.25</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
+                                    <li>NPS_MessageInABottle</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>1</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
                 <li>
                     <weight>0.15</weight>
                     <thingSetMaker Class="ThingSetMaker_StackCount">
@@ -278,8 +288,8 @@
                     </thingSetMaker>
                 </li>
 
-                <li>
-                    <weight>0.05</weight>
+                <li MayRequire="Ludeon.Rimworld.royalty">
+                    <weight>0.03</weight>
                     <thingSetMaker Class="ThingSetMaker_Techprints">
                         <weightAccordingToPlayerNeeds>false</weightAccordingToPlayerNeeds>
                         <fixedParams>

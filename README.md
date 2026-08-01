@@ -10,7 +10,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=3542949511
 
 When I first found this mod back in November I fell in love with it. Downloaded it, opened up a quick test, and watched the terrain slowly transform from the usual dryness to a density that made the dense forest feel like a forest when it rained.
 
-The overall performance was pretty bad though. So I embarked on a multi-month journey to rewrite and optimize the heck out of this mod. Many months later, I think it's ready for release.
+However, the overall performance was not great. So I embarked on a multi-month journey to rewrite and optimize the heck out of this mod. Added a couple features that I felt fit in with the original mod.
 This mod has been split into three parts, Weather Effects, Biomes, and Snow textures.
 
 ### Map features
