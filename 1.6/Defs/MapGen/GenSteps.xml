@@ -8,6 +8,11 @@
         <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_HotSpringsWater</waterTerrain>
         </genStep>
+        <modExtensions>
+            <li Class="MapPreview.GenStepProperties" MayRequire="m00nl1ght.mappreview">
+                <includeInPreviews>true</includeInPreviews>
+            </li>
+        </modExtensions>
     </GenStepDef>
 
     <GenStepDef>
@@ -16,6 +21,11 @@
         <genStep Class="NPSWeather.GenStep_SpringTerrain">
             <waterTerrain>TKKN_ColdSpringsWater</waterTerrain>
         </genStep>
+        <modExtensions>
+            <li Class="MapPreview.GenStepProperties" MayRequire="m00nl1ght.mappreview">
+                <includeInPreviews>true</includeInPreviews>
+            </li>
+        </modExtensions>
     </GenStepDef>
 
 
