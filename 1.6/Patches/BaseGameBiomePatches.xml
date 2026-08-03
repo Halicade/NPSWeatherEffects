@@ -36,6 +36,15 @@ Summer: dry
 Fall: very wet.
 Winter: wet.
 -->
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[defName="Ocean"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <activeForBiome>false</activeForBiome>
+            </li>
+        </value>
+    </Operation>
 
     <!-- Biome_WarmArid -->
     <Operation Class="PatchOperationAddModExtension">

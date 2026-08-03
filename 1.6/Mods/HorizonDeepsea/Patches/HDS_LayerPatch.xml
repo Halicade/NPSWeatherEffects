@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PlanetLayerDef[defName="HDS_Layer_Ocean"]</xpath>
+        <value>
+            <li Class="NPSWeather.PlanetLayerInvalid" />
+        </value>
+    </Operation>
+
+</Patch>

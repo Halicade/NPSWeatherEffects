@@ -18,6 +18,7 @@ public class BiomeSeasonalSettings : DefModExtension
     //tide setting
     public float tideFactor = 1;
 
+    public bool activeForBiome = true;
 
     //disease settings
     public List<BiomeDiseaseRecord> springDiseases;

@@ -89,15 +89,19 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private float currentRainRate;
     private float currentSnowRate;
     private int mapArea; //Default area 62500
+
     /// <summary>
     /// It is not raining if it is snowing
     /// </summary>
     public bool isRaining;
+
     private bool isSnowing;
+
     /// <summary>
     /// Accounts for either rain or snow. Don't care about sand
     /// </summary>
     private bool isPrecipitation;
+
     private readonly List<IntVec3> cellsToRainGrid = [];
     private TerrainDef beachTerrain;
     public bool doRiverFlooding;
@@ -816,7 +820,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         tideCellsList.Clear();
         riverCellsList.Clear();
-        Rand.PushState(map.Tile.tileId);
 
         if (!regenCellLists && CurrentRevision != savedRevision) {
             Log.Message("NPSWeatherEffects had to make some large changes. Recreating map effects.");
@@ -838,8 +841,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
         }
 
-        if (map.Biome.inVacuum) {
-            //Log.Message("In the vacuum of space. Not running");
+        if (map.Tile.LayerDef.HasModExtension<PlanetLayerInvalid>() ||
+            !biomeSettings.activeForBiome ||
+            map.Biome.inVacuum) {
             dontRunAnything = true;
             return;
         }
@@ -913,6 +917,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
         }
 
+        Rand.PushState(map.Tile.tileId);
         if (regenCellLists) {
             savedRevision = CurrentRevision;
             cellWeatherAffectsDict.Clear();

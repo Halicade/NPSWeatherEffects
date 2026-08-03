@@ -3,9 +3,9 @@
   <v1.6>
     <li>/</li>
     <li>1.6</li>
-    <!--Temporary method so I can use Assets instead of AssetBundles
+    <!--Temporary method so I can use Assets instead of AssetBundles-->
     <li>Source/Assets</li>
-    -->
+    
     
     <!--DLC-->
     <li IfModActive="Ludeon.Rimworld.Odyssey">1.6/DLC/Odyssey</li>
@@ -17,6 +17,7 @@
     <li IfModActive="grimterra.biomesmod">1.6/Mods/Grindterra</li>
     <li IfModActive="vanillaexpanded.vexploratione">1.6/Mods/LandmarksExpanded</li>
     <li IfModActive="Hali.NPSBiomes">1.6/Mods/NPSBiomes</li>
+    <li IfModActive="horizons.deepsea">1.6/Mods/HorizonDeepsea</li>
     <li IfModActive="dismarzero.vgp.vgpgardentools">1.6/Mods/VGPGardenTools</li>
     <li IfModActive="TW.TangsBiome.RainbowForest">1.6/Mods/RainbowForest</li>
     <li IfModActive="reel.wintertaigabiome2">1.6/Mods/WinterTaigaBiome</li>
