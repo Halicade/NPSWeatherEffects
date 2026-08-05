@@ -132,13 +132,13 @@ public class HarmonyWeatherEffects
                 prefix: new HarmonyMethod(typeof(Graphic_Shadow_DrawWorker),
                     nameof(Graphic_Shadow_DrawWorker.Prefix)));
         }
-
+/*
         if (EffectSettings.allowPlantEffects) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Plant), nameof(Plant.Graphic)),
                 postfix: new HarmonyMethod(typeof(Plant_Graphic),
                     nameof(Plant_Graphic.Postfix)));
         }
-
+*/
 
         if (EffectSettings.terrainAffectTemperature) {
             harmony.Patch(AccessTools.PropertyGetter(typeof(Thing), nameof(Thing.AmbientTemperature)),

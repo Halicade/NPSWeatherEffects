@@ -2,6 +2,16 @@
 
 <Patch>
 
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantDesertShrubA"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantDesertShrubA"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+    
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/ThingDef[defName = "TKKN_PlantDesertShrubA"]</xpath>
         <value>
@@ -9,6 +19,16 @@
                 <droughtGraphicPath>TKKN_NPS/Things/Plant/VarientDrought/DesertShrubA</droughtGraphicPath>
             </li>
         </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantDesertShrubB"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantDesertShrubB"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
     </Operation>
 
     <Operation Class="PatchOperationAddModExtension">
@@ -21,13 +41,34 @@
         </value>
     </Operation>
 
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_TreeOcotillo"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_TreeOcotillo"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/ThingDef[defName = "TKKN_TreeOcotillo"]</xpath>
         <value>
             <li Class="NPSWeather.ThingWeatherReaction">
                 <floweringGraphicPath>TKKN_NPS/Things/Plant/VarientFlowering/TreeOcotillo</floweringGraphicPath>
+                <droughtGraphicPath>TKKN_NPS/Things/Plant/VarientDrought/TreeOcotillo</droughtGraphicPath>
             </li>
         </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusPricklyPear"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusPricklyPear"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
     </Operation>
 
     <Operation Class="PatchOperationAddModExtension">
@@ -39,6 +80,16 @@
         </value>
     </Operation>
 
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusSanPedro"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusSanPedro"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusSanPedro"]</xpath>
         <value>
@@ -48,11 +99,118 @@
         </value>
     </Operation>
 
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusBarrel"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusBarrel"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/ThingDef[defName = "TKKN_PlantCactusBarrel"]</xpath>
         <value>
             <li Class="NPSWeather.ThingWeatherReaction">
                 <floweringGraphicPath>TKKN_NPS/Things/Plant/VarientFlowering/CactusBarrel</floweringGraphicPath>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeOak"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeOak"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeOak"]</xpath>
+        <value>
+            <li Class="NPSWeather.ThingWeatherReaction">
+                <frostGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/TreeOak</frostGraphicPath>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeRedwood"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeRedwood"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeRedwood"]</xpath>
+        <value>
+            <li Class="NPSWeather.ThingWeatherReaction">
+                <frostGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/Redwoods</frostGraphicPath>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeHazelnut"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeHazelnut"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[defName = "TKKN_OldGrowth_PlantTreeHazelnut"]</xpath>
+        <value>
+            <li Class="NPSWeather.ThingWeatherReaction">
+                <frostGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/HazelOldGrowth</frostGraphicPath>
+                <frostLeaflessGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/Leafless/HazelOldGrowth_Leafless</frostLeaflessGraphicPath>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeHazelnut"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeHazelnut"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantTreeHazelnut"]</xpath>
+        <value>
+            <li Class="NPSWeather.ThingWeatherReaction">
+                <frostGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/Hazels</frostGraphicPath>
+                <frostLeaflessGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Hazels_Leafless</frostLeaflessGraphicPath>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantFern"]/thingClass</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName = "TKKN_PlantFern"]</xpath>
+            <value>
+                <thingClass>NPSWeather.PlantEffects</thingClass>
+            </value>
+        </nomatch>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[defName = "TKKN_PlantFern"]</xpath>
+        <value>
+            <li Class="NPSWeather.ThingWeatherReaction">
+                <frostGraphicPath>TKKN_NPS/Things/Plant/VarientFrosted/Fern</frostGraphicPath>
             </li>
         </value>
     </Operation>

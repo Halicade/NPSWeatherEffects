@@ -14,7 +14,8 @@ public class EffectSettings : ModSettings
 
     public static bool spawnLavaOnlyInBiome = true;
     public static bool allowLavaEruption = true;
-    public static bool allowPlantEffects = false;
+    public static bool allowPlantEffects = true;
+    public static Dictionary<string, bool> plantEffectsFor = new();
 
     public static bool doIce = true;
     public static bool doColdBreath = true;
@@ -53,7 +54,6 @@ public class EffectSettings : ModSettings
     public static bool changeGrassGraphics = true;
 
     public static bool terrainAffectTemperature = false;
-    public static ModContentPack modContent;
 
 
     public override void ExposeData() {
@@ -64,6 +64,8 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref onlyPlayerHome, "onlyPlayerHome", true);
         Scribe_Values.Look(ref doDirtPath, "doDirtPath", true);
         Scribe_Values.Look(ref allowPlantEffects, "allowPlantEffects", false);
+        Scribe_Collections.Look(ref plantEffectsFor, "plantEffectsFor",LookMode.Value, LookMode.Value);
+        
         Scribe_Values.Look(ref rainOptionSelector, "rainOptionSelector", 1);
         Scribe_Values.Look(ref showRainEffects, "showRainEffects", true);
         Scribe_Values.Look(ref showWetTerrain, "showWetTerrain", true);

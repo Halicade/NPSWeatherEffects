@@ -9,7 +9,6 @@ public class WeatherEffectsController : Mod
     public WeatherEffectsController(ModContentPack content)
         : base(content) {
         GetSettings<EffectSettings>();
-        EffectSettings.modContent = content;
     }
 
 
@@ -32,7 +31,7 @@ public class WeatherEffectsController : Mod
         }
 
         base.WriteSettings();
-
+        PlantReactionUtil.updateDictionary();
         if (Current.ProgramState == ProgramState.Playing) {
             foreach (var map in Find.Maps) {
                 var watcher = map.GetComponent<Watcher>();
@@ -319,6 +318,9 @@ public class WeatherEffectsController : Mod
             "NPS_allowPlantEffects_title".Translate(),
             ref EffectSettings.allowPlantEffects,
             "NPS_allowPlantEffects_text".Translate());
+        if (EffectSettings.allowPlantEffects) {
+            
+        }
 
         if (EffectSettings.allowPawnEffects && !ModsConfig.OdysseyActive) {
             list.CheckboxLabeled(

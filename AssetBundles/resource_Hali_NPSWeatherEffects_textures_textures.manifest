@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3035026753
+CRC: 437630800
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: af8909b6a158caba730096b9716c673e
+    Hash: 37cb321c7c8f777a28bd32e0708c220f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2612ac43db082a73502ee80f2eceb73f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: af8909b6a158caba730096b9716c673e
+    Hash: 37cb321c7c8f777a28bd32e0708c220f
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -30,6 +30,7 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientHarvestable/CatTails/CatTailsC.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/Lilypads/LilypadsC.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Brambles_Leafless/Brambles_LeaflessA.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/Beer.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/TallGrasses/TallGrassesR.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/CactusSanPedro/CactusSanPedroA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/CactusBarrel/CactusBarrelB.png
@@ -55,8 +56,9 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/PackedSand.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/saltWaterDeep.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Fern/FernB.png
-- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/CactusPricklyPear/CactusPricklyPearB.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/MadeByZaljerem.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreePoplar/TreePoplarA.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/CactusPricklyPear/CactusPricklyPearB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/CactusSanPedro/CactusSanPedroB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/saltWaterShallow.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/wetSoilRich.png
@@ -74,27 +76,30 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/Grass/GrassA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientHarvestable/CatTails/CatTailsB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeTeak/TreeTeakB.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/MadeByMyleia.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeBamboo/TreeBambooA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientHarvestable/CactusPricklyPear/CactusPricklyPearA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Hazels/Hazel_B.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Weather/thickLavaSmokeWorld.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Weather/thickFogWorld.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Temperature/Puddles/PuddlesB.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/MadeByThe_Weakness.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Brambles/BramblesA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Hazels/Hazel_A.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeTeak/TreeTeakA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/springWater.png
-- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/TreeOcotillo/TreeOcotilloA.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/NeutroamineOld.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientAutumn/TreeOakA.png
-- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Bush_Leafless/Bush_Leafless.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/TreeOcotillo/TreeOcotilloA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/TallGrasses/TallGrassesH.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientHarvestable/CactusPricklyPear/CactusPricklyPearB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/TreeBirch_Leafless/TreeBirchA_Leafless.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Terrain/wetSoil.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Filth/Shells/ShellsA.png
-- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Grass_Leafless/Grass_LeaflessA.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Bush_Leafless/Bush_Leafless.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeMaple/TreeMapleA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/Grass/GrassC.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Grass_Leafless/Grass_LeaflessA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Temperature/Temperature.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/TallGrasses/TallGrassesE.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeBirch/TreeBirchA.png
@@ -102,12 +107,14 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeDrago/TreeDragoA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/HazelOldGrowth/HazelOldGrowthA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Grass/GrassFrostA.png
-- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/HazelOldGrowth/HazelOldGrowthB.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/GoJuice.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/TreeOcotillo/TreeOcotolloB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/DesertShrubB/DesertShrubB_B.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/HazelOldGrowth/HazelOldGrowthB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeWillow/TreeWillowA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Temperature/Wetness.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeCypress/TreeCypressB.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/Neutroamine.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/TreeOak_Leafless/TreeOak_LeaflessA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/Grass/GrassC.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/PincushionCactus/PincushionCactus.png
@@ -139,6 +146,7 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/DesertShrubB/DesertShrubB_A.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/TreeOak_Leafless/TreeOak_LeaflessB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/TallGrasses/TallGrassesO.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/MadeBySneezingSeal.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Hazels_Leafless/Hazel_LeaflessB.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeCypress/TreeCypressA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFlowering/Lilypads/LilypadsB.png
