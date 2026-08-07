@@ -7,15 +7,11 @@ using Verse.AI.Group;
 namespace NPSWeather;
 
 //pawns will go sit in cold springs to cool off if there is no better option and there is one nearby
-//[HarmonyPatch(typeof(JobGiver_SeekSafeTemperature), "TryGiveJob")]
+[HarmonyPatch(typeof(JobGiver_SeekSafeTemperature), "TryGiveJob")]
 internal class JobGiver_SeekSafeTemperature_TryGiveJob
 {
     public static void Postfix(ref Job __result, Pawn pawn) {
-        if (__result != null || pawn?.RaceProps?.CanPassFences == false) {
-            return;
-        }
-
-        if (pawn == null) {
+        if (__result != null || pawn?.RaceProps?.CanPassFences != true) {
             return;
         }
 
@@ -29,7 +25,7 @@ internal class JobGiver_SeekSafeTemperature_TryGiveJob
             }
 
             if (pawn.Position.GetTerrain(Find.CurrentMap) == TerrainDefOf.TKKN_ColdSpringsWater) {
-                __result = new Job(RimWorld.JobDefOf.Wait_SafeTemperature, 500, true);
+                __result = new Job(JobDefOf.Wait_SafeTemperature, 500, true);
                 return;
             }
 
@@ -39,10 +35,8 @@ internal class JobGiver_SeekSafeTemperature_TryGiveJob
                     radius: 80,
                     result: out var result,
                     extraValidator: vec3 => vec3.GetTerrain(map) == TerrainDefOf.TKKN_ColdSpringsWater)) {
-                __result = new Job(RimWorld.JobDefOf.GotoSafeTemperature, result);
+                __result = new Job(JobDefOf.GotoSafeTemperature, result);
             }
         }
-
-        return;
     }
 }

@@ -1,11 +1,15 @@
 ﻿using System.Text;
+using HarmonyLib;
 using RimWorld;
 using Verse;
 
 namespace NPSWeather;
 
+[HarmonyPatch(typeof(Plant), nameof(Plant.GrowthRateCalcDesc), MethodType.Getter)]
 public class Plant_GrowthRateCalcDesc
 {
+    static bool Prepare() => EffectSettings.showRainEffects && EffectSettings.rainIncreaseFertility;
+
     private static Map _cachedMap;
     private static Watcher _cachedWatcher;
 

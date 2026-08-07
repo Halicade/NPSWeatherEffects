@@ -3,9 +3,10 @@ using Verse;
 
 namespace NPSWeather;
 
-//[HarmonyPatch(typeof(Thing), nameof(Thing.AmbientTemperature), MethodType.Getter)]
+[HarmonyPatch(typeof(Thing), nameof(Thing.AmbientTemperature), MethodType.Getter)]
 internal class Thing_AmbientTemperature
 {
+    static bool Prepare() => EffectSettings.terrainAffectTemperature;
 
     public static void Postfix(Thing __instance, ref float __result) {
         if (__instance.Spawned) {
@@ -14,10 +15,10 @@ internal class Thing_AmbientTemperature
             if (!c.InBounds(map)) {
                 return;
             }
+
             //check if we should have temperature affected by contact with terrain
             TerrainTagUtil.AmbientTempReaction.TryGetValue(c.GetTerrain(map), out var reaction);
             __result += reaction;
         }
-        
     }
-} 
+}

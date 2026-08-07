@@ -7,6 +7,7 @@ using Verse;
 
 namespace NPSWeather;
 
+[HarmonyPatch(typeof(UIRoot_Entry), nameof(UIRoot_Entry.Init))]
 public static class UIRootEntry_Init
 {
     private static bool _didWarningCheck = false;

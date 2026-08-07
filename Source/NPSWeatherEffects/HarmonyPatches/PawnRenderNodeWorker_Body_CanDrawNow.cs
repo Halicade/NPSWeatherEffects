@@ -3,31 +3,28 @@ using Verse;
 
 namespace NPSWeather;
 
-//[HarmonyPatch(typeof(PawnRenderNodeWorker_Body), nameof(PawnRenderNodeWorker_Body.CanDrawNow))]
+[HarmonyPatch(typeof(PawnRenderNodeWorker_Body), nameof(PawnRenderNodeWorker_Body.CanDrawNow))]
 internal class PawnRenderNodeWorker_Body_CanDrawNow
 {
-    public static void Postfix(PawnDrawParms parms, ref bool __result)
-    {
-        if (!__result)
-        {
+    static bool Prepare() => EffectSettings.allowPawnsSwim && !ModsConfig.OdysseyActive;
+
+    public static void Postfix(PawnDrawParms parms, ref bool __result) {
+        if (!__result) {
             return;
         }
 
         var pawn = parms.pawn;
-        if (pawn is not { Position.IsValid: true } || pawn.Dead)
-        {
+        if (pawn is not { Position.IsValid: true } || pawn.Dead) {
             return;
         }
 
-        if (!pawn.RaceProps.Humanlike || pawn.MapHeld == null)
-        {
+        if (!pawn.RaceProps.Humanlike || pawn.MapHeld == null) {
             return;
         }
 
         var terrain = pawn.Position.GetTerrain(pawn.MapHeld);
 
-        if (TerrainTagUtil.NPS_DeepWater.Contains(terrain))
-        {
+        if (TerrainTagUtil.NPS_DeepWater.Contains(terrain)) {
             __result = false;
         }
     }

@@ -345,7 +345,7 @@ public class WeatherEffectsController : Mod
             list.Label("NPS_springEffects_title".Translate(),
                 tooltip: "NPS_springEffects_text".Translate());
 
-            if (!HarmonyWeatherEffects.DesirePathsActive) {
+            if (!HarmonyWeatherEffects.PathModActive) {
                 list.CheckboxLabeled(
                     "NPS_doDirtPath_title".Translate(),
                     ref EffectSettings.doDirtPath,

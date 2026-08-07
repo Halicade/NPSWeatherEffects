@@ -4,7 +4,7 @@ using Verse;
 
 namespace NPSWeather;
 
-//[HarmonyPatch(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI))]
+[HarmonyPatch(typeof(MouseoverReadout), nameof(MouseoverReadout.MouseoverReadoutOnGUI))]
 internal class MouseoverReadout_MouseoverReadoutOnGUI
 {
     private static Map cachedMap;
@@ -78,7 +78,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                     $"Current Tide height: {watcher.tideLevel} | Desired Tide height: {watcher.GetTideLevel()}";
                 Widgets.Label(rect, labelTideLevel);
                 num += 19f;
-                
+
                 rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
                 var labelCellTideLevel =
                     $"Tide level: {cell.tideLevel} | Tide focus: {cell.tideFocus}";
@@ -92,7 +92,7 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                     $"Current Flood level: {watcher.floodLevel} | Desired flood level: {watcher.GetRiverLevel()}";
                 Widgets.Label(rect, labelFloodLevel);
                 num += 19f;
-                
+
                 rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
                 var labelCellFloodLevel =
                     $"Flood level: {cell.riverLevel} | River focus: {cell.riverFocus}";
@@ -132,25 +132,24 @@ internal class MouseoverReadout_MouseoverReadoutOnGUI
                 }
             }
 
-            
 
             Widgets.Label(rect, cellWet);
             num += 19f;
-            
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var frostLabel = $"MaxFrost: {cell.frostNoise} | CurrentFrost: {cell.frostLevel}";
             Widgets.Label(rect, frostLabel);
             num += 19f;
-            
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
             var rainLabel = $"MaxRain: {cell.rainNoise} | CurrentRain: {cell.rainLevel}";
             Widgets.Label(rect, rainLabel);
             num += 19f;
-            
+
             rect = new Rect(botLeft.x, UI.screenHeight - botLeft.y - num, 999f, 999f);
-            var seasonLabel = $"Quadrum: {watcher.quadrum} | Prev quadrum: {watcher.previousQuadrum} | Season: {watcher.season}";
+            var seasonLabel =
+                $"Quadrum: {watcher.quadrum} | Prev quadrum: {watcher.previousQuadrum} | Season: {watcher.season}";
             Widgets.Label(rect, seasonLabel);
-            
         }
 
 
