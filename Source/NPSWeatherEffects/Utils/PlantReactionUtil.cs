@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace NPSWeather;
@@ -26,7 +27,6 @@ public static class PlantReactionUtil
                 continue;
             }
 
-
             if (!EffectSettings.plantsEffects.Any(pfh => pfh.defName == plant.defName)) {
                 EffectSettings.plantsEffects.Add(new PlantEffectHolder(plant));
             }
@@ -36,6 +36,9 @@ public static class PlantReactionUtil
     }
 
     public static void updateDictionary() {
+        EffectSettings.plantsEffects = EffectSettings.plantsEffects.OrderBy(x => x?.plant?.modContentPack?.Name)
+            .ThenBy(x => x?.plant?.label).ToList();
+
         var applyGraphicFor = new Dictionary<ThingDef, PlantEffectHolder>();
 
         foreach (PlantEffectHolder pfh in EffectSettings.plantsEffects) {

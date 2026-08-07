@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 using Verse;
 
 namespace NPSWeather;
@@ -23,7 +24,38 @@ public class PlantEffectHolder : IExposable
         }
     }
 
-    public string ModName => plant?.modContentPack?.ModMetaData?.Name ?? defName;
+    public string DescriptionHoverText {
+        get
+        {
+            if (field == null) {
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine("NPS_effectsActive".Translate());
+                ;
+                if (weatherExtension.floweringGraphic != null) {
+                    stringBuilder.AppendLine("NPS_floweringGraphic".Translate());
+                }
+
+                if (weatherExtension.droughtGraphic != null) {
+                    stringBuilder.AppendLine("NPS_droughtGraphic".Translate());
+                }
+
+                if (weatherExtension.frostGraphic != null) {
+                    stringBuilder.AppendLine("NPS_frostGraphic".Translate());
+                }
+
+                if (weatherExtension.frostLeaflessGraphic != null) {
+                    stringBuilder.AppendLine("NPS_frostLeaflessGraphic".Translate());
+                }
+
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine(" - " + (plant?.modContentPack?.ModMetaData?.Name ?? "NPS_unknownMod".Translate()));
+                field = stringBuilder.ToString();
+            }
+
+            return field;
+        }
+    }
 
     public string PlantName => plant.LabelCap;
 

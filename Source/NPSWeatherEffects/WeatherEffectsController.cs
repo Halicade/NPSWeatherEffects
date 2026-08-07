@@ -293,37 +293,6 @@ public class WeatherEffectsController : Mod
         list.Label("NPS_devTools".Translate());
         Text.Font = GameFont.Small;
 
-        list.CheckboxLabeled(
-            "NPS_showDevReadout_title".Translate(),
-            ref EffectSettings.showDevReadout,
-            "NPS_showDevReadout_text".Translate());
-
-        list.Gap(30f);
-        if (Current.Game?.CurrentMap != null) {
-            list.Label("NPS_reapplyMap_text".Translate());
-            if (list.ButtonText("NPS_reapplyMap".Translate())) {
-                Map currentMap = Current.Game.CurrentMap;
-                var watcherComponent = currentMap.GetComponent<Watcher>();
-                EffectSettings.regenCells = true;
-                watcherComponent.RemoveEffects();
-                watcherComponent.RebuildCellLists();
-                Messages.Message("NPS_RebuildingFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
-                EffectSettings.regenCells = false;
-            }
-
-            list.Gap(30f);
-
-            list.Label("NPS_removeEffects_text".Translate());
-            if (list.ButtonText(label: "NPS_removeEffects".Translate())) {
-                Map currentMap = Current.Game.CurrentMap;
-                var watcherComponent = currentMap.GetComponent<Watcher>();
-                EffectSettings.regenCells = true;
-                watcherComponent.RemoveEffects();
-                Messages.Message("NPS_RemovalFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
-                EffectSettings.regenCells = false;
-            }
-        }
-
         list.End();
     }
 
@@ -418,30 +387,61 @@ public class WeatherEffectsController : Mod
                 ref EffectSettings.allowPawnsSwim,
                 "NPS_allowPawnsToSwim_text".Translate());
         }
+        list.CheckboxLabeled(
+            "NPS_showDevReadout_title".Translate(),
+            ref EffectSettings.showDevReadout,
+            "NPS_showDevReadout_text".Translate());
 
+        list.Gap(30f);
+        if (Current.Game?.CurrentMap != null) {
+            list.Label("NPS_reapplyMap_text".Translate());
+            if (list.ButtonText("NPS_reapplyMap".Translate())) {
+                Map currentMap = Current.Game.CurrentMap;
+                var watcherComponent = currentMap.GetComponent<Watcher>();
+                EffectSettings.regenCells = true;
+                watcherComponent.RemoveEffects();
+                watcherComponent.RebuildCellLists();
+                Messages.Message("NPS_RebuildingFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
+                EffectSettings.regenCells = false;
+            }
+
+            list.Gap(30f);
+
+            list.Label("NPS_removeEffects_text".Translate());
+            if (list.ButtonText(label: "NPS_removeEffects".Translate())) {
+                Map currentMap = Current.Game.CurrentMap;
+                var watcherComponent = currentMap.GetComponent<Watcher>();
+                EffectSettings.regenCells = true;
+                watcherComponent.RemoveEffects();
+                Messages.Message("NPS_RemovalFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
+                EffectSettings.regenCells = false;
+            }
+        }
 
         list.End();
     }
 
     private void DrawPlantEffectsTab() {
         Listing_Standard list = new Listing_Standard();
-        Rect smallRect = new Rect(theBox.x, theBox.y, theBox.width / 2, Text.LineHeight);
-        list.Begin(smallRect);
+        Rect smallRect = new Rect(theBox.x, theBox.y, theBox.width, 50f);
+        Rect columnOne = smallRect.LeftPart(0.35f);
+        list.Begin(columnOne);
         list.CheckboxLabeled(
             "NPS_allowPlantEffects_title".Translate(),
             ref EffectSettings.allowPlantEffects,
             "NPS_allowPlantEffects_text".Translate());
-        list.End();
+       list.End();
+        
         if (EffectSettings.allowPlantEffects) {
             float y = 0;
 
-            Rect plantScrollBox = theBox.BottomPart(0.9f);
+            Rect plantScrollBox = theBox.BottomPart(0.9f).LeftHalf();
+            
+            
             var plantBoxSize = EffectSettings.plantsEffects.Count * 30f;
             Rect actualPlantBox = new Rect(0, 0, plantScrollBox.width - 30f, plantBoxSize);
 
             Widgets.BeginScrollView(plantScrollBox, ref scrollPosition, actualPlantBox);
-
-
             foreach (var plantHolder in EffectSettings.plantsEffects) {
                 if (!plantHolder.PlantValid) {
                     continue;
@@ -451,19 +451,24 @@ public class WeatherEffectsController : Mod
                 Rect plantLabel = new Rect(35, y, actualPlantBox.width - 35, 30f);
                 Widgets.ButtonImage(plantIcon, plantHolder.PlantIcon);
                 list.Begin(plantLabel);
-                list.CheckboxLabeled(plantHolder.PlantName, ref plantHolder.active, plantHolder.ModName);
+                list.CheckboxLabeled(plantHolder.PlantName, ref plantHolder.active, plantHolder.DescriptionHoverText);
                 list.End();
-
-
-                // Widgets.Label(plantLabel, plantHolder.plantName);
-                // bool checkOn = true;
-                // Widgets.CheckboxLabeledSelectable(windowForEntry,"",ref plantHolder.active,ref checkOn,plantHolder.plantIcon);
-                // Widgets.Checkbox(plantCheckbox, ref plantHolder.active);
-
                 y += 30;
             }
-
             Widgets.EndScrollView();
+
+            Rect rightColumn = theBox.BottomPart(0.75f).RightPart(0.45f);
+            
+            list.Begin(rightColumn);
+            list.Label("NPS_floweringGraphic_text".Translate(21f.ToStringTemperature("F0")));
+            list.Gap();
+            list.Label("NPS_droughtGraphic_text".Translate());
+            list.Gap();
+            list.Label("NPS_frostGraphic_text".Translate());
+            list.Gap();
+            list.Label("NPS_frostLeaflessGraphic_text".Translate());
+            list.End();
+
         }
     }
 }

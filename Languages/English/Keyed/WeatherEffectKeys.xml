@@ -82,8 +82,19 @@
     <NPS_doAmbientTemperature_text>Temperature of a pawn can be affected by the terrain they are standing on. Note that this can be performance heavy.\n\nRequires restart</NPS_doAmbientTemperature_text>
     <NPS_PlantEffectsHeader>Plant Effects</NPS_PlantEffectsHeader>
     <NPS_allowPlantEffects_title>Allow plant effects</NPS_allowPlantEffects_title>
-    <NPS_allowPlantEffects_text>Plants will have graphical effects applied during different seasons.</NPS_allowPlantEffects_text>
+    <NPS_allowPlantEffects_text>Plants will have different graphical effects applied under certain conditions.</NPS_allowPlantEffects_text>
 
+    <NPS_effectsActive>Effects active:</NPS_effectsActive>
+    <NPS_floweringGraphic>Flowering</NPS_floweringGraphic>
+    <NPS_floweringGraphic_text>Flowering: During the spring, if the temperatures is above {0}, these plants will have a flowering graphic</NPS_floweringGraphic_text>
+    <NPS_droughtGraphic>Drought</NPS_droughtGraphic>
+    <NPS_droughtGraphic_text>Drought: Plants will get a dried appearance when a drought is active.</NPS_droughtGraphic_text>
+    <NPS_frostGraphic>Frost</NPS_frostGraphic>
+    <NPS_frostGraphic_text>Frost: Plants will get a frosted effect on them when there is frost on the ground.</NPS_frostGraphic_text>
+    <NPS_frostLeaflessGraphic>Frost leafless</NPS_frostLeaflessGraphic>
+    <NPS_frostLeaflessGraphic_text>Leafless Frost: Leafless plants will get a frosted effect on them when there is frost on the ground.</NPS_frostLeaflessGraphic_text>
+    <NPS_unknownMod>Unknown mod</NPS_unknownMod>
+    
     <!--Pawn effects-->
 
     <!--Seasonal-->
