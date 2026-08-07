@@ -3,7 +3,7 @@
 namespace NPSWeather;
 
 
-public class PlanetLayerInvalid: DefModExtension
+public class PlanetLayerValid: DefModExtension
 {
-    //Purposely blank. If the planetLayer has this it won't try to run anything on it 
+    //Purposely blank. required for weather effects to occur on this layer 
 }

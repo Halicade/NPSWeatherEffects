@@ -3,9 +3,9 @@
 <Patch>
 
     <Operation Class="PatchOperationAddModExtension">
-        <xpath>Defs/PlanetLayerDef[defName="HDS_Layer_Ocean"]</xpath>
+        <xpath>Defs/PlanetLayerDef[defName="Surface"]</xpath>
         <value>
-            <li Class="NPSWeather.PlanetLayerInvalid" />
+            <li Class="NPSWeather.PlanetLayerValid" />
         </value>
     </Operation>
 

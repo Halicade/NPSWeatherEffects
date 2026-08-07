@@ -59,7 +59,6 @@
     <xpath>Defs/TerrainDef[defName = "Mud"]</xpath>
     <value>
       <li Class="NPSWeather.TerrainWeatherReactions">
-        <wetTerrain>NPS_WaterMuddy</wetTerrain>
         <floodTerrain>NPS_WaterMuddy</floodTerrain>
         <wetAt>1</wetAt>
         <freezeTerrain>TKKN_MuddyIce</freezeTerrain>
