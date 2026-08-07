@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace NPSWeather;
@@ -15,7 +13,7 @@ public class EffectSettings : ModSettings
     public static bool spawnLavaOnlyInBiome = true;
     public static bool allowLavaEruption = true;
     public static bool allowPlantEffects = true;
-    public static Dictionary<string, bool> plantEffectsFor = new();
+    public static List<PlantEffectHolder> plantsEffects = [];
 
     public static bool doIce = true;
     public static bool doColdBreath = true;
@@ -64,8 +62,9 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref onlyPlayerHome, "onlyPlayerHome", true);
         Scribe_Values.Look(ref doDirtPath, "doDirtPath", true);
         Scribe_Values.Look(ref allowPlantEffects, "allowPlantEffects", false);
-        Scribe_Collections.Look(ref plantEffectsFor, "plantEffectsFor",LookMode.Value, LookMode.Value);
-        
+
+        Scribe_Collections.Look(ref plantsEffects, "plantsEffects", LookMode.Deep);
+
         Scribe_Values.Look(ref rainOptionSelector, "rainOptionSelector", 1);
         Scribe_Values.Look(ref showRainEffects, "showRainEffects", true);
         Scribe_Values.Look(ref showWetTerrain, "showWetTerrain", true);

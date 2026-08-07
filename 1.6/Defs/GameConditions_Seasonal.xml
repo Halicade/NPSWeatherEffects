@@ -30,7 +30,7 @@
     </exclusiveConditions>
   </GameConditionDef>
 
-    <GameConditionDef>
+  <GameConditionDef>
     <defName>TKKN_Drought</defName>
     <label>drought</label>
     <description>There's no rain in the forecast... for a very long time.</description>
@@ -40,6 +40,7 @@
     <exclusiveConditions>
       <li>TKKN_WildFlowerBloom</li>
       <li>TKKN_Superbloom</li>
+      <li MayRequire="Ludeon.Rimworld.Odyssey">Drought</li>
     </exclusiveConditions>
   </GameConditionDef>
 </Defs>

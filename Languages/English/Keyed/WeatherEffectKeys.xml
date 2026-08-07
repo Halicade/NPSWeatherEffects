@@ -20,7 +20,7 @@
     <!--Settings-->
 
     <!--Weather effects -->
-    <NPS_weatherEffectsHeader>Weather Effects:</NPS_weatherEffectsHeader>
+    <NPS_weatherEffectsHeader>Weather Effects</NPS_weatherEffectsHeader>
     <NPS_doWeather_title>Show weather effects (master)</NPS_doWeather_title>
     <NPS_doWeather_text>If unchecked, none of the below will happen. If checked, only the ones checked below will happen.</NPS_doWeather_text>
     <NPS_weatherCellUpdateSpeed_title>Maximum scan speed: {0}</NPS_weatherCellUpdateSpeed_title>
@@ -77,16 +77,17 @@
     <NPS_spawnLavaOnlyInBiome_text>Allow volcanoes to erupt in other biomes. If unchecked, volcanic eruptions will only happen in the Volcanic Fields biome</NPS_spawnLavaOnlyInBiome_text>
 
     <!--Patches-->
-    <NPS_MiscPatches>Miscellaneous Changes:</NPS_MiscPatches>
+    <NPS_MiscPatches>Miscellaneous Changes</NPS_MiscPatches>
     <NPS_doAmbientTemperature_title>Apply ambient temperature patch</NPS_doAmbientTemperature_title>
     <NPS_doAmbientTemperature_text>Temperature of a pawn can be affected by the terrain they are standing on. Note that this can be performance heavy.\n\nRequires restart</NPS_doAmbientTemperature_text>
+    <NPS_PlantEffectsHeader>Plant Effects</NPS_PlantEffectsHeader>
     <NPS_allowPlantEffects_title>Allow plant effects</NPS_allowPlantEffects_title>
-    <NPS_allowPlantEffects_text>Plants will have graphical effects applied during different seasons.\n\nRequires restart</NPS_allowPlantEffects_text>
+    <NPS_allowPlantEffects_text>Plants will have graphical effects applied during different seasons.</NPS_allowPlantEffects_text>
 
     <!--Pawn effects-->
 
     <!--Seasonal-->
-    <NPS_seasonalEffects>Seasonal Effects:</NPS_seasonalEffects>
+    <NPS_seasonalEffects>Seasonal Effects</NPS_seasonalEffects>
     <NPS_seasonalDiseases_title>Seasonal diseases</NPS_seasonalDiseases_title>
     <NPS_seasonalDiseases_text>Possible diseases can change each month/season.\n\nRequires restart to reset</NPS_seasonalDiseases_text>
     <NPS_seasonalIncidents_title>Seasonal incidents</NPS_seasonalIncidents_title>
@@ -95,7 +96,7 @@
     <NPS_seasonalWeather_text>Possible weather can change each month/season.\n\nRequires restart to reset</NPS_seasonalWeather_text>
 
     <!--Pawn-->
-    <NPS_pawnEffects>Pawn Effects:</NPS_pawnEffects>
+    <NPS_pawnEffects>Pawn Effects</NPS_pawnEffects>
     <NPS_allowPawnEffects_title>Allow pawn effects</NPS_allowPawnEffects_title>
     <NPS_allowPawnEffects_text>Specific effects that can be applied to pawns.</NPS_allowPawnEffects_text>
 

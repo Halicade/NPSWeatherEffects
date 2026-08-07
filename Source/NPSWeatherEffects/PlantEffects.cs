@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -13,7 +12,7 @@ public class PlantEffects : Plant
 
     private bool hasAnyGraphic;
 
-    private ThingWeatherReaction weatherExtension;
+    private PlantEffectHolder effectsHolder;
 
     public override void SpawnSetup(Map map, bool respawningAfterLoad) {
         base.SpawnSetup(map, respawningAfterLoad);
@@ -23,9 +22,14 @@ public class PlantEffects : Plant
 
         cachedMap = map;
         watcherComponent = cachedMap.GetComponent<Watcher>();
-        weatherExtension = def.GetModExtension<ThingWeatherReaction>();
-        hasAnyGraphic = weatherExtension?.hasGraphic == true;
-        calculateGraphics();
+        PlantReactionUtil.ApplyGraphicFrozen.TryGetValue(def, out effectsHolder);
+        hasAnyGraphic = effectsHolder?.weatherExtension != null;
+        if (respawningAfterLoad) {
+            verifyGraphics();
+        }
+        else {
+            calculateGraphics();
+        }
     }
 
     public override void PostMapInit() {
@@ -36,14 +40,12 @@ public class PlantEffects : Plant
 
         cachedMap = MapHeld;
         watcherComponent = cachedMap.GetComponent<Watcher>();
-        weatherExtension = def.GetModExtension<ThingWeatherReaction>();
-        hasAnyGraphic = weatherExtension?.hasGraphic == true;
-        calculateGraphics();
+        PlantReactionUtil.ApplyGraphicFrozen.TryGetValue(def, out effectsHolder);
+        hasAnyGraphic = effectsHolder != null;
     }
 
     private Map cachedMap;
     private Watcher watcherComponent;
-    private bool displayCustomGraphic = true;
     private bool displayFloweringGraphic;
     private bool displayDroughtGraphic;
     private bool displayFrostGraphic;
@@ -67,14 +69,7 @@ public class PlantEffects : Plant
             return;
         }
 
-        if (EffectSettings.allowPlantEffects) {
-            displayCustomGraphic = PlantReactionUtil.ApplyGraphicFrozen.TryGetValue(def, out var result) && result;
-            if (!displayCustomGraphic) {
-                return;
-            }
-        }
-        else {
-            displayCustomGraphic = false;
+        if (!EffectSettings.allowPlantEffects && !effectsHolder.active) {
             return;
         }
 
@@ -93,28 +88,27 @@ public class PlantEffects : Plant
             if (watcherComponent.season == Season.Spring ||
                 (watcherComponent.season == Season.PermanentSummer &&
                  watcherComponent.quadrum == Quadrum.Aprimay)) {
-                
                 if (!watcherComponent.isRaining
-                    && weatherExtension.floweringGraphic != null) {
+                    && effectsHolder.weatherExtension.floweringGraphic != null) {
                     displayFloweringGraphic = true;
                 }
             }
         }
 
 
-        if (watcherComponent.droughtActive && weatherExtension.droughtGraphic != null) {
+        if (watcherComponent.droughtActive && effectsHolder.weatherExtension.droughtGraphic != null) {
             displayDroughtGraphic = true;
         }
 
 
         if (EffectSettings.showFrostGrid
             && temperature < 0) {
-            if (watcherComponent.frostGridComponent.GetDepth(PositionHeld) >= 0.3f) {
-                if (weatherExtension.frostLeaflessGraphic != null && LeaflessNow) {
+            if (watcherComponent?.frostGridComponent.GetDepth(PositionHeld) >= 0.3f) {
+                if (effectsHolder.weatherExtension.frostLeaflessGraphic != null && LeaflessNow) {
                     displayFrostLeaflessGraphic = true;
                 }
 
-                if (weatherExtension.frostGraphic != null) {
+                if (effectsHolder.weatherExtension.frostGraphic != null) {
                     displayFrostGraphic = true;
                 }
             }
@@ -124,7 +118,7 @@ public class PlantEffects : Plant
     public override Graphic Graphic {
         get
         {
-            if (!displayCustomGraphic) {
+            if (!hasAnyGraphic || !effectsHolder.active) {
                 return base.Graphic;
             }
 
@@ -141,8 +135,8 @@ public class PlantEffects : Plant
             }
 
             if (displayFrostLeaflessGraphic && LeaflessNow && (!sown || !HarvestableNow)) {
-                //Have this check before the other frostLeafless check
-                return weatherExtension.frostLeaflessGraphic;
+                // Have this check before the other frost and leafless check
+                return effectsHolder.weatherExtension.frostLeaflessGraphic;
             }
 
             if (def.plant.leaflessGraphic != null && LeaflessNow && (!sown || !HarvestableNow)) {
@@ -150,7 +144,7 @@ public class PlantEffects : Plant
             }
 
             if (displayFrostGraphic) {
-                return weatherExtension.frostGraphic;
+                return effectsHolder.weatherExtension.frostGraphic;
             }
 
             if (def.plant.immatureGraphic != null && !HarvestableNow) {
@@ -158,21 +152,37 @@ public class PlantEffects : Plant
             }
 
             if (displayFloweringGraphic) {
-                return weatherExtension.floweringGraphic;
+                return effectsHolder.weatherExtension.floweringGraphic;
             }
 
             if (displayDroughtGraphic) {
-                return weatherExtension.droughtGraphic;
+                return effectsHolder.weatherExtension.droughtGraphic;
             }
-
 
             return base.Graphic;
         }
     }
 
+    private void verifyGraphics() {
+        if (effectsHolder?.weatherExtension?.floweringGraphic == null) {
+            displayFloweringGraphic = false;
+        }
+
+        if (effectsHolder?.weatherExtension?.droughtGraphic == null) {
+            displayDroughtGraphic = false;
+        }
+
+        if (effectsHolder?.weatherExtension?.frostGraphic == null) {
+            displayFrostGraphic = false;
+        }
+
+        if (effectsHolder?.weatherExtension?.frostLeaflessGraphic == null) {
+            displayFrostLeaflessGraphic = false;
+        }
+    }
+
     public override void ExposeData() {
         base.ExposeData();
-        Scribe_Values.Look(ref displayCustomGraphic, "displayCustomGraphic");
         Scribe_Values.Look(ref displayFloweringGraphic, "displayFloweringGraphic");
         Scribe_Values.Look(ref displayDroughtGraphic, "displayDroughtGraphic");
         Scribe_Values.Look(ref displayFrostGraphic, "displayFrostGraphic");
