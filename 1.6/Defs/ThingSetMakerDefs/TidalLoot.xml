@@ -214,6 +214,35 @@
                         <fixedParams>
                             <filter>
                                 <thingDefs>
+                                    <li>Beer</li>
+                                    <li MayRequire="zal.piratesgold">Zal_Rum</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>2~6</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+
+                <li>
+                    <weight>0.3</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
+                                    <li>MealSurvivalPack</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>1~4</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+
+                <li>
+                    <weight>0.3</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
                                     <li>Silver</li>
                                     <li>Plasteel</li>
                                     <li>Gold</li>
@@ -308,6 +337,22 @@
                                 </tradeTagsToAllow>
                             </filter>
                             <countRange>10~40</countRange>
+                        </fixedParams>
+                    </thingSetMaker>
+                </li>
+                <li MayRequire="zal.piratesgold">
+                    <weight>0.04</weight>
+                    <thingSetMaker Class="ThingSetMaker_StackCount">
+                        <fixedParams>
+                            <filter>
+                                <thingDefs>
+                                    <li>LetterMarque</li>
+                                    <li>Pirate_Cutlass</li>
+                                    <li>PirateRutter</li>
+                                    <li>TreasureMap</li>
+                                </thingDefs>
+                            </filter>
+                            <countRange>1</countRange>
                         </fixedParams>
                     </thingSetMaker>
                 </li>
