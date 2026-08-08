@@ -16,7 +16,7 @@ public class PlantEffectHolder : IExposable
         {
             if (!field) {
                 plant = DefDatabase<ThingDef>.GetNamed(defName, false);
-                weatherExtension = plant.GetModExtension<ThingWeatherReaction>();
+                weatherExtension = plant?.GetModExtension<ThingWeatherReaction>();
                 field = true;
             }
 

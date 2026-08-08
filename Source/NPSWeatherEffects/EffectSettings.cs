@@ -14,6 +14,8 @@ public class EffectSettings : ModSettings
     public static bool allowLavaEruption = true;
     public static bool allowPlantEffects = true;
     public static List<PlantEffectHolder> plantsEffects = [];
+    // This field isn't saved, I just put it with the plantsEffects cause it matches 
+    public static int ActivePlants;
 
     public static bool doIce = true;
     public static bool doColdBreath = true;

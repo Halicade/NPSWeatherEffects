@@ -438,7 +438,7 @@ public class WeatherEffectsController : Mod
             Rect plantScrollBox = theBox.BottomPart(0.9f).LeftHalf();
             
             
-            var plantBoxSize = EffectSettings.plantsEffects.Count * 30f;
+            float plantBoxSize = EffectSettings.ActivePlants * 30f;
             Rect actualPlantBox = new Rect(0, 0, plantScrollBox.width - 30f, plantBoxSize);
 
             Widgets.BeginScrollView(plantScrollBox, ref scrollPosition, actualPlantBox);

@@ -36,6 +36,7 @@ public static class PlantReactionUtil
     }
 
     public static void updateDictionary() {
+        EffectSettings.ActivePlants = 0;
         EffectSettings.plantsEffects = EffectSettings.plantsEffects.OrderBy(x => x?.plant?.modContentPack?.Name)
             .ThenBy(x => x?.plant?.label).ToList();
 
@@ -44,6 +45,7 @@ public static class PlantReactionUtil
         foreach (PlantEffectHolder pfh in EffectSettings.plantsEffects) {
             if (pfh.PlantValid) {
                 applyGraphicFor.Add(pfh.plant, pfh);
+                EffectSettings.ActivePlants++;
             }
         }
 
