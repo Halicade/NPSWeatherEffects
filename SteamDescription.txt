@@ -19,7 +19,7 @@ This mod has been split into three parts, Weather Effects, Biomes, Snow textures
 [*]Seasonal diseases - You are less likely to get a cold in the summer and more likely in the fall and winter.
 [*]Some tiles can have hot or cold springs. Hot springs appear in colder areas while cold springs appear in warmer. Pawns resting in these springs will gain a mood boost. They can enter springs naturally to relax, or even remove heatstroke in cold springs.
 [*]New weather - Wind storms, overcast, thick fog, dust storms
-[*]New incidents - herd migrations, droughts, rainbows, wildflower blooms
+[*]New incidents - herd migrations, droughts, wildflower blooms
 [/list][h1]Pawn Features[/h1]These can all be turned off in settings. There is also an option to affect all pawns, or only colonists.
 [list][*]Water impact - Pawns will be impacted more by water. Rain or entering water will affect a pawns comfortable temperature range. They will be more comfortable in hotter weather but less comfortable in cold.
 [*]Drowning - If downed, pawns can drown in water

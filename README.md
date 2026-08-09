@@ -26,7 +26,7 @@ These can all be turned off in settings.
 - Seasonal diseases - You are less likely to get a cold in the summer and more likely in the fall and winter.
 - Springs - Hot springs appear in colder areas while cold springs appear in warmer. Pawns resting in these springs will gain a mood boost. They can enter springs naturally to relax, or even remove heatstroke in cold springs. Springs inspired by Arkansas Hot Springs, Crystal Springs and Blue Springs, Florida.
 - New weather events - Wind storms, overcast, thick fog, dust storms
-- New incidents - herd migrations, droughts, rainbows, wildflower blooms
+- New incidents - herd migrations, droughts, wildflower blooms
 
 ### Pawn Features
 
