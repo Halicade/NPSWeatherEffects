@@ -27,7 +27,6 @@
     <durationDays>0.1</durationDays>
     <stackLimit>1</stackLimit>
     <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
-    <gameCondition>TKKN_Superbloom</gameCondition>
     <stages>
       <li>
         <label>lava smoke</label>
