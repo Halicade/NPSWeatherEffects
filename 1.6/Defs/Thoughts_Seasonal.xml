@@ -5,7 +5,7 @@
     <gameCondition>TKKN_WildFlowerBloom</gameCondition>
     <stages>
       <li>
-        <label>Wildflowers are Blooming</label>
+        <label>wildflowers are Blooming</label>
         <description>Spring is finally here!</description>
         <baseMoodEffect>5</baseMoodEffect>
       </li>
@@ -16,9 +16,23 @@
     <gameCondition>TKKN_Superbloom</gameCondition>
     <stages>
       <li>
-        <label>It's a Superbloom!</label>
+        <label>it's a Superbloom!</label>
         <description>I can't believe how many flowers there are!</description>
         <baseMoodEffect>15</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <ThoughtDef>
+    <defName>NPS_LavaSmoke</defName>
+    <durationDays>0.1</durationDays>
+    <stackLimit>1</stackLimit>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <gameCondition>TKKN_Superbloom</gameCondition>
+    <stages>
+      <li>
+        <label>lava smoke</label>
+        <description>The smell is really getting to me.</description>
+        <baseMoodEffect>-4</baseMoodEffect>
       </li>
     </stages>
   </ThoughtDef>

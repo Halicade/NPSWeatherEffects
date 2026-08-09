@@ -87,7 +87,6 @@
     <description>Cloudy, but no rain.</description>
     <favorability>Neutral</favorability>
     <perceivePriority>0</perceivePriority>
-    <maxGlow>0.9</maxGlow>
     <ambientSounds>
       <li>Ambient_Wind_Clear</li>
     </ambientSounds>
@@ -123,7 +122,6 @@
     <windSpeedFactor>0.5</windSpeedFactor>
     <accuracyMultiplier>0.5</accuracyMultiplier>
     <favorability>Neutral</favorability>
-    <maxGlow>0.9</maxGlow>
     <ambientSounds>
       <li>Ambient_Wind_Fog</li>
     </ambientSounds>
@@ -166,10 +164,11 @@
   <WeatherDef>
     <defName>TKKN_LavaSmoke</defName>
     <label>lava smoke</label>
-    <description>lava smoke reduces the accuracy of ranged weapons and poisons pawns.</description>
+    <description>lava smoke reduces the accuracy of ranged weapons and makes pawns upset.</description>
     <windSpeedFactor>0.5</windSpeedFactor>
     <accuracyMultiplier>0.5</accuracyMultiplier>
     <favorability>Bad</favorability>
+    <weatherThought>NPS_LavaSmoke</weatherThought>
     <ambientSounds>
       <li>Ambient_Wind_Fog</li>
     </ambientSounds>
