@@ -181,12 +181,10 @@ public class WeatherEffectsController : Mod
             list.Label("NPS_waterEffects".Translate());
             Text.Font = GameFont.Small;
 
-            if (!ModsConfig.OdysseyActive) {
-                list.CheckboxLabeled(
-                    "NPS_doFloods_title".Translate(),
-                    ref EffectSettings.doFloods,
-                    "NPS_doFloods_text".Translate());
-            }
+            list.CheckboxLabeled(
+                "NPS_doFloods_title".Translate(),
+                ref EffectSettings.doFloods,
+                "NPS_doFloods_text".Translate());
 
             list.CheckboxLabeled(
                 "NPS_doTides_title".Translate(),
@@ -287,12 +285,6 @@ public class WeatherEffectsController : Mod
             }
         }
 
-        list.GapLine(30f);
-
-        Text.Font = GameFont.Medium;
-        list.Label("NPS_devTools".Translate());
-        Text.Font = GameFont.Small;
-
         list.End();
     }
 
@@ -387,6 +379,11 @@ public class WeatherEffectsController : Mod
                 ref EffectSettings.allowPawnsSwim,
                 "NPS_allowPawnsToSwim_text".Translate());
         }
+
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_devTools".Translate());
+        Text.Font = GameFont.Small;
+
         list.CheckboxLabeled(
             "NPS_showDevReadout_title".Translate(),
             ref EffectSettings.showDevReadout,
@@ -430,14 +427,14 @@ public class WeatherEffectsController : Mod
             "NPS_allowPlantEffects_title".Translate(),
             ref EffectSettings.allowPlantEffects,
             "NPS_allowPlantEffects_text".Translate());
-       list.End();
-        
+        list.End();
+
         if (EffectSettings.allowPlantEffects) {
             float y = 0;
 
             Rect plantScrollBox = theBox.BottomPart(0.9f).LeftHalf();
-            
-            
+
+
             float plantBoxSize = EffectSettings.ActivePlants * 30f;
             Rect actualPlantBox = new Rect(0, 0, plantScrollBox.width - 30f, plantBoxSize);
 
@@ -455,10 +452,11 @@ public class WeatherEffectsController : Mod
                 list.End();
                 y += 30;
             }
+
             Widgets.EndScrollView();
 
             Rect rightColumn = theBox.BottomPart(0.75f).RightPart(0.45f);
-            
+
             list.Begin(rightColumn);
             list.Label("NPS_floweringGraphic_text".Translate(21f.ToStringTemperature("F0")));
             list.Gap();
@@ -468,7 +466,6 @@ public class WeatherEffectsController : Mod
             list.Gap();
             list.Label("NPS_frostLeaflessGraphic_text".Translate());
             list.End();
-
         }
     }
 }

@@ -43,8 +43,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private readonly List<List<cellData>> riverCellsList = [];
     public int floodLevel;
-    private int floodThreat;
-    private int floodThreatIncrease;
+    public bool rainingPreviousFloodCheck;
 
     public FrostGrid frostGridComponent;
     public WetnessGrid wetnessGridComponent;
@@ -58,6 +57,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public bool regenCellLists = true;
 
     private int ticks;
+
+    /// <summary>
+    /// Doing this so that all checks aren't at the same time as other people probably have.<br/>
+    /// Original ticks is still required for time specific things like tide level
+    /// </summary>
+    private int ticksWithModifier;
 
     public bool doCoast = true; //false if no coast
     private readonly List<List<cellData>> tideCellsList = [];
@@ -128,6 +133,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public override void FinalizeInit() {
         base.FinalizeInit();
         ticks = Find.TickManager.TicksAbs;
+        ticksWithModifier = ticks + Rand.RangeInclusiveSeeded(1000, 30000, map.Tile.tileId);
         RebuildCellLists();
         mapChecks();
         allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
@@ -139,12 +145,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
 
         ticks = Find.TickManager.TicksAbs;
-
-
+        ticksWithModifier = ticks + Rand.RangeInclusiveSeeded(1000, 30000, map.Tile.tileId);
+        
         //environmental changes
-
-
-        if (ticks % MapCheckInterval == 0) {
+        if (ticksWithModifier % MapCheckInterval == 0) {
             mapChecks();
 
             if (cellActionsPerformed > EffectSettings.maxCellsPerTick / 3) {
@@ -165,7 +169,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             DoTides();
             DoRiverModify();
 
-            if (ticks % RainGridCheckInterval == 0) {
+            if (ticksWithModifier % RainGridCheckInterval == 0) {
                 foreach (var cellBeingRefreshed in cellsToRainGrid) {
                     wetnessGridComponent.refreshAt(cellBeingRefreshed);
                 }
@@ -195,17 +199,17 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         if (EffectSettings.allowPawnEffects) {
             // rebuild the dictionary of valid pawns every quadrum
-            if (ticks % 900000 == 0) {
+            if (ticksWithModifier % 900000 == 0) {
                 validPawns.Clear();
             }
 
-            if (ticks % MapCheckInterval == 0) {
+            if (ticksWithModifier % MapCheckInterval == 0) {
                 allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
             }
 
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
-                    PawnChecks.checks(allPawnsSpawned[i], map, this, isPrecipitation, ticks);
+                    PawnChecks.checks(allPawnsSpawned[i], map, this, isPrecipitation, ticksWithModifier);
             }
         }
 
@@ -252,8 +256,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         humidity = ((baseHumidity + currentHumidity) / 1000) + 18;
         wetPlantsValue = -1 * (outdoorTemp / humidity / 10);
         //noHurtPlants = !EffectSettings.allowPlantEffects || ticks % 150 != 0;
-        */
         floodThreatIncrease = 1 + 2 * (int)Math.Round(currentRainRate);
+        */
 
         doUnpacking = EffectSettings.doDirtPath && !doUnpacking;
         iceOrFrostGrid = EffectSettings.doIce || EffectSettings.showFrostGrid;
@@ -267,7 +271,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         Scribe_Values.Look(ref regenCellLists, "regenCellLists", true);
         Scribe_Collections.Look(ref cellWeatherAffectsDict, "cellWeatherAffects", LookMode.Value, LookMode.Deep);
-        Scribe_Values.Look(ref floodThreat, "floodThreat");
+        Scribe_Values.Look(ref rainingPreviousFloodCheck, "rainingPreviousFloodCheck");
         Scribe_Values.Look(ref tideLevel, "tideLevel");
         Scribe_Values.Look(ref floodLevel, "floodLevel");
         Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding);
@@ -282,7 +286,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private void UpdateBiomeSettings(bool force = false) {
         if (!force) {
-            if (ticks % BiomeUpdateCheck != 0) {
+            if (ticksWithModifier % BiomeUpdateCheck != 0) {
                 // Check every 12 hours
                 return;
             }
@@ -394,11 +398,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         //if it's raining in this cell:
         if (isRaining) {
-            if (floodThreat < 1090000) {
-                floodThreat += floodThreatIncrease;
-            }
-
-
             if (activeCellData.setTerrainWater()) {
                 waterChanged = true;
             }
@@ -414,8 +413,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             activeCellData.wetCheck();
         }
         else {
-            floodThreat--;
-
             //DRY GROUND
             if (activeCellData.trySetTerrainDry()) {
                 waterChanged = true;
@@ -542,7 +539,21 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
 
     public int GetRiverLevel() {
-        if (floodThreat > 1000000 || season == Season.Spring) {
+        if (isRaining) {
+            if (rainingPreviousFloodCheck) {
+                return HowManyRiverSteps;
+            }
+
+            rainingPreviousFloodCheck = true;
+        }
+        else {
+            rainingPreviousFloodCheck = false;
+        }
+
+        if (season == Season.Spring ||
+            (ModsConfig.OdysseyActive &&
+             (map.listerThings.AnyThingWithDef(RimWorld.ThingDefOf.SeasonalFlood) ||
+              map.listerThings.AnyThingWithDef(RimWorld.ThingDefOf.TorrentialRainFlood)))) {
             return HowManyRiverSteps;
         }
 
@@ -557,7 +568,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private void DoRiverModify(bool force = false) {
         if (!force) {
-            if (!EffectSettings.doFloods || !doRiverFlooding || ticks % RiverIntervalCheck != 0) {
+            if (!EffectSettings.doFloods || !doRiverFlooding || ticksWithModifier % RiverIntervalCheck != 0) {
                 return;
             }
         }
@@ -651,7 +662,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private void DoTides(bool force = false) {
         //notes to future me: use this.howManyTideSteps - 1, so we always have a little bit of wet sand, or else it looks stupid.
         if (!force) {
-            if (!doCoast || !EffectSettings.doTides || ticks % TideIntervalCheck != 0) {
+            if (!doCoast || !EffectSettings.doTides || ticksWithModifier % TideIntervalCheck != 0) {
                 return;
             }
         }
@@ -848,7 +859,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
         }
 
-        ticks = Find.TickManager.TicksAbs;
+        ticksWithModifier = Find.TickManager.TicksAbs;
         mapArea = map.Area;
         doCoast = map.TileInfo.IsCoastal;
         SurfaceTile surfaceTile = (SurfaceTile)map.TileInfo;
@@ -951,6 +962,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
                 if (isRiverTerrain(focusCell, bottomTerrain)) {
                     if (!MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map).HasTag("NPS_River")) {
+                        Log.Error("Terrain at "+focusCell+MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map));
                         doRiverFlooding = false;
                     }
                 }
@@ -1075,7 +1087,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                                 }
 
                                 affect.riverTerrainAt = MapGenUtility.ShallowMovingWaterTerrainAt(bankCheck, map)
-                                    .GetModExtension<TerrainWeatherReactions>().riverTerrain;
+                                    .GetModExtension<TerrainWeatherReactions>()?.riverTerrain;
 
                                 //Prefer lower river levels first. Then go to cardinal direction 
                                 if (j < affect.riverLevel) {

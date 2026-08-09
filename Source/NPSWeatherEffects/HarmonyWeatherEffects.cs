@@ -42,7 +42,6 @@ public class HarmonyWeatherEffects
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
-            EffectSettings.doFloods = false;
             EffectSettings.allowPawnsSwim = false;
         }
 

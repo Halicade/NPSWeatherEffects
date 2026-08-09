@@ -16,6 +16,7 @@
         <value>
             <li Class="NPSWeather.TerrainWeatherReactions">
                 <freezeTerrain>TKKN_Ice</freezeTerrain>
+                <riverTerrain>NPS_WaterRiverFlood</riverTerrain>
                 <freezeAt>-1</freezeAt>
                 <temperatureAdjust>-5</temperatureAdjust>
             </li>
@@ -37,6 +38,7 @@
         <value>
             <li Class="NPSWeather.TerrainWeatherReactions">
                 <freezeTerrain>TKKN_Ice</freezeTerrain>
+                <riverTerrain>NPS_WaterRiverFlood</riverTerrain>
                 <freezeAt>-1</freezeAt>
                 <temperatureAdjust>-5</temperatureAdjust>
             </li>
@@ -124,6 +126,20 @@
         <xpath>Defs/TerrainDef[@Name="WaterDeepBase"]/tags</xpath>
         <value>
             <li>NPS_DeepWater</li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName="WaterMovingChestDeep"]/tags</xpath>
+        <value>
+            <li>NPS_River</li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName="WaterMovingShallow"]/tags</xpath>
+        <value>
+            <li>NPS_River</li>
         </value>
     </Operation>
     

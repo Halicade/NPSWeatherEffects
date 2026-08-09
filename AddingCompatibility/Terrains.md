@@ -1,6 +1,4 @@
-﻿# Adding compatibility
-
-## TerrainWeatherReactions
+﻿## TerrainWeatherReactions
 
 
 
@@ -122,7 +120,7 @@ And these tags for river flooding
     <li>NPS_River</li>
 
 The `Flood` tag allows plants that have `destroyedByFlooding` (usually trees) to not be destroyed.
-While not required, it is recommended
+While not required, it is recommended.
 `NPS_Tide` and `NPS_River` are used internally to identify the terrain
 
 An example of new defs taken from base game ocean and river terrain
@@ -161,13 +159,15 @@ An example of new defs taken from base game ocean and river terrain
             <li>River</li>
             <li>WaterFreshShallow</li>
             <li>WaterFreshShallowMoving</li>
+            <li>Flood</li>
+            <li>NPS_River</li>
         </tags>
         <waterDepthShaderParameters>
             <_UseWaterOffset>1</_UseWaterOffset>
         </waterDepthShaderParameters>
     </TerrainDef>
 
-After this you will need to add an xml patch to the original def
+After this you will need to add xml patches to the original def as well
 
     <Operation Class="PatchOperationAddModExtension">
         <xpath>Defs/TerrainDef[defName="WaterOceanShallow"]</xpath>
@@ -176,10 +176,17 @@ After this you will need to add an xml patch to the original def
                 <!-- The tide terrain we just made-->
                 <tideTerrain>NPS_WaterOceanShallow</tideTerrain>
                 <!-- 
-                If the "Ambient temperature" patch is active, the pawns ambient temperature will be offset by tyhis amount
+                If the "Ambient temperature" patch is active, the pawns ambient temperature will be offset by this amount
                 --> 
                 <temperatureAdjust>-5</temperatureAdjust>
             </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName="WaterMovingShallow"]/tags</xpath>
+        <value>
+            <li>NPS_River</li>
         </value>
     </Operation>
     

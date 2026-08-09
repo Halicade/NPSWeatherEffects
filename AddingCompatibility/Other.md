@@ -26,3 +26,10 @@ MutatorSettings is an extension that can be applied to `TileMutatorDef`s to allo
 `tideVariant` can be SemiDiurnal, Diurnal, MixedSemiDiurnal, or left blank for the default SemiDiurnal.
 `tideFactor` defaults to 1. Values around 0 - 1.3 should work but verify first.
 If set to 0, there will be no tide when this mutator is active.
+
+
+### PlanetLayerValid
+
+By default, other `PlanetLayerDef` will not be valid unless given this mod extension. The extension itself has no data inside. 
+
+    <li Class="NPSWeather.PlanetLayerValid" />

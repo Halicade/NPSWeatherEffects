@@ -15,8 +15,25 @@
             <li>Flood</li>
             <li>NPS_Tide</li>
         </tags>
-
     </TerrainDef>
 
+    <TerrainDef ParentName="ToxicWaterShallowBase">
+        <defName>NPS_ToxicWaterMovingShallow</defName>
+        <label>toxic shallow moving water</label>
+        <renderPrecedence>398</renderPrecedence>
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>River</li>
+            <li>NPS_River</li>
+        </tags>
+        <waterDepthShaderParameters>
+            <_UseWaterOffset>1</_UseWaterOffset>
+        </waterDepthShaderParameters>
+    </TerrainDef>
 
 </Defs>

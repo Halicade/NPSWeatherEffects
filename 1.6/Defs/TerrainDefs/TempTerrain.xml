@@ -28,10 +28,14 @@
         <waterDepthShader>Map/WaterDepth</waterDepthShader>
         <renderPrecedence>396</renderPrecedence>
         <driesTo />
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
         <canFreeze>false</canFreeze>
         <temporary>true</temporary>
         <tags>
             <li>Flood</li>
+            <li>River</li>
             <li>NPS_River</li>
         </tags>
     </TerrainDef>

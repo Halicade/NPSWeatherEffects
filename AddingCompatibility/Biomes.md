@@ -2,6 +2,8 @@
 
 Biomes can have the mod extension `NPSWeather.BiomeSeasonalSettings`
 
+    bool activeForBiome = true;
+
     //incident settings
     List<ThingDef> bloomPlants;
     List<PawnKindDef> specialHerds;
@@ -30,6 +32,8 @@ Biomes can have the mod extension `NPSWeather.BiomeSeasonalSettings`
     List<WeatherCommonalityRecord> fallWeathers;
     List<WeatherCommonalityRecord> winterWeathers;
 
+
+`activeForBiome` is true by default and not needed. If you don't want your biome to have any effects, set that to false.
 
 `bloomPlants` These are plants that can spawn during the superbloom game condition. 
 These can spawn regardless of a biomes allowed plants.
