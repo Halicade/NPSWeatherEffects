@@ -57,6 +57,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public bool regenCellLists = true;
 
     private int ticks;
+    private int tickOffset;
 
     /// <summary>
     /// Doing this so that all checks aren't at the same time as other people probably have.<br/>
@@ -133,7 +134,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public override void FinalizeInit() {
         base.FinalizeInit();
         ticks = Find.TickManager.TicksAbs;
-        ticksWithModifier = ticks + Rand.RangeInclusiveSeeded(1000, 30000, map.Tile.tileId);
+        tickOffset = Rand.RangeInclusiveSeeded(1000, 30000, map.Tile.tileId);
+        ticksWithModifier = ticks + tickOffset;
         RebuildCellLists();
         mapChecks();
         allPawnsSpawned = map.mapPawns.AllHumanlikeSpawned;
@@ -145,7 +147,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }
 
         ticks = Find.TickManager.TicksAbs;
-        ticksWithModifier = ticks + Rand.RangeInclusiveSeeded(1000, 30000, map.Tile.tileId);
+        ticksWithModifier = ticks + tickOffset;
         
         //environmental changes
         if (ticksWithModifier % MapCheckInterval == 0) {
