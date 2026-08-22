@@ -854,9 +854,20 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
         }
 
-        if (map.Tile.LayerDef?.HasModExtension<PlanetLayerValid>() != true ||
-            !biomeSettings.activeForBiome ||
-            map.Biome?.inVacuum == true) {
+        if (map.Tile.LayerDef?.HasModExtension<PlanetLayerValid>() != true)
+        {
+            dontRunAnything = true;
+            return;
+        }
+
+        if (biomeSettings is { activeForBiome: false })
+        {
+            dontRunAnything = true;
+            return;
+        }
+
+        if (map.Biome?.inVacuum == true)
+        {
             dontRunAnything = true;
             return;
         }
