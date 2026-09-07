@@ -148,7 +148,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
         ticks = Find.TickManager.TicksAbs;
         ticksWithModifier = ticks + tickOffset;
-        
+
         //environmental changes
         if (ticksWithModifier % MapCheckInterval == 0) {
             mapChecks();
@@ -211,7 +211,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
             for (int i = 0; i < allPawnsSpawned.Count; i++) {
                 if (checkPawnHuman(allPawnsSpawned[i]))
-                    PawnChecks.checks(allPawnsSpawned[i], map, this, isPrecipitation, ticksWithModifier);
+                    PawnChecks.checks(allPawnsSpawned[i], map, this, isPrecipitation);
             }
         }
 
@@ -219,10 +219,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     }
 
     private bool checkPawnHuman(Pawn pawn) {
-        if (pawn?.Spawned!=true)
-        {
+        if (pawn?.Spawned != true) {
             return false;
         }
+
         if (pawn.HashOffsetTicks() % 10 != 0) {
             return false;
         }
@@ -858,20 +858,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             }
         }
 
-        if (map.Tile.LayerDef?.HasModExtension<PlanetLayerValid>() != true)
-        {
-            dontRunAnything = true;
-            return;
-        }
-
-        if (biomeSettings is { activeForBiome: false })
-        {
-            dontRunAnything = true;
-            return;
-        }
-
-        if (map.Biome?.inVacuum == true)
-        {
+        if (map.Tile.LayerDef?.HasModExtension<PlanetLayerValid>() != true ||
+            biomeSettings is { activeForBiome: false } ||
+            map.Biome?.inVacuum == true) {
             dontRunAnything = true;
             return;
         }
@@ -979,7 +968,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
                 if (isRiverTerrain(focusCell, bottomTerrain)) {
                     if (!MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map).HasTag("NPS_River")) {
-                        Log.Error("Terrain at "+focusCell+MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map));
+                        Log.Error("Terrain at " + focusCell +
+                                  MapGenUtility.ShallowMovingWaterTerrainAt(focusCell, map));
                         doRiverFlooding = false;
                     }
                 }

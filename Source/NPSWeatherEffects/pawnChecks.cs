@@ -6,7 +6,7 @@ namespace NPSWeather;
 
 public static class PawnChecks
 {
-    public static void checks(Pawn pawn, Map map, Watcher watcher, bool isRaining, int ticks) {
+    public static void checks(Pawn pawn, Map map, Watcher watcher, bool isRaining) {
         if (!pawn.Spawned || pawn.Dead) {
             return;
         }
@@ -16,7 +16,7 @@ public static class PawnChecks
 
         makePaths(pawn, watcher, map);
         makeWet(pawn, terrain, isRaining, map);
-        if ((pawn.HashOffset() + ticks) % 300 == 0) {
+        if (pawn.HashOffsetTicks() % 300 == 0) {
             makeBreath(pawn, map);
             if (!drowningCheck(pawn, terrain)) {
                 springCheck(pawn, terrain);
