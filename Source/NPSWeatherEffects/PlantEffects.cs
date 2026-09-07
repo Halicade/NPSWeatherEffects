@@ -22,14 +22,14 @@ public class PlantEffects : Plant
 
         cachedMap = map;
         watcherComponent = cachedMap.GetComponent<Watcher>();
+        frostComponent = cachedMap.GetComponent<FrostGrid>();
         PlantReactionUtil.ApplyGraphicFrozen.TryGetValue(def, out effectsHolder);
         hasAnyGraphic = effectsHolder?.weatherExtension != null;
         if (respawningAfterLoad) {
             verifyGraphics();
         }
-        else {
-            calculateGraphics();
-        }
+
+        calculateGraphics();
     }
 
     public override void PostMapInit() {
@@ -40,16 +40,19 @@ public class PlantEffects : Plant
 
         cachedMap = MapHeld;
         watcherComponent = cachedMap.GetComponent<Watcher>();
+        frostComponent = cachedMap.GetComponent<FrostGrid>();
         PlantReactionUtil.ApplyGraphicFrozen.TryGetValue(def, out effectsHolder);
         hasAnyGraphic = effectsHolder != null;
+        calculateGraphics();
     }
 
     private Map cachedMap;
     private Watcher watcherComponent;
-    private bool displayFloweringGraphic;
-    private bool displayDroughtGraphic;
-    private bool displayFrostGraphic;
-    private bool displayFrostLeaflessGraphic;
+    private FrostGrid frostComponent;
+    private bool displayingFloweringGraphic;
+    private bool displayingDroughtGraphic;
+    private bool displayingFrostGraphic;
+    private bool displayingFrostLeaflessGraphic;
 
     public override void TickLong() {
         base.TickLong();
@@ -57,10 +60,6 @@ public class PlantEffects : Plant
     }
 
     private void calculateGraphics() {
-        displayFloweringGraphic = false;
-        displayDroughtGraphic = false;
-        displayFrostGraphic = false;
-        displayFrostLeaflessGraphic = false;
         if (Destroyed) {
             return;
         }
@@ -73,45 +72,69 @@ public class PlantEffects : Plant
             return;
         }
 
-
         if (MapHeld != cachedMap) {
             cachedMap = MapHeld;
             watcherComponent = MapHeld.GetComponent<Watcher>();
+            frostComponent = MapHeld.GetComponent<FrostGrid>();
         }
 
         if (watcherComponent?.dontRunAnything != false) {
             return;
         }
 
-        var temperature = watcherComponent.outdoorTemp;
-        if (temperature > 21) {
-            if (watcherComponent.season == Season.Spring ||
-                (watcherComponent.season == Season.PermanentSummer &&
-                 watcherComponent.quadrum == Quadrum.Aprimay)) {
-                if (!watcherComponent.isRaining
-                    && effectsHolder.weatherExtension.floweringGraphic != null) {
-                    displayFloweringGraphic = true;
-                }
+        float temperature = watcherComponent.outdoorTemp;
+        if (temperature > 21 &&
+            (watcherComponent.season == Season.Spring ||
+             (watcherComponent.season == Season.PermanentSummer &&
+              watcherComponent.quadrum == Quadrum.Aprimay)) &&
+            effectsHolder.weatherExtension.floweringGraphic != null) {
+            if (!displayingFloweringGraphic) {
+                displayingFloweringGraphic = true;
+                Map.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things);
             }
+        }
+        else {
+            displayingFloweringGraphic = false;
         }
 
 
         if (watcherComponent.droughtActive && effectsHolder.weatherExtension.droughtGraphic != null) {
-            displayDroughtGraphic = true;
+            if (!displayingDroughtGraphic) {
+                displayingDroughtGraphic = true;
+                Map.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things);
+            }
+        }
+        else {
+            displayingDroughtGraphic = false;
         }
 
-
         if (EffectSettings.showFrostGrid
-            && temperature < 0) {
-            if (watcherComponent?.frostGridComponent.GetDepth(PositionHeld) >= 0.3f) {
-                if (effectsHolder.weatherExtension.frostLeaflessGraphic != null && LeaflessNow) {
-                    displayFrostLeaflessGraphic = true;
-                }
-
-                if (effectsHolder.weatherExtension.frostGraphic != null) {
-                    displayFrostGraphic = true;
+            && temperature < 0 &&
+            frostComponent?.GetDepth(PositionHeld) >= 0.3f) {
+            
+            if (effectsHolder.weatherExtension.frostLeaflessGraphic != null && LeaflessNow) {
+                if (!displayingFrostLeaflessGraphic) {
+                    displayingFrostLeaflessGraphic = true;
+                    Map.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things);
                 }
             }
+            else {
+                displayingFrostLeaflessGraphic = false;
+            }
+
+            if (effectsHolder.weatherExtension.frostGraphic != null) {
+                if (!displayingFrostGraphic) {
+                    displayingFrostGraphic = true;
+                    Map.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things);
+                }
+            }
+            else {
+                displayingFrostGraphic = false;
+            }
+        }
+        else {
+            displayingFrostLeaflessGraphic = false;
+            displayingFrostGraphic = false;
         }
     }
 
@@ -134,7 +157,7 @@ public class PlantEffects : Plant
                 return def.plant.leaflessImmatureGraphic;
             }
 
-            if (displayFrostLeaflessGraphic && LeaflessNow && (!sown || !HarvestableNow)) {
+            if (displayingFrostLeaflessGraphic && LeaflessNow && (!sown || !HarvestableNow)) {
                 // Have this check before the other frost and leafless check
                 return effectsHolder.weatherExtension.frostLeaflessGraphic;
             }
@@ -143,7 +166,7 @@ public class PlantEffects : Plant
                 return def.plant.leaflessGraphic;
             }
 
-            if (displayFrostGraphic) {
+            if (displayingFrostGraphic) {
                 return effectsHolder.weatherExtension.frostGraphic;
             }
 
@@ -151,11 +174,11 @@ public class PlantEffects : Plant
                 return def.plant.immatureGraphic;
             }
 
-            if (displayFloweringGraphic) {
+            if (displayingFloweringGraphic) {
                 return effectsHolder.weatherExtension.floweringGraphic;
             }
 
-            if (displayDroughtGraphic) {
+            if (displayingDroughtGraphic) {
                 return effectsHolder.weatherExtension.droughtGraphic;
             }
 
@@ -165,27 +188,27 @@ public class PlantEffects : Plant
 
     private void verifyGraphics() {
         if (effectsHolder?.weatherExtension?.floweringGraphic == null) {
-            displayFloweringGraphic = false;
+            displayingFloweringGraphic = false;
         }
 
         if (effectsHolder?.weatherExtension?.droughtGraphic == null) {
-            displayDroughtGraphic = false;
+            displayingDroughtGraphic = false;
         }
 
         if (effectsHolder?.weatherExtension?.frostGraphic == null) {
-            displayFrostGraphic = false;
+            displayingFrostGraphic = false;
         }
 
         if (effectsHolder?.weatherExtension?.frostLeaflessGraphic == null) {
-            displayFrostLeaflessGraphic = false;
+            displayingFrostLeaflessGraphic = false;
         }
     }
 
     public override void ExposeData() {
         base.ExposeData();
-        Scribe_Values.Look(ref displayFloweringGraphic, "displayFloweringGraphic");
-        Scribe_Values.Look(ref displayDroughtGraphic, "displayDroughtGraphic");
-        Scribe_Values.Look(ref displayFrostGraphic, "displayFrostGraphic");
-        Scribe_Values.Look(ref displayFrostLeaflessGraphic, "displayFrostLeaflessGraphic");
+        Scribe_Values.Look(ref displayingFloweringGraphic, "displayFloweringGraphic");
+        Scribe_Values.Look(ref displayingDroughtGraphic, "displayDroughtGraphic");
+        Scribe_Values.Look(ref displayingFrostGraphic, "displayFrostGraphic");
+        Scribe_Values.Look(ref displayingFrostLeaflessGraphic, "displayFrostLeaflessGraphic");
     }
 }

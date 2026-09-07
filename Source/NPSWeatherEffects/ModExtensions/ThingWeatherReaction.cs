@@ -14,7 +14,7 @@ public class ThingWeatherReaction : DefModExtension
     public Graphic frostGraphic;
     public Graphic frostLeaflessGraphic;
 
-    public bool hasGraphic;
+    private bool hasGraphic;
 
     public bool initializeGraphics(ThingDef plant) {
         if (!droughtGraphicPath.NullOrEmpty()) {

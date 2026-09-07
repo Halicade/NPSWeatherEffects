@@ -62,7 +62,7 @@ public static class TerrainTagUtil
                 }
             }
 
-            var weatherExtension = terrain.GetModExtension<TerrainWeatherReactions>();
+            TerrainWeatherReactions weatherExtension = reverseGetModExtension(terrain);
             if (weatherExtension != null) {
                 if (weatherExtension.temperatureAdjust != 0) {
                     HashAmbientTempReaction.Add(terrain, weatherExtension.temperatureAdjust);
@@ -118,5 +118,24 @@ public static class TerrainTagUtil
         HashAmbientTempReaction.Clear();
         HashTideHasTempTide.Clear();
         HashRiverToTempRiver.Clear();
+    }
+
+    /// <summary>
+    /// Due to inheritance, if a def inherits mod extensions from a parent, the inherited one takes priority.
+    /// (Looking at you sand)
+    /// Going through the list backwards to get the last extension.
+    /// Ironically, this won't apply to sand because I have that mod extension added post inheritance.
+    /// Will probably still be useful when I least expect it
+    /// Thanks to Saf/Combat extended for the idea!
+    /// </summary>
+    private static TerrainWeatherReactions reverseGetModExtension(TerrainDef def) {
+        if (def.modExtensions == null)
+            return null;
+        for (int index = def.modExtensions.Count - 1; index >= 0; --index) {
+            if (def.modExtensions[index] is TerrainWeatherReactions)
+                return def.modExtensions[index] as TerrainWeatherReactions;
+        }
+
+        return null;
     }
 }
