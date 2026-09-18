@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 437630800
+CRC: 4156407116
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 37cb321c7c8f777a28bd32e0708c220f
+    Hash: 8d7b57f37a6877bdf98949d13c674269
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2612ac43db082a73502ee80f2eceb73f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 37cb321c7c8f777a28bd32e0708c220f
+    Hash: 8d7b57f37a6877bdf98949d13c674269
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -99,6 +99,7 @@ Assets:
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Bush_Leafless/Bush_Leafless.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/TreeMaple/TreeMapleA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/Grass/GrassC.png
+- Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle/MadeByLeeOfLightsabers.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientFrosted/Leafless/Grass_Leafless/Grass_LeaflessA.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Temperature/Temperature.png
 - Assets/Data/Hali.NPSWeatherEffects/Textures/TKKN_NPS/Things/Plant/VarientDrought/TallGrasses/TallGrassesE.png

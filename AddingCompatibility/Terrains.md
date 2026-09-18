@@ -4,30 +4,37 @@
 
 Terrain can have the mod extension `NPSWeather.TerrainWeatherReactions`
 
-    TerrainDef floodTerrain;
     TerrainDef freezeTerrain;
     int freezeAt;
+    bool optionalFreeze;
+    
     bool holdFrost;
     float temperatureAdjust;
-    int wetAt;
+    
+    TerrainDef floodTerrain;
     TerrainDef wetTerrain;
-
+    int wetAt;
+    
     TerrainDef tideTerrain;
     TerrainDef riverTerrain;
 
-- `wetTerrain` Terrain this cell will turn into when it rains. This only occurs if the setting "Show wet terrain" is
-  active.
-- `floodTerrain` Terrain this cell will turn into when it rains. This only occurs if the setting "Show flood terrain" is
-  active.
-- `wetAt` The level of wetness that needs to be reached before a terrain can become wet or flooded. This value defaults
-  to 0.
+- `freezeTerrain` Terrain this cell will turn into when the temperature is below this value
+- `freezeAt` The minimum temperature to allow the temperature to freeze. Defaults to 0
+- `optionalFreeze` This terrain will only freeze if an additional option is selected
 - `holdFrost` This terrain can receive frost from the setting "Show frost". This is purely visual.
 - `temperatureAdjust` Pawns will receive an offset of this value if they are on this terrain. This is only active if
   the "Apply ambient temperature patch" is active.
+- `floodTerrain` Terrain this cell will turn into when it rains. This only occurs if the setting "Show flood terrain" is
+  active.
+- `wetTerrain` Terrain this cell will turn into when it rains. This only occurs if the setting "Show wet terrain" is
+  active.
+- `wetAt` The level of wetness that needs to be reached before a terrain can become wet or flooded. This value defaults
+  to 0.
+
 - `tideTerrain` The terrain that will be used when a biome has a custom `oceanShallowTerrain`
 - `riverTerrain` The terrain that will be used when a biome has a custom `waterMovingShallowTerrain`. This is only used
   if Odyssey is not active.
-- `freezeTerrain` Terrain this cell will turn into when the temperature
+
 
 Most of these patches were extracted directly from [terrain-water-patches.xml](./../1.6/Patches/terrain-water-patches.xml)
 with Defs coming from [TerrainDefs](./../1.6/Defs/TerrainDefs).
@@ -69,6 +76,7 @@ terrain can use both of these options
 If Odyssey is not active, terrain can freeze when certain temperatures are met. Setting a `freezeTerrain` will allow
 that terrain to freeze when `freezeAt` is reached. If `freezeAt` is not indicated, it defaults to 0 degrees Celsius.
 
+
     <Operation Class="PatchOperationAddModExtension">
     <xpath>Defs/TerrainDef[defName = "Mud"]</xpath>
     <value>
@@ -78,6 +86,7 @@ that terrain to freeze when `freezeAt` is reached. If `freezeAt` is not indicate
         <freezeTerrain>TKKN_MuddyIce</freezeTerrain>
         <wetAt>1</wetAt>
         <holdFrost>True</holdFrost>
+        <optionalFreeze>True</optionalFreeze>
       </li>
     </value>
     </Operation>

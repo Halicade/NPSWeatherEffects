@@ -4,13 +4,17 @@ namespace NPSWeather;
 
 public class TerrainWeatherReactions : DefModExtension
 {
-    public TerrainDef floodTerrain;
     public TerrainDef freezeTerrain;
     public int freezeAt;
+    public bool optionalFreeze;
+    
     public bool holdFrost;
     public float temperatureAdjust;
-    public int wetAt;
+    
+    
+    public TerrainDef floodTerrain;
     public TerrainDef wetTerrain;
+    public int wetAt;
 
     public TerrainDef tideTerrain;
     public TerrainDef riverTerrain;

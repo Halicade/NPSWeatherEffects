@@ -13,7 +13,6 @@ public static class TerrainTagUtil
     private static readonly HashSet<TerrainDef> HashTide = [];
     private static HashSet<TerrainDef> HashTideHasTempTide = [];
     private static readonly HashSet<TerrainDef> HashRiver = [];
-    private static HashSet<TerrainDef> HashRiverToTempRiver = [];
 
     private static readonly Dictionary<TerrainDef, float> HashAmbientTempReaction = [];
 
@@ -21,10 +20,8 @@ public static class TerrainTagUtil
     public static FrozenSet<TerrainDef> NPS_DeepWater = [];
     public static FrozenSet<TerrainDef> Lava = [];
     public static FrozenSet<TerrainDef> CanBePacked = [];
-    public static FrozenSet<TerrainDef> NPS_Tide = [];
     public static FrozenSet<TerrainDef> TideHasTempTide = [];
     public static FrozenSet<TerrainDef> NPS_River = [];
-    public static FrozenSet<TerrainDef> RiverHasTempRiver = [];
     public static FrozenDictionary<TerrainDef, float> AmbientTempReaction = [];
 
     public static void InitializeTerrainTags() {
@@ -97,8 +94,6 @@ public static class TerrainTagUtil
                         Log.Error(
                             $"NPSWeatherEffects: Terrain {terrain} has an extension indicating {weatherExtension.riverTerrain} is a river terrain. But it is not temporary.");
                     }
-
-                    HashRiverToTempRiver.Add(terrain);
                 }
             }
         }
@@ -108,16 +103,16 @@ public static class TerrainTagUtil
         Lava = HashLava.ToFrozenSet();
         CanBePacked = HashCanBePacked.ToFrozenSet();
         TideHasTempTide = HashTideHasTempTide.ToFrozenSet();
-        RiverHasTempRiver = HashRiverToTempRiver.ToFrozenSet();
+        NPS_River = HashRiver.ToFrozenSet();
         AmbientTempReaction = HashAmbientTempReaction.ToFrozenDictionary();
         // Don't need the original dicts
         HashNPS_Water.Clear();
         HashNPS_DeepWater.Clear();
         HashLava.Clear();
         HashCanBePacked.Clear();
-        HashAmbientTempReaction.Clear();
         HashTideHasTempTide.Clear();
-        HashRiverToTempRiver.Clear();
+        HashRiver.Clear();
+        HashAmbientTempReaction.Clear();
     }
 
     /// <summary>

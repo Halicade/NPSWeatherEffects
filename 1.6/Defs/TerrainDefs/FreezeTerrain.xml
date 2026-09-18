@@ -22,7 +22,7 @@
         <holdSnowOrSand>false</holdSnowOrSand>
         <takeFootprints>False</takeFootprints>
         <tags>
-            <li>Frozen</li>
+            <li>NPS_Frozen</li>
         </tags>
     </TerrainDef>
 
@@ -46,7 +46,7 @@
         <fertility>0</fertility>
         <takeFootprints>False</takeFootprints>
         <tags>
-            <li>Frozen</li>
+            <li>NPS_Frozen</li>
         </tags>
     </TerrainDef>
 </Defs>

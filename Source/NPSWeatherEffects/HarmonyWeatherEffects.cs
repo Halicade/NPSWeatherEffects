@@ -21,6 +21,8 @@ public class HarmonyWeatherEffects
     public static readonly bool WaterFreezesActive;
 
     public static readonly bool SeasonalWeatherModActive;
+    
+    public static readonly bool NPSBiomesActive;
 
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
 
@@ -39,6 +41,7 @@ public class HarmonyWeatherEffects
         StorytellerJianghuActive = ModLister.AnyModActiveNoSuffix(["zal.jianghujin"]);
         WaterFreezesActive = ModLister.AnyModActiveNoSuffix(["mlie.waterfreezes"]);
         SeasonalWeatherModActive = ModLister.AnyModActiveNoSuffix(["nightmare.weathercontrol", "mlie.seasonalweather"]);
+        NPSBiomesActive = ModLister.AnyModActiveNoSuffix(["Hali.NPSBiomes"]);
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;

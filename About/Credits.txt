@@ -5,7 +5,11 @@ Uses the postInheritance patch
 
 Bottle textures by Myleia, The_Weakness, and SneezingSeal. Were modified by Roque The Rogue.
 Acquired from the Rimworld discords #mod-art resources thread
+
 Rum texture provided by Zaljerem. Part of Pirates! Gold 
 https://steamcommunity.com/sharedfiles/filedetails/?id=2599107582
+
+Additional Message in a bott made by Lee
+https://steamcommunity.com/profiles/76561198272687194/myworkshopfiles/?appid=294100
 
 Specific textures are indicated in Assets/Textures/TKKN_NPS/Things/Sculptures/MessageInABottle

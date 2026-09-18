@@ -68,7 +68,7 @@ public class PlantEffects : Plant
             return;
         }
 
-        if (!EffectSettings.allowPlantEffects && !effectsHolder.active) {
+        if (!EffectSettings.allowPlantEffects || !effectsHolder.active) {
             return;
         }
 
@@ -111,7 +111,7 @@ public class PlantEffects : Plant
         if (EffectSettings.showFrostGrid
             && temperature < 0 &&
             frostComponent?.GetDepth(PositionHeld) >= 0.3f) {
-            
+
             if (effectsHolder.weatherExtension.frostLeaflessGraphic != null && LeaflessNow) {
                 if (!displayingFrostLeaflessGraphic) {
                     displayingFrostLeaflessGraphic = true;
@@ -138,7 +138,8 @@ public class PlantEffects : Plant
         }
     }
 
-    public override Graphic Graphic {
+    public override Graphic Graphic
+    {
         get
         {
             if (!hasAnyGraphic || !effectsHolder.active) {

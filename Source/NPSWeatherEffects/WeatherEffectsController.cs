@@ -161,6 +161,12 @@ public class WeatherEffectsController : Mod
                     "NPS_doIce_title".Translate(),
                     ref EffectSettings.doIce,
                     "NPS_doIce_text".Translate());
+                if (EffectSettings.doIce) {
+                    list.CheckboxLabeled(
+                        "NPS_doExtraIce_title".Translate(),
+                        ref EffectSettings.doExtraIce,
+                        "NPS_doExtraIce_text".Translate());
+                }
 
                 if (EffectSettings.doIce && EffectSettings.modsPatchingTerrain > 0) {
                     Text.Font = GameFont.Tiny;
@@ -195,17 +201,18 @@ public class WeatherEffectsController : Mod
                 "NPS_doWetSand_title".Translate(),
                 ref EffectSettings.doWetSand,
                 "NPS_doWetSand_text".Translate());
-
-            list.CheckboxLabeled(
-                "NPS_leaveLoot_title".Translate(),
-                ref EffectSettings.leaveLoot,
-                "NPS_leaveLoot_text".Translate());
-
-            if (EffectSettings.leaveLoot) {
+            if (EffectSettings.doFloods || EffectSettings.doTides) {
                 list.CheckboxLabeled(
-                    "NPS_forbidLoot_title".Translate(),
-                    ref EffectSettings.forbidLoot,
-                    "NPS_forbidLoot_text".Translate());
+                    "NPS_leaveLoot_title".Translate(),
+                    ref EffectSettings.leaveLoot,
+                    "NPS_leaveLoot_text".Translate());
+
+                if (EffectSettings.leaveLoot) {
+                    list.CheckboxLabeled(
+                        "NPS_forbidLoot_title".Translate(),
+                        ref EffectSettings.forbidLoot,
+                        "NPS_forbidLoot_text".Translate());
+                }
             }
         }
 

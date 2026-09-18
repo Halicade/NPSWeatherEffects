@@ -185,15 +185,27 @@ public class cellData : IExposable
         if (weatherExtension?.freezeTerrain == null)
             return false;
 
+        if (weatherExtension.optionalFreeze && !EffectSettings.doExtraIce)
+            return false;
+
         if (temperature > weatherExtension.freezeAt)
             return false;
-        // Still want the system to count this as a changed tile
-        if (!Rand.Chance(0.05f))
-            return true;
 
-        map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain);
-        setCurrentExtension();
-        isFrozen = true;
+        if (TerrainTagUtil.NPS_River.Contains(currentTerrain)) {
+            if (Rand.Value < 0.02f) {
+                map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain);
+                setCurrentExtension();
+                isFrozen = true;
+            }
+        }
+        else {
+            if (Rand.Value < 0.05f) {
+                map.terrainGrid.SetTempTerrain(location, weatherExtension.freezeTerrain);
+                setCurrentExtension();
+                isFrozen = true;
+            }
+        }
+
         return true;
     }
 
@@ -399,7 +411,8 @@ public class cellData : IExposable
         }
     }
 
-    private readonly List<ThingDef> possibleFilth = [
+    private readonly List<ThingDef> possibleFilth =
+    [
         ThingDefOf.TKKN_FilthPuddle,
         ThingDefOf.Filth_Slime,
         ThingDefOf.TKKN_FilthShells,
@@ -414,7 +427,8 @@ public class cellData : IExposable
         }
 
         switch (Rand.Value) {
-            case < 0.001f: {
+            case < 0.001f:
+            {
                 if (!checkTileValidForLoot()) {
                     return;
                 }
@@ -433,7 +447,8 @@ public class cellData : IExposable
 
                 FilthMaker.TryMakeFilth(location, map, possibleFilth.RandomElement());
                 break;
-            case < 0.002f: {
+            case < 0.002f:
+            {
                 if (!checkTileValidForLoot()) {
                     return;
                 }
@@ -462,7 +477,8 @@ public class cellData : IExposable
 
                 break;
             }
-            case < 0.003f when location.GetPlant(map) == null && location.GetCover(map) == null: {
+            case < 0.003f when location.GetPlant(map) == null && location.GetCover(map) == null:
+            {
                 if (!checkTileValidForLoot()) {
                     return;
                 }
@@ -633,6 +649,9 @@ public class cellData : IExposable
 
         if (weatherExtension?.freezeTerrain == null)
             return;
+        
+        if (weatherExtension.optionalFreeze && !EffectSettings.doExtraIce)
+            return;
 
         if (temperature > weatherExtension.freezeAt)
             return;
@@ -662,8 +681,10 @@ public class cellData : IExposable
             return;
         }
 
-        if (currentTerrain.HasTag("NPS_Tide") || currentTerrain.HasTag("NPS_River")) {
-            map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
+        foreach (var terrainTag in currentTerrain.tags) {
+            if (terrainTag is "NPS_Tide" or "NPS_River" or "NPS_Frozen") {
+                map.terrainGrid.RemoveTempTerrain(location, doLeavings: false, preventDestroyEffects: true);
+            }
         }
     }
 

@@ -18,6 +18,7 @@ public class EffectSettings : ModSettings
     public static int ActivePlants;
 
     public static bool doIce = true;
+    public static bool doExtraIce = false;
     public static bool doColdBreath = true;
     public static bool showFrostGrid = true;
     public static bool doWalkThroughSnow = true;
@@ -82,6 +83,7 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref forbidLoot, "forbidLoot", true);
 
         Scribe_Values.Look(ref doIce, "doIce", true);
+        Scribe_Values.Look(ref doExtraIce, "doExtraIce", false);
         Scribe_Values.Look(ref doColdBreath, "doColdBreath", true);
         Scribe_Values.Look(ref showFrostGrid, "showFrostGrid", true);
         Scribe_Values.Look(ref useMapTemperature, "useMapTemperature", false);

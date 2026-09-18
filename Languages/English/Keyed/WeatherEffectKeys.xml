@@ -33,8 +33,10 @@
     <NPS_useMapTemperature_title>Use map-wide temperature</NPS_useMapTemperature_title>
     <NPS_useMapTemperature_text>Use the maps outdoor temperature instead of querying each cell. This applies for ice freezing and frost grid generation.\nWill improve performance but can lead to frost generating indoors.</NPS_useMapTemperature_text>
     <NPS_numModsPatching>{0} mod(s) currently detected patching functions this option uses heavily</NPS_numModsPatching>
-    <NPS_doIce_title>Ground / water freezes</NPS_doIce_title>
-    <NPS_doIce_text>Terrain can freeze at cold temperatures</NPS_doIce_text>
+    <NPS_doIce_title>Water freezes</NPS_doIce_title>
+    <NPS_doIce_text>Water can freeze at cold temperatures</NPS_doIce_text>
+    <NPS_doExtraIce_title>Ground freezes</NPS_doExtraIce_title>
+    <NPS_doExtraIce_text>Ground terrain such as mud, marshy soil, and riverbanks can freeze. Note that this can cause lag on maps with a lot of such terrain.</NPS_doExtraIce_text>
     <NPS_ShowFrostGrid_title>Show frost</NPS_ShowFrostGrid_title>
     <NPS_FrostGrid_text>When it gets cold, frost can appear on the map. This is purely visual</NPS_FrostGrid_text>
     
@@ -66,7 +68,7 @@
     <NPS_doWetSand_title>Spawn wet sand</NPS_doWetSand_title>
     <NPS_doWetSand_text>Sand underneath ocean tides will be wet. Requires "Reset map" to add/remove</NPS_doWetSand_text>
     <NPS_leaveLoot_title>Wash up loot</NPS_leaveLoot_title>
-    <NPS_leaveLoot_text>After water recedes, items can wash up on land</NPS_leaveLoot_text>
+    <NPS_leaveLoot_text>After water recedes, items can wash up on land. This can occur from ocean or river water</NPS_leaveLoot_text>
     <NPS_forbidLoot_title>Loot spawns forbidden</NPS_forbidLoot_title>
     <NPS_forbidLoot_text>Loot that spawns from tide will be forbidden by default</NPS_forbidLoot_text>
 
