@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/GameConditionDef[defName = "Eclipse"]</xpath>
+        <value>
+            <li Class="NPSWeather.TideConditions">
+                <tideOffset>1</tideOffset>
+                <tideFactor>1.25</tideFactor>
+            </li>
+        </value>
+    </Operation>
+    
+</Patch>
