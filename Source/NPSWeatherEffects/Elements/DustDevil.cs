@@ -51,16 +51,16 @@ public class DustDevil : ThingWithComps
 
     private const float MaxMidOffset = 2f;
 
-    private static readonly MaterialPropertyBlock matPropertyBlock = new();
+    private static readonly MaterialPropertyBlock matPropertyBlock = new MaterialPropertyBlock();
 
     private static ModuleBase directionNoise;
 
-    private static readonly IntRange DurationTicks = new(2700, 10080);
+    private static readonly IntRange DurationTicks = new IntRange(2700, 10080);
 
     private static readonly Material DustDevilMaterial = MaterialPool.MatFrom("Things/Ethereal/Tornado",
         ShaderDatabase.Transparent, MapMaterialRenderQueues.Tornado);
 
-    private static readonly FloatRange PartsDistanceFromCenter = new(1f, 5f);
+    private static readonly FloatRange PartsDistanceFromCenter = new FloatRange(1f, 5f);
 
     private static readonly float ZOffsetBias = -4f * PartsDistanceFromCenter.min;
 
@@ -81,8 +81,8 @@ public class DustDevil : ThingWithComps
     {
         get
         {
-            var a = Mathf.Clamp01((Find.TickManager.TicksGame - spawnTick) / 120f);
-            var b = leftFadeOutTicks >= 0 ? Mathf.Min(leftFadeOutTicks / 120f, 1f) : 1f;
+            float a = Mathf.Clamp01((Find.TickManager.TicksGame - spawnTick) / 120f);
+            float b = leftFadeOutTicks >= 0 ? Mathf.Min(leftFadeOutTicks / 120f, 1f) : 1f;
             return Mathf.Min(a, b);
         }
     }
@@ -175,7 +175,7 @@ public class DustDevil : ThingWithComps
                     return;
                 }
 
-                var num = Rand.Range(0.6f, 1f);
+                float num = Rand.Range(0.6f, 1f);
                 FleckMaker.ThrowTornadoDustPuff(new Vector3(realPosition.x, 0f, realPosition.y)
                     {
                         y = AltitudeLayer.MoteOverhead.AltitudeFor()
@@ -195,7 +195,7 @@ public class DustDevil : ThingWithComps
     {
         Rand.PushState();
         Rand.Seed = thingIDNumber;
-        for (var i = 0; i < 180; i++)
+        for (int i = 0; i < 180; i++)
         {
             drawDustDevilPart(PartsDistanceFromCenter.RandomInRange, Rand.Range(0f, 360f), Rand.Range(0.9f, 1.1f),
                 Rand.Range(0.52f, 0.88f));
@@ -207,17 +207,17 @@ public class DustDevil : ThingWithComps
     private void drawDustDevilPart(float distanceFromCenter, float initialAngle, float speedMultiplier,
         float colorMultiplier)
     {
-        var ticksGame = Find.TickManager.TicksGame;
-        var num = 1f / distanceFromCenter;
-        var num2 = 25f * speedMultiplier * num;
-        var num3 = (initialAngle + (ticksGame * num2)) % 360f;
+        int ticksGame = Find.TickManager.TicksGame;
+        float num = 1f / distanceFromCenter;
+        float num2 = 25f * speedMultiplier * num;
+        float num3 = (initialAngle + (ticksGame * num2)) % 360f;
         var vector = realPosition.Moved(num3, adjustedDistanceFromCenter(distanceFromCenter));
         vector.y += distanceFromCenter * 4f;
         vector.y += ZOffsetBias;
         var vector2 = new Vector3(vector.x, AltitudeLayer.Weather.AltitudeFor() + (0.046875f * Rand.Range(0f, 1f)),
             vector.y);
-        var num4 = distanceFromCenter * 3f;
-        var num5 = 1f;
+        float num4 = distanceFromCenter * 3f;
+        float num5 = 1f;
         if (num3 > 270f)
         {
             num5 = GenMath.LerpDouble(270f, 360f, 0f, 1f, num3);
@@ -227,11 +227,11 @@ public class DustDevil : ThingWithComps
             num5 = GenMath.LerpDouble(180f, 270f, 1f, 0f, num3);
         }
 
-        var num6 = Mathf.Min(distanceFromCenter / (PartsDistanceFromCenter.max + 2f), 1f);
-        var d = Mathf.InverseLerp(0.18f, 0.4f, num6);
+        float num6 = Mathf.Min(distanceFromCenter / (PartsDistanceFromCenter.max + 2f), 1f);
+        float d = Mathf.InverseLerp(0.18f, 0.4f, num6);
         var a = new Vector3(Mathf.Sin((ticksGame / 1000f) + (thingIDNumber * 10)) * 2f, 0f, 0f);
         vector2 += a * d;
-        var a2 = Mathf.Max(1f - num6, 0f) * num5 * FadeInOutFactor;
+        float a2 = Mathf.Max(1f - num6, 0f) * num5 * FadeInOutFactor;
         var value = new Color(colorMultiplier, colorMultiplier, colorMultiplier, a2);
         matPropertyBlock.SetColor(ShaderPropertyIDs.Color, value);
         var matrix = Matrix4x4.TRS(vector2, Quaternion.Euler(0f, num3, 0f), new Vector3(num4, 1f, num4));
@@ -240,7 +240,7 @@ public class DustDevil : ThingWithComps
 
     private static float adjustedDistanceFromCenter(float distanceFromCenter)
     {
-        var num = Mathf.Min(distanceFromCenter / 8f, 1f);
+        float num = Mathf.Min(distanceFromCenter / 8f, 1f);
         num *= num;
         return distanceFromCenter * num;
     }
@@ -262,8 +262,8 @@ public class DustDevil : ThingWithComps
 
     private void damageCloseThings()
     {
-        var num = GenRadial.NumCellsInRadius(3f);
-        for (var i = 0; i < num; i++)
+        int num = GenRadial.NumCellsInRadius(3f);
+        for (int i = 0; i < num; i++)
         {
             var intVec = Position + GenRadial.RadialPattern[i];
             if (!intVec.InBounds(Map) || cellImmuneToDamage(intVec))
@@ -277,7 +277,7 @@ public class DustDevil : ThingWithComps
                 continue;
             }
 
-            var damageFactor = GenMath.LerpDouble(0f, 3f, 1f, 0.2f, intVec.DistanceTo(Position));
+            float damageFactor = GenMath.LerpDouble(0f, 3f, 1f, 0.2f, intVec.DistanceTo(Position));
             doDamage(intVec, damageFactor);
         }
     }
@@ -314,7 +314,7 @@ public class DustDevil : ThingWithComps
         tmpThings.AddRange(c.GetThingList(Map));
         var vector = c.ToVector3Shifted();
         var b = new Vector2(vector.x, vector.z);
-        var angle = -realPosition.AngleTo(b) + 180f;
+        float angle = -realPosition.AngleTo(b) + 180f;
         foreach (var thing in tmpThings)
         {
             BattleLogEntry_DamageTaken battleLogEntry_DamageTaken = null;
@@ -354,7 +354,7 @@ public class DustDevil : ThingWithComps
                     break;
             }
 
-            var amount = Mathf.Max(GenMath.RoundRandom(DustDevilAnimationSpeed * damageFactor), 1);
+            int amount = Mathf.Max(GenMath.RoundRandom(DustDevilAnimationSpeed * damageFactor), 1);
             thing.TakeDamage(new DamageInfo(DamageDefOf.TornadoScratch, amount, 0, angle, this))
                 .AssociateWithLog(battleLogEntry_DamageTaken);
         }

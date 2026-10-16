@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[@Name = "ChunkSlagSteel"]</xpath>
+        <value>
+            <li Class="NPSWeather.DontDestroyTide"/>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/ThingDef[@Name = "RockBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.DontDestroyTide"/>
+        </value>
+    </Operation>
+
+
+</Patch>

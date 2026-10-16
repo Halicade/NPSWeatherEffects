@@ -50,6 +50,7 @@ public static class TerrainTagUtil
             }
 
             if (terrain.temporary) {
+                //TODO remember where NPS_Tide was supposed to be used
                 if (terrain.HasTag("NPS_Tide")) {
                     HashTide.Add(terrain);
                 }

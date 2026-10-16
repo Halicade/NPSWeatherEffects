@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "VG_GardenSoil"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <wetTerrain>NPS_VG_GardenSoilWet</wetTerrain>
+                <wetAt>1</wetAt>
+                <holdFrost>True</holdFrost>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName = "VG_PlowSoil"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <wetTerrain>NPS_VG_PlowSoilWet</wetTerrain>
+                <wetAt>1</wetAt>
+                <holdFrost>True</holdFrost>
+            </li>
+        </value>
+    </Operation>
+</Patch>

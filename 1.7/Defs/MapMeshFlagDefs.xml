@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <MapMeshFlagDef>
+        <defName>NPS_Frost</defName>
+    </MapMeshFlagDef>
+
+    <MapMeshFlagDef>
+        <defName>NPS_Rain</defName>
+    </MapMeshFlagDef>
+    
+</Defs>

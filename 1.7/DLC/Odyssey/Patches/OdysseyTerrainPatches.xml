@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/TerrainDef[defName="LavaDeep"]/tags</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/TerrainDef[defName="LavaDeep"]</xpath>
+            <value>
+                <tags />
+            </value>
+        </nomatch>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName="LavaDeep"]/tags</xpath>
+        <value>
+            <li>TKKN_Lava</li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="ToxicWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_ToxicWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="ToxicWaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <riverTerrain>NPS_ToxicWaterMovingShallow</riverTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/TerrainDef[defName="ToxicWaterMovingShallow"]/tags</xpath>
+        <value>
+            <li>NPS_River</li>
+        </value>
+    </Operation>
+
+</Patch>

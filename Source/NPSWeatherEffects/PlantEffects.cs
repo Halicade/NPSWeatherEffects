@@ -85,8 +85,7 @@ public class PlantEffects : Plant
         float temperature = watcherComponent.outdoorTemp;
         if (temperature > 21 &&
             (watcherComponent.season == Season.Spring ||
-             (watcherComponent.season == Season.PermanentSummer &&
-              watcherComponent.quadrum == Quadrum.Aprimay)) &&
+             watcherComponent is { season: Season.PermanentSummer, quadrum: Quadrum.Aprimay }) &&
             effectsHolder.weatherExtension.floweringGraphic != null) {
             if (!displayingFloweringGraphic) {
                 displayingFloweringGraphic = true;

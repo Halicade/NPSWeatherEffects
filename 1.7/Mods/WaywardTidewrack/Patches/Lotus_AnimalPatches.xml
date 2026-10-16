@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Dippet"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach"/>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_SnippySnop"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach">
+                <isCrabCritter>true</isCrabCritter>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/PawnKindDef[defName="ZWB_Flupper"]</xpath>
+        <value>
+            <li Class="NPSWeather.WashUpOnBeach"/>
+        </value>
+    </Operation>
+
+</Patch>

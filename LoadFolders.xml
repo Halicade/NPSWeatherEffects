@@ -3,9 +3,8 @@
   <v1.6>
     <li>/</li>
     <li>1.6</li>
-    <!--Temporary method so I can use Assets instead of AssetBundles
+    
     <li>Source/Assets</li>
-    -->
     
     <!--DLC-->
     <li IfModActive="Ludeon.Rimworld.Odyssey">1.6/DLC/Odyssey</li>
@@ -24,4 +23,30 @@
     <li IfModActive="zylle.waywardbiomes.landreef">1.6/Mods/WaywardTidewrack</li>
 
   </v1.6>
+
+  <v1.7>
+    <li>/</li>
+    <li>1.7</li>
+
+    <!-- No, I'm not moving this folder again. Textures stay where they are cause I'm tired of moving them -->
+    <li>Source/Assets</li>
+
+    <!--DLC-->
+    <li IfModActive="Ludeon.Rimworld.Odyssey">1.7/DLC/Odyssey</li>
+    <li IfModActive="Ludeon.Rimworld.Biotech">1.7/DLC/Biotech</li>
+
+    <!--Mods-->
+    <li IfModActive="sarg.alphabiomes">1.7/Mods/AlphaBiomes</li>
+    <li IfModActive="scurvyez.alienbiomes">1.7/Mods/AlienBiomes</li>
+    <li IfModActive="grimterra.biomesmod">1.7/Mods/Grindterra</li>
+    <li IfModActive="vanillaexpanded.vexploratione">1.7/Mods/LandmarksExpanded</li>
+    <li IfModActive="Hali.NPSBiomes">1.7/Mods/NPSBiomes</li>
+    <li IfModActive="dismarzero.vgp.vgpgardentools">1.7/Mods/VGPGardenTools</li>
+    <li IfModActive="TW.TangsBiome.RainbowForest">1.7/Mods/RainbowForest</li>
+    <li IfModActive="reel.wintertaigabiome2">1.7/Mods/WinterTaigaBiome</li>
+    <li IfModActive="zylle.waywardbiomes.lotuswilds">1.7/Mods/WaywardLotus</li>
+    <li IfModActive="zylle.waywardbiomes.landreef">1.7/Mods/WaywardTidewrack</li>
+
+  </v1.7>
+  
 </loadFolders>

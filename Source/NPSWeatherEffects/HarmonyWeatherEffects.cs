@@ -63,7 +63,7 @@ public class HarmonyWeatherEffects
 
         var harmony = new Harmony("Hali.NPS_WeatherEffects");
         harmony.PatchAll();
-
+        //TODO verify this works with Rimbrellas still
         if (RimBrellasActive) {
             HasUmbrella = AccessTools.MethodDelegate<HasUmbrellaDelegate>(
                 AccessTools.Method("Umbrellas.UmbrellaDefMethods:HasUmbrella"));

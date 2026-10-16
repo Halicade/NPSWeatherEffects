@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="GU_RedWaterOceanShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <tideTerrain>NPS_GU_RedWaterOceanShallow</tideTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TerrainDef[defName="GU_RedWaterMovingShallow"]</xpath>
+        <value>
+            <li Class="NPSWeather.TerrainWeatherReactions">
+                <riverTerrain>NPS_GU_RedWaterMovingShallow</riverTerrain>
+                <temperatureAdjust>-5</temperatureAdjust>
+            </li>
+        </value>
+    </Operation>
+    
+</Patch>

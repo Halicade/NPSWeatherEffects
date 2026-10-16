@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName = "VEE_RisingWaters"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0</tideFactor>
+            </li>
+        </value>
+    </Operation>
+</Patch>

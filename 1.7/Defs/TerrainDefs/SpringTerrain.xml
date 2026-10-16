@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>TKKN_ColdSpringsWater</defName>
+        <label>cold spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>394</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>2</Beauty>
+        </statBases>
+        <tags>
+            <li>ColdSpring</li>
+        </tags>
+        <fertility>0.001</fertility>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterChestDeepBase">
+        <defName>TKKN_ColdSpringsWaterDeep</defName>
+        <label>chest-deep cold spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWaterDeep</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>395</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>2</Beauty>
+        </statBases>
+        <tags>
+            <li>Spring</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>TKKN_HotSpringsWater</defName>
+        <label>hot spring</label>
+        <texturePath>TKKN_NPS/Terrain/springWater</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>394</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <waterBodyType>Other</waterBodyType>
+        <statBases>
+            <Beauty>2</Beauty>
+        </statBases>
+        <tags>
+            <li>Spring</li>
+        </tags>
+        <fertility>0.001</fertility>
+        <throwFleckChance>0.25</throwFleckChance>
+        <fleckData>
+            <fleck>NPS_HotSpringSmoke</fleck>
+            <velocitySpeedRange>0.1~0.5</velocitySpeedRange>
+            <velocityAngleRange>-180~180</velocityAngleRange>
+            <solidTicksRange>1~3</solidTicksRange>
+            <scaleRange>1.7~2.8</scaleRange>
+        </fleckData>
+    </TerrainDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>NPS_HotSpringSmoke</defName>
+        <graphicData>
+            <texPath>Things/Mote/Smoke</texPath>
+            <renderInstanced>true</renderInstanced>
+        </graphicData>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>1.5</fadeInTime>
+        <solidTime>3</solidTime>
+        <fadeOutTime>1.5</fadeOutTime>
+    </FleckDef>
+</Defs>

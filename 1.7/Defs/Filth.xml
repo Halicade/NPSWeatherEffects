@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <!--
+    Puddles dropped from pawns
+    -->
+    <ThingDef ParentName="BaseFilth">
+        <defName>TKKN_FilthPuddle</defName>
+        <label>Puddle</label>
+        <graphicData>
+            <texPath>TKKN_NPS/Temperature/Puddles</texPath>
+            <shaderType>Transparent</shaderType>
+        </graphicData>
+        <filth>
+            <cleaningWorkToReduceThickness>35</cleaningWorkToReduceThickness>
+            <canFilthAttach>true</canFilthAttach>
+            <disappearsInDays>0.4~0.9</disappearsInDays>
+            <allowsFire>false</allowsFire>
+        </filth>
+        <size>(3,3)</size>
+        <statBases>
+            <Beauty>1</Beauty>
+        </statBases>
+        <pathCost>14</pathCost>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseFilth">
+        <defName>TKKN_FilthShells</defName>
+        <label>Shells</label>
+        <graphicData>
+            <texPath>TKKN_NPS/Filth/Shells</texPath>
+        </graphicData>
+        <filth>
+            <cleaningWorkToReduceThickness>10</cleaningWorkToReduceThickness>
+            <canFilthAttach>false</canFilthAttach>
+        </filth>
+        <statBases>
+            <Beauty>1</Beauty>
+        </statBases>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseFilth">
+        <defName>TKKN_FilthSeaweed</defName>
+        <label>seaweed</label>
+        <graphicData>
+            <texPath>TKKN_NPS/Filth/Seaweed</texPath>
+        </graphicData>
+        <filth>
+            <cleaningWorkToReduceThickness>10</cleaningWorkToReduceThickness>
+            <canFilthAttach>false</canFilthAttach>
+        </filth>
+        <statBases>
+            <Beauty>-1</Beauty>
+        </statBases>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseFilth">
+        <defName>TKKN_FilthDriftwood</defName>
+        <label>driftwood</label>
+        <graphicData>
+            <texPath>TKKN_NPS/Filth/Driftwood</texPath>
+        </graphicData>
+        <filth>
+            <cleaningWorkToReduceThickness>10</cleaningWorkToReduceThickness>
+            <canFilthAttach>false</canFilthAttach>
+        </filth>
+    </ThingDef>
+</Defs>

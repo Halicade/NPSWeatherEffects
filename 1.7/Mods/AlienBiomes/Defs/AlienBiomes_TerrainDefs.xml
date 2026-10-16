@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_SmolderingWaterOceanShallow</defName>
+        <label>shallow ocean water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/SmolderingWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>SmolderingWaterOceanShallow</li>
+            <li>Water</li>
+            <li>Salty</li>
+            <li>Shallow</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+    </TerrainDef>
+    
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_SmolderingWaterMovingShallow</defName>
+        <label>shallow moving water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/SmolderingWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>398</renderPrecedence>
+        
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        
+        <waterDepthShaderParameters>
+            <_UseWaterOffset>1</_UseWaterOffset>
+        </waterDepthShaderParameters>
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
+        <tags>
+            <li>RadiantWaterMovingShallow</li>
+            <li>Water</li>
+            <li>Fresh</li>
+            <li>Shallow</li>
+            <li>River</li>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
+    </TerrainDef>
+
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_CrystallineWaterOceanShallow</defName>
+        <label>shallow ocean water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/CrystallineWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        
+        <tags>
+            <li>CrystallineWaterOceanShallow</li>
+            <li>Water</li>
+            <li>Salty</li>
+            <li>Shallow</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+    </TerrainDef>
+
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_CrystallineWaterMovingShallow</defName>
+        <label>shallow moving water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/CrystallineWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>398</renderPrecedence>
+        <waterDepthShaderParameters>
+            <_UseWaterOffset>1</_UseWaterOffset>
+        </waterDepthShaderParameters>
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
+
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>RadiantWaterMovingShallow</li>
+            <li>Water</li>
+            <li>Fresh</li>
+            <li>Shallow</li>
+            <li>River</li>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
+    </TerrainDef>
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_RadiantWaterOceanShallow</defName>
+        <label>shallow ocean water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/RadiantWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>RadiantWaterOceanShallow</li>
+            <li>Water</li>
+            <li>Salty</li>
+            <li>Shallow</li>
+            <li>Flood</li>
+            <li>NPS_Tide</li>
+        </tags>
+    </TerrainDef>
+
+
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_SZ_RadiantWaterMovingShallow</defName>
+        <label>shallow moving water</label>
+        <texturePath>AlienBiomes/Terrain/Surfaces/RadiantWaterShallowRamp</texturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>398</renderPrecedence>
+        <waterDepthShaderParameters>
+            <_UseWaterOffset>1</_UseWaterOffset>
+        </waterDepthShaderParameters>
+        <affordances>
+            <li>MovingFluid</li>
+        </affordances>
+        <driesTo />
+        <canFreeze>false</canFreeze>
+        <temporary>true</temporary>
+        <tags>
+            <li>RadiantWaterMovingShallow</li>
+            <li>Water</li>
+            <li>Fresh</li>
+            <li>Shallow</li>
+            <li>River</li>
+            <li>Flood</li>
+            <li>NPS_River</li>
+        </tags>
+    </TerrainDef>
+
+
+</Defs>

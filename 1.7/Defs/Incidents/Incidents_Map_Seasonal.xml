@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- =========================== Good ============================-->
+  <IncidentDef>
+    <defName>TKKN_WildFlowerBloom</defName>
+    <label>wild flower bloom</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>NPSWeather.IncidentWorker_Bloom</workerClass>
+    <gameCondition>TKKN_WildFlowerBloom</gameCondition>
+    <letterLabel>Wildflowers are blooming!</letterLabel>
+    <letterDef>PositiveEvent</letterDef>
+    <baseChance>1.5</baseChance>
+    <minRefireDays>15</minRefireDays>
+    <durationDays>0.125~0.35</durationDays>
+    <tale>TKKN_WildFlowerBloom</tale>
+  </IncidentDef>
+  
+  <IncidentDef>
+    <defName>TKKN_Superbloom</defName>
+    <label>superbloom</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>NPSWeather.IncidentWorker_Bloom</workerClass>
+    <gameCondition>TKKN_Superbloom</gameCondition>
+    <letterLabel>Superbloom!</letterLabel>
+    <letterDef>PositiveEvent</letterDef>
+    <baseChance>1.2</baseChance>
+    <minRefireDays>15</minRefireDays>
+    <durationDays>0.125~0.35</durationDays>
+    <tale>TKKN_Superbloom</tale>
+  </IncidentDef>
+  
+  <!-- migration using only special herd animals -->
+  <IncidentDef>
+    <defName>TKKN_SpecialHerdMigration</defName>
+    <label>herd migration</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>NPSWeather.TKKN_SpecialHerdMigration</workerClass>
+    <baseChance>0</baseChance>
+    <letterLabel>Animal migration: {0}</letterLabel>
+    <letterText>A group of {0} is passing through the area.\n\nThey won't attack unless provoked.</letterText>
+    <letterDef>NeutralEvent</letterDef>
+  </IncidentDef>
+</Defs>

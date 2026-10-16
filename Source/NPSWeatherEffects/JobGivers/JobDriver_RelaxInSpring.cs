@@ -14,10 +14,10 @@ public class JobDriver_RelaxInSpring : JobDriver
     // Using Skygazing as reference
     protected override IEnumerable<Toil> MakeNewToils() {
         yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.OnCell);
-        Toil toil = ToilMaker.MakeToil("MakeNewToils");
+        Toil toil = ToilMaker.MakeToil("RelaxSpring");
         toil.initAction = delegate { pawn.jobs.posture = PawnPosture.LayingOnGroundFaceUp; };
         toil.tickIntervalAction = delegate(int delta) {
-            JoyUtility.JoyTickCheckEnd(pawn, delta, JoyTickFullJoyAction.EndJob, 1f);
+            JoyUtility.JoyTickCheckEnd(pawn, delta);
             pawn.mindState.lastSwamTick = GenTicks.TicksGame;
         };
         toil.defaultCompleteMode = ToilCompleteMode.Delay;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- =========================== Good ============================-->
+  <IncidentDef ParentName="DiseaseIncident">
+    <defName>TKKN_Disease_Common_Cold</defName>
+    <label>common cold</label>
+    <diseaseIncident>TKKN_CommonCold</diseaseIncident>
+    <letterLabel>Disease: Common cold</letterLabel>
+  </IncidentDef>
+  <IncidentDef ParentName="DiseaseAnimalIncident">
+    <defName>TKKN_Disease_Animal_Common_Cold</defName>
+    <label>common cold (animals)</label>
+    <diseaseIncident>TKKN_Animal_Common_Cold</diseaseIncident>
+    <letterLabel>Animal disease: Common cold</letterLabel>
+  </IncidentDef>
+  <IncidentDef ParentName="DiseaseIncident">
+    <defName>TKKN_Disease_Allergies</defName>
+    <label>allergies</label>
+    <diseaseIncident>TKKN_Allergies</diseaseIncident>
+    <letterLabel>Allergy attack</letterLabel>
+  </IncidentDef>
+  <IncidentDef ParentName="DiseaseAnimalIncident">
+    <defName>TKKN_Disease_Animal_Allergies</defName>
+    <label>allergies (animals)</label>
+    <diseaseIncident>TKKN_Animal_Allergies</diseaseIncident>
+    <letterLabel>Animal allergy attack</letterLabel>
+  </IncidentDef>
+</Defs>

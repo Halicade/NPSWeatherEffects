@@ -655,6 +655,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                 throw new ArgumentOutOfRangeException();
         }
 
+        //TODO make this have a mod extension instead of hard coding
         if (map.gameConditionManager.ConditionIsActive(RimWorld.GameConditionDefOf.Eclipse)) {
             calculatedTide++;
             calculatedTide *= 1.25f;
