@@ -85,7 +85,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     //private float wetPlantsValue;
 
     public bool dontRunAnything;
-    private bool anyLavaTerrain;
 
     private bool doUnpacking;
 
@@ -190,7 +189,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     continue;
                 }
 
-                lavaCellChecks();
                 rainCellChecks();
                 if (!acceleratedChecks) {
                     iceCellChecks();
@@ -280,7 +278,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         Scribe_Values.Look(ref tideLevel, "tideLevel");
         Scribe_Values.Look(ref floodLevel, "floodLevel");
         Scribe_Values.Look(ref doRiverFlooding, "doRiverFlooding", doRiverFlooding);
-        Scribe_Values.Look(ref anyLavaTerrain, "anyLavaTerrain", anyLavaTerrain);
         Scribe_Values.Look(ref checkUpToCell, "checkUpToCell");
         Scribe_Values.Look(ref finishedTideMovement, "finishedTideMovement", true);
         Scribe_Values.Look(ref savedTidalVariant, "savedTidalVariant");
@@ -360,28 +357,6 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         }*/
         return true;
     }
-
-    private void lavaCellChecks() {
-        //spawn special things
-        //TODO move this into NPS biomes
-        if (!anyLavaTerrain) {
-            return;
-        }
-
-        if (Rand.Value < 0.0001f) {
-            if (currentTerrain == TerrainDefOf.TKKN_Lava) {
-                var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_LavaRock);
-                GenSpawn.Spawn(thing, activeCellData.location, map);
-            }
-            else if (currentTerrain == TerrainDefOf.TKKN_LavaRock_RoughHewn &&
-                     map.Biome == BiomeDefOf.TKKN_VolcanicFlow &&
-                     map.listerThings.ThingsOfDef(ThingDefOf.TKKN_SteamVent).Count < 10) {
-                var thing = ThingMaker.MakeThing(ThingDefOf.TKKN_SteamVent);
-                GenSpawn.Spawn(thing, activeCellData.location, map);
-            }
-        }
-    }
-
 
     private void rainCellChecks() {
         if (!EffectSettings.showRainEffects) {
@@ -957,11 +932,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     if (!focusCell.InBounds(map)) {
                         continue;
                     }
-
-                    if (bottomTerrain == TerrainDefOf.TKKN_Lava || bottomTerrain == TerrainDefOf.TKKN_LavaRock_RoughHewn) {
-                        anyLavaTerrain = true;
-                    }
-
+                    
                     if (!TerrainTagUtil.TideHasTempTide.Contains(
                             MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map))) {
                         doCoast = false;
@@ -1236,7 +1207,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     private void SpawnSpecialPlants(IntVec3 c) {
         if (!HarmonyWeatherEffects.NPSBiomesActive)
             return;
-        //TODO see if I can rework function with something more object oriented. Maybe move it into NPS biomes instead?
+        //Can't move this into NPS biomes because TKKN_SandBeachWetSalt isn't set until it reaches the mapComponent
         var terrain = c.GetTerrain(map);
 
         if (terrain == TerrainDefOf.TKKN_SaltField || terrain == TerrainDefOf.TKKN_SandBeachWetSalt) {
