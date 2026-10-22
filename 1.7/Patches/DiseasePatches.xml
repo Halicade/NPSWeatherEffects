@@ -203,7 +203,7 @@
     <Operation Class="PostInheritanceOperation.Patch">
         <operation Class="PatchOperationAdd">
             <xpath>Defs/BiomeDef[not (inVacuum)]
-                /diseases[not (li/diseaseInc[text() = "TKKN_Disease_Common_Cold" or text="TKKN_Disease_Allergies"]) ]</xpath>
+                /diseases[not (li/diseaseInc[text() = "TKKN_Disease_Common_Cold"]) ]</xpath>
             <value>
                 <li>
                     <diseaseInc>TKKN_Disease_Common_Cold</diseaseInc>
@@ -213,6 +213,18 @@
                     <diseaseInc>TKKN_Disease_Animal_Common_Cold</diseaseInc>
                     <commonality>60</commonality>
                 </li>
+            </value>
+        </operation>
+    </Operation>
+
+    <!--
+    Adds default values to any biome mods not listed above or patched from other loadFolders.
+    -->
+    <Operation Class="PostInheritanceOperation.Patch">
+        <operation Class="PatchOperationAdd">
+            <xpath>Defs/BiomeDef[not (inVacuum)]
+                /diseases[not (li/diseaseInc[text()="TKKN_Disease_Allergies"]) ]</xpath>
+            <value>
                 <li>
                     <diseaseInc>TKKN_Disease_Allergies</diseaseInc>
                     <commonality>60</commonality>
