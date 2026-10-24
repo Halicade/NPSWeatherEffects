@@ -16,7 +16,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Lib.Harmony">
-            <Version>3.0.0-rc.3</Version>
+            <Version>*</Version>
             <ExcludeAssets>runtime</ExcludeAssets>
         </PackageReference>
         <PackageReference Include="System.Collections.Immutable">
