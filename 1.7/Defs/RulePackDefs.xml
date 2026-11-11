@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    
+    <RulePackDef>
+        <defName>NPS_MessageInABottle</defName>
+        <include>
+            <li>GlobalUtility</li>
+        </include>
+        <rulePack>
+            <rulesStrings>
+                <li>r_art_description->[NPS_bottle_description]. [NPS_message_description].</li>
+
+                <li>NPS_bottle_description->A [NPS_bottle_adj] bottle with a [NPS_writing_material] inside</li>
+                <li>NPS_bottle_adj->delicate</li>
+                <li>NPS_bottle_adj->fragile</li>
+                <li>NPS_bottle_adj->smooth</li>
+                <li>NPS_bottle_adj->weathered</li>
+                <li>NPS_bottle_adj->glass</li>
+                <li>NPS_bottle_adj->clouded</li>
+
+                <li>NPS_writing_material->piece of paper</li>
+                <li>NPS_writing_material->scrap of paper</li>
+                <li>NPS_writing_material->piece of parchment</li>
+                <li>NPS_writing_material->tattered paper</li>
+                <li>NPS_writing_material->yellowed paper</li>
+                <li>NPS_writing_material->parchment</li>
+                <li>NPS_writing_material->scroll</li>
+                <li>NPS_writing_material->tightly rolled note</li>
+                <li>NPS_writing_material->water-stained letter</li>
+
+                <li>NPS_message_description->[NPS_personal_message]</li>
+                <li>NPS_message_description->[NPS_current_message]</li>
+
+                <li>NPS_personal_message->It tells about a [PersonJob] named [ANYPAWN_label] and [NPS_life_detail]</li>
+                <li>NPS_personal_message->It describes [ANYPAWN_label], and [NPS_life_detail]</li>
+                <li>NPS_personal_message->It is a letter from [ANYPAWN_label], about [NPS_life_detail]</li>
+                <li>NPS_personal_message->It contains a few words about [ANYPAWN_label] and [NPS_life_detail]</li>
+                <li>NPS_personal_message->It tells of a [PersonJob] named [ANYPAWN_label], and [NPS_life_detail]</li>
+                <li>NPS_personal_message->It contains the writings of a child named [ANYPAWN_label]. [NPS_child_writing]</li>
+                
+                <li>NPS_life_detail->how they are shipwrecked on an island. The coordinates they believe they are at indicate this bottle has made a long journey</li>
+                <li>NPS_life_detail->a murder they were responsible for and the guilt surrounding the choice</li>
+                <li>NPS_life_detail->[ANYPAWN_possessive] grieving over the loss of a loved one</li>
+                <li>NPS_life_detail->how they want to become friends with people across the ocean. It seems to be missing a return address</li>
+                <li>NPS_life_detail->[ANYPAWN_possessive] ship. The ship struck a rock and began taking on water. [ANYPAWN_pronoun] is too far for rescue</li>
+                <li>NPS_life_detail->their hope of finding a safe place to call home</li>
+                <li>NPS_life_detail->the strange events that led them to write this letter</li>
+                
+                <li>NPS_child_writing->The handwriting is very messy, and it is difficult to read</li>
+
+                <li>NPS_current_message->It explains that the bottle was released to track ocean currents</li>
+                <li>NPS_current_message->It describes an attempt to map the currents by sending messages out to sea</li>
+                <li>NPS_current_message->It records the bottle's starting point, though the settlement named there is unfamiliar</li>
+                <li>NPS_current_message->It asks whoever finds it to contact the original settlement and let them know. The original location unrecognizable</li>
+                <li>NPS_current_message->It contains an address for a settlement that no longer appears on any map</li>
+                <li>NPS_current_message->It names a faction as the sender, but that faction has since been wiped out</li>
+                <li>NPS_current_message->It bears the name of a faction that is no longer known to exist</li>
+                <li>NPS_current_message->It was sent from a settlement whose fate is left unknown</li>
+                <li>NPS_current_message->The hastily written note speaks of a ship besieged by mechanoids. There is no word on their fate</li>
+                <li>NPS_current_message->It only contains the word [Vegetable]</li>
+                <li>NPS_current_message->It only contains the word [Animal]</li>
+                
+                
+            </rulesStrings>
+        </rulePack>
+    </RulePackDef>
+
+
+</Defs>

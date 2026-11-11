@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <!--
+    Copy of shallow ocean water.
+    Was going to use it for the tidewrack reef mod to replace their terrain, but decided against it because I don't want to confuse people. 
+    
+    Keeping it here in case it can be used for/by other mods
+    -->
+    <TerrainDef ParentName="WaterShallowBase">
+        <defName>NPS_WaterOceanShallow</defName>
+        <label>shallow ocean water</label>
+        <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+        <pollutedTexturePath>Terrain/Surfaces/WaterShallowRampPolluted</pollutedTexturePath>
+        <waterDepthShader>Map/WaterDepth</waterDepthShader>
+        <renderPrecedence>396</renderPrecedence>
+        <driesTo>Gravel</driesTo>
+        <canFreeze>false</canFreeze>
+        <waterBodyType>Saltwater</waterBodyType>
+        <tags>
+            <li>Ocean</li>
+        </tags>
+    </TerrainDef>
+    
+</Defs>

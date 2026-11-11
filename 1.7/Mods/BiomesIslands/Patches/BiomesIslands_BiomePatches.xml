@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    
+    <!--
+    Some biomes have an abstract def that gets inherited by both island, and archipelago biomes. 
+    Patching this onto the abstract one unless I decide to add other customizations later.
+    Halving the tide factor so that the tide doesn't lag the game (as much)
+    -->
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[defName="BMT_Atoll"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[@Name="BMT_BorealIslandBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[@Name="BMT_DesertIslandBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[@Name="BMT_TemperateIslandBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[@Name="BMT_TropicalIslandBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[@Name="BMT_TundraIslandBase"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0.5</tideFactor>
+            </li>
+        </value>
+    </Operation>
+    
+    
+</Patch>

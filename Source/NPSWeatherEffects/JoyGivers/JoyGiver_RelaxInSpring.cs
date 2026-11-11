@@ -46,14 +46,17 @@ public class JoyGiver_RelaxInSpring : JoyGiver
                     return false;
                 }
             }
-
-            if (c.GetTemperature(map) < 10) {
-                return false;
+            
+            var springTerrain = c.GetTerrain(map);
+            if (springTerrain == TerrainDefOf.TKKN_HotSpringsWater) {
+                return true;
             }
 
-            var springTerrain = c.GetTerrain(map);
-            return springTerrain == TerrainDefOf.TKKN_HotSpringsWater ||
-                   springTerrain == TerrainDefOf.TKKN_ColdSpringsWater;
+            if (springTerrain == TerrainDefOf.TKKN_ColdSpringsWater) {
+                return c.GetTemperature(map) > 10;
+            }
+            
+            return false;
         }
     }
 }

@@ -24,7 +24,7 @@ internal class PawnRenderNodeWorker_Body_CanDrawNow
 
         var terrain = pawn.Position.GetTerrain(pawn.MapHeld);
 
-        if (TerrainTagUtil.NPS_DeepWater.Contains(terrain)) {
+        if (TerrainTagUtil.NPS_Water.Contains(terrain)) {
             __result = false;
         }
     }

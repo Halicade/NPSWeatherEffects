@@ -41,7 +41,7 @@ public class BiomeSeasonalSettings : DefModExtension
     //internal use
     public bool diseaseCacheUpdated;
 
-    public void setWeatherBySeason(Map map, Season season, Quadrum quadrum) {
+    public void setWeatherBySeason(Map map, Season season, Quadrum quadrum, bool northernLatitude) {
         if (!EffectSettings.seasonalWeather) {
             return;
         }
@@ -71,25 +71,27 @@ public class BiomeSeasonalSettings : DefModExtension
             case Season.Undefined:
             case Season.PermanentSummer:
             case Season.PermanentWinter:
-            default: {
+            default:
+            {
+
                 switch (quadrum) {
                     case Quadrum.Aprimay:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, springWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, northernLatitude ? springWeathers : fallWeathers);
                         break;
                     case Quadrum.Jugust:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, summerWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, northernLatitude ? summerWeathers : winterWeathers);
                         break;
                     case Quadrum.Septober:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, fallWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, northernLatitude ? fallWeathers : springWeathers);
                         break;
                     case Quadrum.Decembary:
-                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, winterWeathers);
+                        setWeatherCommonalities(map.Biome.baseWeatherCommonalities, map.Biome, northernLatitude ? winterWeathers : summerWeathers);
                         break;
                     case Quadrum.Undefined:
                     default:
                         Log.ErrorOnce(
                             $"NPSWeatherEffects: Could not find an appropriate weather settings for biome: {map.Biome} from mod: {map.Biome.modContentPack?.Name} Season: {season} Quadrum: {quadrum}",
-                            map.Biome.GetHashCode());
+                            1586 ^ map.Biome.GetHashCode());
                         return;
                 }
 
@@ -98,7 +100,10 @@ public class BiomeSeasonalSettings : DefModExtension
         }
 
         if (map.Biome.baseWeatherCommonalities?.Any() == false) {
-            map.Biome.baseWeatherCommonalities = [
+            Log.Error(
+                $"NPSWeatherEffects: Something broke horribly and despite the there are no weather settings for the current map. Please report this. biome: {map.Biome} from mod: {map.Biome.modContentPack?.Name} Season: {season} Quadrum: {quadrum}");
+            map.Biome.baseWeatherCommonalities =
+            [
                 new WeatherCommonalityRecord { commonality = 1f, weather = WeatherDefOf.Clear }
             ];
         }
@@ -122,7 +127,7 @@ public class BiomeSeasonalSettings : DefModExtension
         }
     }
 
-    public void setDiseaseBySeason(Map map, Season season, Quadrum quadrum) {
+    public void setDiseaseBySeason(Map map, Season season, Quadrum quadrum, bool northernLatitude) {
         if (!EffectSettings.seasonalDiseases) {
             return;
         }
@@ -136,41 +141,42 @@ public class BiomeSeasonalSettings : DefModExtension
 
         List<BiomeDiseaseRecord> seasonalDiseases;
         switch (season) {
-            case Season.Spring when springDiseases != null:
+            case Season.Spring:
                 seasonalDiseases = springDiseases;
                 break;
-            case Season.Summer when summerDiseases != null:
+            case Season.Summer:
                 seasonalDiseases = summerDiseases;
                 break;
-            case Season.Fall when fallDiseases != null:
+            case Season.Fall:
                 seasonalDiseases = fallDiseases;
                 break;
-            case Season.Winter when winterDiseases != null:
+            case Season.Winter:
                 seasonalDiseases = winterDiseases;
                 break;
             case Season.Undefined:
             case Season.PermanentSummer:
             case Season.PermanentWinter:
-            default: {
+            default:
+            {
                 switch (quadrum) {
-                    case Quadrum.Aprimay when springDiseases != null:
-                        seasonalDiseases = springDiseases;
-                        break;
+                    case Quadrum.Aprimay:
 
-                    case Quadrum.Jugust when summerDiseases != null:
-                        seasonalDiseases = summerDiseases;
+                        seasonalDiseases = northernLatitude ? springDiseases : fallDiseases;
                         break;
-                    case Quadrum.Septober when fallDiseases != null:
-                        seasonalDiseases = fallDiseases;
+                    case Quadrum.Jugust:
+                        seasonalDiseases = northernLatitude ? summerDiseases : winterDiseases;
                         break;
-                    case Quadrum.Decembary when winterDiseases != null:
-                        seasonalDiseases = winterDiseases;
+                    case Quadrum.Septober:
+                        seasonalDiseases = northernLatitude ? fallDiseases : springDiseases;
+                        break;
+                    case Quadrum.Decembary:
+                        seasonalDiseases = northernLatitude ? winterDiseases : summerDiseases;
                         break;
                     case Quadrum.Undefined:
                     default:
                         Log.ErrorOnce(
                             $"NPSWeatherEffects: Could not find an appropriate weather settings for biome: {map.Biome} from mod: {map.Biome.modContentPack?.Name} Season: {season} Quadrum: {quadrum}",
-                            map.Biome.GetHashCode());
+                            456 ^ map.Biome.GetHashCode());
                         return;
                 }
 
@@ -186,7 +192,7 @@ public class BiomeSeasonalSettings : DefModExtension
         diseaseCacheUpdated = false;
     }
 
-    public void setIncidentsBySeason(Map map, Season season, Quadrum quadrum) {
+    public void setIncidentsBySeason(Map map, Season season, Quadrum quadrum, bool northernLatitude) {
         if (!EffectSettings.seasonalIncidents) {
             return;
         }
@@ -200,40 +206,41 @@ public class BiomeSeasonalSettings : DefModExtension
 
         List<TKKN_IncidentCommonalityRecord> seasonalIncidents;
         switch (season) {
-            case Season.Spring when springEvents != null:
+            case Season.Spring:
                 seasonalIncidents = springEvents;
                 break;
-            case Season.Summer when summerEvents != null:
+            case Season.Summer:
                 seasonalIncidents = summerEvents;
                 break;
-            case Season.Fall when fallEvents != null:
+            case Season.Fall:
                 seasonalIncidents = fallEvents;
                 break;
-            case Season.Winter when winterEvents != null:
+            case Season.Winter:
                 seasonalIncidents = winterEvents;
                 break;
             case Season.Undefined:
             case Season.PermanentSummer:
             case Season.PermanentWinter:
-            default: {
+            default:
+            {
                 switch (quadrum) {
-                    case Quadrum.Aprimay when springEvents != null:
-                        seasonalIncidents = springEvents;
+                    case Quadrum.Aprimay:
+                        seasonalIncidents = northernLatitude ? springEvents : fallEvents;
                         break;
-                    case Quadrum.Jugust when summerEvents != null:
-                        seasonalIncidents = summerEvents;
+                    case Quadrum.Jugust:
+                        seasonalIncidents = northernLatitude ? summerEvents : winterEvents;
                         break;
-                    case Quadrum.Septober when fallEvents != null:
-                        seasonalIncidents = fallEvents;
+                    case Quadrum.Septober:
+                        seasonalIncidents = northernLatitude ? fallEvents : springEvents;
                         break;
-                    case Quadrum.Decembary when winterEvents != null:
-                        seasonalIncidents = winterEvents;
+                    case Quadrum.Decembary:
+                        seasonalIncidents = northernLatitude ? winterEvents : summerEvents;
                         break;
                     case Quadrum.Undefined:
                     default:
                         Log.ErrorOnce(
                             $"NPSWeatherEffects: Could not find an appropriate weather settings for biome: {map.Biome} from mod: {map.Biome.modContentPack?.Name} Season: {season} Quadrum: {quadrum}",
-                            map.Biome.GetHashCode());
+                            4367 ^ map.Biome.GetHashCode());
                         return;
                 }
 

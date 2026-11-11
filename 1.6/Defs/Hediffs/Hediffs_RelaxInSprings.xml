@@ -32,7 +32,8 @@
           </li>
         </capMods>
         <statOffsets>
-          <ComfyTemperatureMin>-5</ComfyTemperatureMin>
+          <!--This feels large, but it's to offset the temperature change from being wet due to the hot spring-->
+          <ComfyTemperatureMin>-15</ComfyTemperatureMin>
         </statOffsets>
       </li>
     </stages>

@@ -46,6 +46,7 @@
     <li IfModActive="reel.wintertaigabiome2">1.7/Mods/WinterTaigaBiome</li>
     <li IfModActive="zylle.waywardbiomes.lotuswilds">1.7/Mods/WaywardLotus</li>
     <li IfModActive="zylle.waywardbiomes.landreef">1.7/Mods/WaywardTidewrack</li>
+    <li IfModActive="BiomesTeam.BiomesIslands">1.7/Mods/BiomesIslands</li>
 
   </v1.7>
   

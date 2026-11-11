@@ -52,8 +52,6 @@ My main motivation for making this was improving performance. As such, I did all
 ### Compatibility
 
 For specific compatibility please see https://github.com/Halicade/NPSWeatherEffects/blob/Main/ModCompatibility.md
-There are some warnings that pop up in the logs at startup if other mods patch certain methods are detected.
-Terraforming mods should be compatible. However, if a wet terrain block is terraformed, it may not be affected until save and reload.
 
 This should be save compatible. As with any mod that adds items/terrain hash collisions are possible. While I don't recommend removal, there is an option to disable all weather effects and will remove all effects from the current map.
 
@@ -62,8 +60,8 @@ This should be save compatible. As with any mod that adds items/terrain hash col
 tkkntkkn - Original creator of this mod
 mlie - Continued this mod so I was able to find it
 Paradox - Helped with bugs, testing, and general balance
-Rogue The Rogue - Helped with bugs, testing, and suggested new features
-Rimworld discord - Helped with general balance and comforted me during my descent into madness
+Roque The Rogue - Helped with bugs, testing, and suggested new features
+RimRimworld discord - Helped with general balance, optimizations, and watched my descent into madness
 
 ### Bug reports
 

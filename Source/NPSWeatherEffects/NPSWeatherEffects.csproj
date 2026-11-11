@@ -15,12 +15,11 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony">
-            <Version>*</Version>
-            <ExcludeAssets>runtime</ExcludeAssets>
+        <PackageReference Include="Lib.Harmony.Ref">
+          <Version>3.0.0-*</Version>
         </PackageReference>
         <PackageReference Include="System.Collections.Immutable">
-            <Version>11.0.0-rc.2.26504.105</Version>
+            <Version>11.0.0-rc.3.26522.148</Version>
         </PackageReference>
     </ItemGroup>
     <ItemGroup>

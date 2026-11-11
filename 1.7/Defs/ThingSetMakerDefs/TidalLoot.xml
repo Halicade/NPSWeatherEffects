@@ -85,6 +85,13 @@
                                 <thingDefs>
                                     <li>Kibble</li>
                                     <li MayRequire="Ludeon.Rimworld.Anomaly">Meat_Twisted</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Salmon</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Cod</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Bluefish</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Dogfish</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Marlin</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Tuna</li>
+                                    <li MayRequire="Ludeon.Rimworld.Odyssey">Fish_Flounder</li>
                                 </thingDefs>
                             </filter>
                             <countRange>6~34</countRange>

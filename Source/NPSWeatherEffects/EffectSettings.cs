@@ -9,6 +9,7 @@ public class EffectSettings : ModSettings
     public static int modsPatchingTemperature = 0;
     public static bool leaveLoot = true;
     public static bool forbidLoot = true;
+    public static int messageInBottleSelector = 0;
 
     public static bool spawnLavaOnlyInBiome = true;
     public static bool allowLavaEruption = true;
@@ -42,7 +43,7 @@ public class EffectSettings : ModSettings
     public static bool regenCells;
     public static bool doTides = true;
     public static bool doWetSand = true;
-    public static bool showDevReadout;
+    public static bool showDevReadout = false;
 
     public static bool doFloods = true;
     public static int maxCellsPerTick = 75;
@@ -81,6 +82,7 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref doFloods, "doFloods", true);
         Scribe_Values.Look(ref leaveLoot, "leaveStuff", true);
         Scribe_Values.Look(ref forbidLoot, "forbidLoot", true);
+        Scribe_Values.Look(ref messageInBottleSelector, "messageInBottleSelector", 0);
 
         Scribe_Values.Look(ref doIce, "doIce", true);
         Scribe_Values.Look(ref doExtraIce, "doExtraIce", false);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Patch>
+
+    <!--
+    Their biome has patchmakers that make shallow ocean water. 
+    Sounds cool but then the tide forming from random patches of water is just weird.
+    
+    Their biome does not spawn near ocean tiles so I'm just changing the tideFactor to 0
+    -->
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/BiomeDef[defName="ZWB_TidewrackReef"]</xpath>
+        <value>
+            <li Class="NPSWeather.BiomeSeasonalSettings">
+                <tideFactor>0</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+</Patch>

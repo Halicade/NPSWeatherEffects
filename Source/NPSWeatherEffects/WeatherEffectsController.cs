@@ -90,7 +90,8 @@ public class WeatherEffectsController : Mod
 
     private void generateTabs() {
         if (cachedTabs.NullOrEmpty()) {
-            cachedTabs = [
+            cachedTabs =
+            [
                 new TabRecord("NPS_weatherEffectsHeader".Translate(),
                     delegate { activeTab = SettingTab.WeatherEffects; },
                     () => activeTab == SettingTab.WeatherEffects),
@@ -191,11 +192,23 @@ public class WeatherEffectsController : Mod
                 "NPS_doFloods_title".Translate(),
                 ref EffectSettings.doFloods,
                 "NPS_doFloods_text".Translate());
+            if (HarmonyWeatherEffects.RiverModifyingModActive && EffectSettings.doFloods) {
+                Text.Font = GameFont.Tiny;
+                list.Label("NPS_WaterAffectingMod".Translate()
+                    .Colorize(Color.yellow));
+                Text.Font = GameFont.Small;
+            }
 
             list.CheckboxLabeled(
                 "NPS_doTides_title".Translate(),
                 ref EffectSettings.doTides,
                 "NPS_doTides_text".Translate());
+            if (HarmonyWeatherEffects.OceanModifyingModActive && EffectSettings.doTides) {
+                Text.Font = GameFont.Tiny;
+                list.Label("NPS_WaterAffectingMod".Translate()
+                    .Colorize(Color.yellow));
+                Text.Font = GameFont.Small;
+            }
 
             list.CheckboxLabeled(
                 "NPS_doWetSand_title".Translate(),
@@ -403,6 +416,7 @@ public class WeatherEffectsController : Mod
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
                 EffectSettings.regenCells = true;
+                watcherComponent.settingsForcedDontRunAnything = false;
                 watcherComponent.RemoveEffects();
                 watcherComponent.RebuildCellLists();
                 Messages.Message("NPS_RebuildingFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
@@ -415,19 +429,51 @@ public class WeatherEffectsController : Mod
             if (list.ButtonText(label: "NPS_removeEffects".Translate())) {
                 Map currentMap = Current.Game.CurrentMap;
                 var watcherComponent = currentMap.GetComponent<Watcher>();
-                EffectSettings.regenCells = true;
+                EffectSettings.regenCells = false;
+                watcherComponent.settingsForcedDontRunAnything = true;
+                watcherComponent.dontRunAnything = true;
                 watcherComponent.RemoveEffects();
                 Messages.Message("NPS_RemovalFinished".Translate(), MessageTypeDefOf.NeutralEvent, false);
                 EffectSettings.regenCells = false;
             }
         }
+        list.End();
 
+        list.Begin(theBox.RightPart(0.49f));
+        Text.Font = GameFont.Medium;
+        list.Label("NPS_MessageInABottleSettings".Translate());
+        Text.Font = GameFont.Small;
+
+
+        if (list.RadioButton("NPS_bothMessages_title".Translate(),
+                EffectSettings.messageInBottleSelector == 0,
+                tooltip: "NPS_bothMessages_text".Translate())) {
+            EffectSettings.messageInBottleSelector = 0;
+        }
+
+        if (list.RadioButton("NPS_travelerMessages_title".Translate(),
+                EffectSettings.messageInBottleSelector == 1,
+                tooltip: "NPS_travelerMessages_text".Translate())) {
+            EffectSettings.messageInBottleSelector = 1;
+        }
+
+        if (list.RadioButton("NPS_TipMessages_title".Translate(),
+                EffectSettings.messageInBottleSelector == 2,
+                tooltip: "NPS_TipMessages_text".Translate())) {
+            EffectSettings.messageInBottleSelector = 2;
+        }
         list.End();
     }
 
     private void DrawPlantEffectsTab() {
         Listing_Standard list = new Listing_Standard();
         Rect smallRect = new Rect(theBox.x, theBox.y, theBox.width, 50f);
+        if (HarmonyWeatherEffects.CombatExtendedActive) {
+            list.Begin(smallRect);
+            list.Label("NPS_CETurnOffTextureEffects".Translate());
+            list.End();
+            return;
+        }
         Rect columnOne = smallRect.LeftPart(0.35f);
         list.Begin(columnOne);
         list.CheckboxLabeled(

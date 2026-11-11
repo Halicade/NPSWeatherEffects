@@ -85,6 +85,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     //private float wetPlantsValue;
 
     public bool dontRunAnything;
+    public bool settingsForcedDontRunAnything;
 
     private bool doUnpacking;
 
@@ -118,6 +119,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
     public Season season;
     public Quadrum quadrum;
     public Quadrum previousQuadrum = Quadrum.Undefined;
+    public bool northernLatitude;
     public bool droughtActive;
 
     private const int MapCheckInterval = 625;
@@ -283,6 +285,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         Scribe_Values.Look(ref savedTidalVariant, "savedTidalVariant");
         Scribe_Values.Look(ref savedHowManyTideSteps, "savedHowManyTideSteps", -1);
         Scribe_Values.Look(ref savedRevision, "savedRevision");
+        Scribe_Values.Look(ref settingsForcedDontRunAnything, "settingsForcedDontRunAnything");
     }
 
 
@@ -298,6 +301,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
         quadrum = GenDate.Quadrum(ticks, location.x);
 
         season = GenDate.Season(ticks, location);
+        northernLatitude = location.y > 0;
         droughtActive = false;
         foreach (var gameCondition in map.gameConditionManager.ActiveConditions) {
             if (gameCondition.def == GameConditionDefOf.TKKN_Drought ||
@@ -316,9 +320,9 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             return;
 
 
-        biomeSettings.setWeatherBySeason(map, season, quadrum);
-        biomeSettings.setDiseaseBySeason(map, season, quadrum);
-        biomeSettings.setIncidentsBySeason(map, season, quadrum);
+        biomeSettings.setWeatherBySeason(map, season, quadrum, northernLatitude);
+        biomeSettings.setDiseaseBySeason(map, season, quadrum, northernLatitude);
+        biomeSettings.setIncidentsBySeason(map, season, quadrum, northernLatitude);
     }
 
     private bool waterChanged;
@@ -799,6 +803,10 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             if (EffectSettings.regenCells) {
                 regenCellLists = true;
             }
+            if (settingsForcedDontRunAnything) {
+                dontRunAnything = true;
+                return;
+            }
 
             //rebuild lookup lists.
 
@@ -932,9 +940,8 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                     if (!focusCell.InBounds(map)) {
                         continue;
                     }
-                    
-                    if (!TerrainTagUtil.TideHasTempTide.Contains(
-                            MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map))) {
+
+                    if (MapGenUtility.ShallowOceanWaterTerrainAt(focusCell, map)?.GetModExtension<TerrainWeatherReactions>()?.tideTerrain == null) {
                         doCoast = false;
                     }
 
@@ -990,7 +997,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                                         List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
                                         string mutatorList = "";
                                         if (mutators?.NullOrEmpty() == true) {
-                                            foreach (var mutator in mutatorList) {
+                                            foreach (var mutator in mutators) {
                                                 mutatorList += mutator + ", ";
                                             }
                                         }
@@ -1055,7 +1062,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
                                         List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
                                         string mutatorList = "";
                                         if (mutators?.NullOrEmpty() == true) {
-                                            foreach (var mutator in mutatorList) {
+                                            foreach (var mutator in mutators) {
                                                 mutatorList += mutator + ", ";
                                             }
                                         }
@@ -1199,9 +1206,22 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             SetUpWeatherEffects();
             regenCellLists = false;
         }
+        catch (Exception e) {
+            List<TileMutatorDef> mutators = map.TileInfo.mutatorsNullable;
+            string mutatorList = "";
+            if (mutators?.NullOrEmpty() == true) {
+                foreach (var mutator in mutators) {
+                    mutatorList += mutator + ", ";
+                }
+            }
+            Log.Error("NPSWeatherEffects:  Biome: " + map.Biome +
+                      (mutatorList.Length > 0 ? " Mutators: " + mutatorList : "") +
+                      "There was an error while rebuilding cells "+e);
+        }
         finally {
             Rand.PopState();
         }
+        
     }
 
     private void SpawnSpecialPlants(IntVec3 c) {

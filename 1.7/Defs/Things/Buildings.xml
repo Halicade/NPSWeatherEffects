@@ -52,7 +52,7 @@
     <defName>NPS_MessageInABottle</defName>
     <label>message in a bottle</label>
     <description>A weathered bottle that washed up on the shore; it contains a message inside. The bottle is fragile and can't be repaired.</description>
-    <thingClass>Building_Art</thingClass>
+    <thingClass>NPSWeather.Bottle</thingClass>
     <inspectorTabs>
       <li>ITab_Art</li>
     </inspectorTabs>

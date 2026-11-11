@@ -18,11 +18,21 @@ public class HarmonyWeatherEffects
     // https://steamcommunity.com/sharedfiles/filedetails/?id=3403972335
     public static readonly bool StorytellerJianghuActive;
 
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=3542918378
     public static readonly bool WaterFreezesActive;
 
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=3047040031
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=2045114229
     public static readonly bool SeasonalWeatherModActive;
-    
+
     public static readonly bool NPSBiomesActive;
+
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044
+    // https://steamcommunity.com/sharedfiles/filedetails/?id=3495749827
+    public static readonly bool CombatExtendedActive;
+    
+    public static readonly bool OceanModifyingModActive;
+    public static readonly bool RiverModifyingModActive;
 
     public delegate bool HasUmbrellaDelegate(Pawn pawn);
 
@@ -42,6 +52,10 @@ public class HarmonyWeatherEffects
         WaterFreezesActive = ModLister.AnyModActiveNoSuffix(["mlie.waterfreezes"]);
         SeasonalWeatherModActive = ModLister.AnyModActiveNoSuffix(["nightmare.weathercontrol", "mlie.seasonalweather"]);
         NPSBiomesActive = ModLister.AnyModActiveNoSuffix(["Hali.NPSBiomes"]);
+        CombatExtendedActive = ModLister.AnyModActiveNoSuffix(["CETeam.CombatExtended"]);
+        OceanModifyingModActive = ModLister.AnyModActiveNoSuffix(["patrickschwarzer.waves", "HoloceneHorror.RealisticRivers"]);
+        RiverModifyingModActive =ModLister.AnyModActiveNoSuffix(["patrickschwarzer.rivers", "HoloceneHorror.RealisticRivers"]);
+        
 
         if (ModsConfig.OdysseyActive) {
             EffectSettings.doIce = false;
@@ -60,17 +74,19 @@ public class HarmonyWeatherEffects
             EffectSettings.seasonalWeather = false;
         }
 
+        if (CombatExtendedActive) {
+            EffectSettings.allowPlantEffects = false;
+        }
+
 
         var harmony = new Harmony("Hali.NPS_WeatherEffects");
-        harmony.PatchAll();
-        //TODO verify this works with Rimbrellas still
+        harmony.PatchAll(Assembly.GetExecutingAssembly());
         if (RimBrellasActive) {
-            HasUmbrella = AccessTools.MethodDelegate<HasUmbrellaDelegate>(
-                AccessTools.Method("Umbrellas.UmbrellaDefMethods:HasUmbrella"));
+            HasUmbrella = AccessTools.MethodDelegate<HasUmbrellaDelegate>(AccessTools.Method("Umbrellas.UmbrellaDefMethods:HasUmbrella"));
 
             if (HasUmbrella == null) {
                 Log.Warning(
-                    "NPSWeatherEffects: Rimbrella loaded but could not find the correct method to check for umbrellas");
+                    "NPSWeatherEffects: Rimbrellas loaded but could not find the correct method to check for umbrellas");
                 RimBrellasActive = false;
             }
         }

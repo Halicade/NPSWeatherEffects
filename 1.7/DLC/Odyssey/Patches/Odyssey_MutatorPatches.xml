@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    
+    <!--
+    Decreasing the tide factor on these to reduce potential lag 
+    -->
+    
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="Archipelago"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="CoastalIsland"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="Peninsula"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="CoastalAtoll"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="Fjord"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAddModExtension">
+        <xpath>Defs/TileMutatorDef[defName="Bay"]</xpath>
+        <value>
+            <li Class="NPSWeather.MutatorSettings">
+                <tideFactor>0.6</tideFactor>
+            </li>
+        </value>
+    </Operation>
+
+
+
+</Patch>

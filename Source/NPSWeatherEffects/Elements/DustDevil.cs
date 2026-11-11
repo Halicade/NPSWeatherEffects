@@ -324,7 +324,7 @@ public class DustDevil : ThingWithComps
                 {
                     var pawn = (Pawn)thing;
                     battleLogEntry_DamageTaken =
-                        new BattleLogEntry_DamageTaken(pawn, RulePackDefOf.DamageEvent_Tornado);
+                        new BattleLogEntry_DamageTaken(pawn, RimWorld.RulePackDefOf.DamageEvent_Tornado);
                     Find.BattleLog.Add(battleLogEntry_DamageTaken);
                     if (pawn.RaceProps.baseHealthScale < 1f)
                     {

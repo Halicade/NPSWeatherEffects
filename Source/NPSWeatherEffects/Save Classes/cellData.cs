@@ -13,7 +13,6 @@ public class cellData : IExposable
 
     private const int UnpackAt = PackAt / 2;
 
-    //public TerrainDef baseTerrain;
     public int riverLevel = 999;
     public IntVec3 riverFocus = IntVec3.Invalid;
     public float frostLevel;
@@ -268,7 +267,7 @@ public class cellData : IExposable
             setTerrainWater();
         }
 
-        leaveLoot();
+        leaveLoot(true);
     }
 
     /// <summary>
@@ -317,7 +316,7 @@ public class cellData : IExposable
             setTerrainWet();
         }
 
-        leaveLoot();
+        leaveLoot(false);
     }
 
     public void Unpack() {
@@ -421,13 +420,13 @@ public class cellData : IExposable
         ThingDefOf.TKKN_FilthDriftwood
     ];
 
-    private void leaveLoot() {
+    private void leaveLoot(bool tide) {
         if (!EffectSettings.leaveLoot) {
             return;
         }
 
         switch (Rand.Value) {
-            case < 0.001f:
+            case < 0.001f when tide:
             {
                 if (!checkTileValidForLoot()) {
                     return;
@@ -452,8 +451,8 @@ public class cellData : IExposable
                 if (!checkTileValidForLoot()) {
                     return;
                 }
-
-                List<Thing> allowed = ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate();
+                List<Thing> allowed = [];
+                allowed = tide ? ThingSetMakerDefOf.TKKN_TidalLoot.root.Generate() : ThingSetMakerDefOf.TKKN_RiverLoot.root.Generate();
 
                 if (allowed == null) {
                     return;
@@ -462,12 +461,6 @@ public class cellData : IExposable
                 for (int i = 0; i < allowed.Count; i++) {
                     Thing thing = allowed[i];
                     Thing innerThing = thing is MinifiedThing minified ? minified.InnerThing : thing;
-                    // For some reason, if an art thing doesn't have quality it doesn't try to generate an art description.
-                    // Need to do this manually
-                    if (innerThing.def == ThingDefOf.NPS_MessageInABottle) {
-                        innerThing.TryGetComp<BottleMessage>()?.InitializeArt(ArtGenerationContext.Outsider);
-                    }
-
                     innerThing.HitPoints = (int)(innerThing.HitPoints * Rand.Range(0.1f, 1f));
                     var spawnedThing = GenSpawn.Spawn(thing, location, map);
                     if (EffectSettings.forbidLoot) {
@@ -477,10 +470,10 @@ public class cellData : IExposable
 
                 break;
             }
-            case < 0.003f when location.GetPlant(map) == null && location.GetCover(map) == null:
+            case < 0.003f when tide && location.GetPlant(map) == null && location.GetCover(map) == null:
             {
                 if (!checkTileValidForLoot()) {
-                    return;
+                    break;
                 }
 
                 //grow water and shore plants:

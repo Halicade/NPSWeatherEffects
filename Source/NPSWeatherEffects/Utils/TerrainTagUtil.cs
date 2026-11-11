@@ -10,8 +10,6 @@ public static class TerrainTagUtil
     private static readonly HashSet<TerrainDef> HashNPS_DeepWater = [];
     private static readonly HashSet<TerrainDef> HashLava = [];
     private static readonly HashSet<TerrainDef> HashCanBePacked = [];
-    private static readonly HashSet<TerrainDef> HashTide = [];
-    private static HashSet<TerrainDef> HashTideHasTempTide = [];
     private static readonly HashSet<TerrainDef> HashRiver = [];
 
     private static readonly Dictionary<TerrainDef, float> HashAmbientTempReaction = [];
@@ -20,7 +18,6 @@ public static class TerrainTagUtil
     public static FrozenSet<TerrainDef> NPS_DeepWater = [];
     public static FrozenSet<TerrainDef> Lava = [];
     public static FrozenSet<TerrainDef> CanBePacked = [];
-    public static FrozenSet<TerrainDef> TideHasTempTide = [];
     public static FrozenSet<TerrainDef> NPS_River = [];
     public static FrozenDictionary<TerrainDef, float> AmbientTempReaction = [];
 
@@ -50,10 +47,6 @@ public static class TerrainTagUtil
             }
 
             if (terrain.temporary) {
-                //TODO remember where NPS_Tide was supposed to be used
-                if (terrain.HasTag("NPS_Tide")) {
-                    HashTide.Add(terrain);
-                }
 
                 if (terrain.HasTag("NPS_River")) {
                     HashRiver.Add(terrain);
@@ -81,8 +74,6 @@ public static class TerrainTagUtil
                         Log.Error(
                             $"NPSWeatherEffects: Terrain {terrain} has an extension indicating {weatherExtension.tideTerrain} is a tide terrain. But it is not temporary.");
                     }
-
-                    HashTideHasTempTide.Add(terrain);
                 }
 
                 if (weatherExtension.riverTerrain is { } riverTerrain) {
@@ -103,7 +94,6 @@ public static class TerrainTagUtil
         NPS_DeepWater = HashNPS_DeepWater.ToFrozenSet();
         Lava = HashLava.ToFrozenSet();
         CanBePacked = HashCanBePacked.ToFrozenSet();
-        TideHasTempTide = HashTideHasTempTide.ToFrozenSet();
         NPS_River = HashRiver.ToFrozenSet();
         AmbientTempReaction = HashAmbientTempReaction.ToFrozenDictionary();
         // Don't need the original dicts
@@ -111,7 +101,6 @@ public static class TerrainTagUtil
         HashNPS_DeepWater.Clear();
         HashLava.Clear();
         HashCanBePacked.Clear();
-        HashTideHasTempTide.Clear();
         HashRiver.Clear();
         HashAmbientTempReaction.Clear();
     }
