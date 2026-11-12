@@ -1,6 +1,4 @@
-# [Nature's Pretty Sweet: Weather Effects](https://steamcommunity.com/sharedfiles/filedetails/?id=3542949511)
-
-TODO update link
+# [Nature's Pretty Sweet: Weather Effects](https://steamcommunity.com/sharedfiles/filedetails/?id=3838152996)
 
 This is an update and rework of the mod Natures Pretty Sweet
 Originally created by tkkntkkns
