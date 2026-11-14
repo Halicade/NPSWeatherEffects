@@ -648,9 +648,12 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
 
     private void DoTides(bool force = false) {
         if (!force) {
-            if (!doCoast || !EffectSettings.doTides || ticksWithModifier % TideIntervalCheck != 0) {
+            if (!doCoast || ticksWithModifier % TideIntervalCheck != 0) {
                 return;
             }
+        }
+        if (!EffectSettings.doTides) {
+            return;
         }
 
         if (finishedTideMovement) {
