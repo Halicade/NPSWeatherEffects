@@ -21,6 +21,7 @@ public class WeatherEffectsController : Mod
         if (!EffectSettings.allowPawnEffects) {
             EffectSettings.pawnEffectsOnlyColonists = false;
             EffectSettings.allowPawnsToGetWet = false;
+            EffectSettings.allowPawnsPuddles = false;
             EffectSettings.allowPawnsDrowning = false;
             EffectSettings.allowPawnsSwim = false;
             EffectSettings.doDirtPath = false;
@@ -349,6 +350,13 @@ public class WeatherEffectsController : Mod
                 "NPS_allowPawnsToGetWet_title".Translate(),
                 ref EffectSettings.allowPawnsToGetWet,
                 "NPS_allowPawnsToGetWet_text".Translate());
+            
+            if (EffectSettings.allowPawnsToGetWet) {
+                list.CheckboxLabeled(
+                    "NPS_allowPawnsToDropPuddles_title".Translate(),
+                    ref EffectSettings.allowPawnsPuddles,
+                    "NPS_allowPawnsToDropPuddles_text".Translate());
+            }
 
             list.CheckboxLabeled(
                 "NPS_allowPawnsToDrown_title".Translate(),

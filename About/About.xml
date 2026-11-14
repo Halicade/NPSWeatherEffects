@@ -5,7 +5,7 @@
     <packageId>Hali.NPSWeatherEffects</packageId>
     <author>tkkntkkn, mlie, halicade</author>
     <url>https://github.com/halicade/NPSWeatherEffects</url>
-    <modVersion>1.7-Avocet</modVersion>
+    <modVersion>1.7-Bunting</modVersion>
     <supportedVersions>
         <li>1.6</li>
         <li>1.7</li>
@@ -22,6 +22,9 @@
         <li>ludeon.rimworld</li>
         <li>ludeon.rimworld.odyssey</li>
     </loadAfter>
+    <incompatibleWith>
+        <li>Mlie.NaturesPrettySweet</li>
+    </incompatibleWith>
     <description>A continued version of Nature's Pretty Sweet. Reworked and split up into only the weather effects portion of the mod.
     </description>
 </ModMetaData>

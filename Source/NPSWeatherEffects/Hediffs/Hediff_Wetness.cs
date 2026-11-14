@@ -56,8 +56,14 @@ public class Hediff_Wetness : HediffWithComps
         }
 
         if (storedWetness < 0 && Severity > 0.4 && pawn.IsHashIntervalTick(1000, delta)) {
-            if (FilthMaker.TryMakeFilth(position, map, ThingDefOf.TKKN_FilthPuddle))
+            if (EffectSettings.allowPawnsPuddles) {
+                if (FilthMaker.TryMakeFilth(position, map, ThingDefOf.TKKN_FilthPuddle)) {
+                    Severity -= 0.1f;
+                }
+            }
+            else {
                 Severity -= 0.1f;
+            }
         }
 
         Severity += storedWetness * delta;

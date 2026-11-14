@@ -825,7 +825,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             riverCellsList.Clear();
 
             if (!regenCellLists && CurrentRevision != savedRevision) {
-                Log.Message("NPSWeatherEffects had to make some large changes. Recreating map effects.");
+                Log.Message("NPSWeatherEffects: had to make some large changes. Recreating map effects.");
                 RemoveEffects();
                 regenCellLists = true;
             }
@@ -856,7 +856,7 @@ public class Watcher(Map map) : MapComponent(map), IDisposable
             doCoast = map.TileInfo.IsCoastal;
             SurfaceTile surfaceTile = (SurfaceTile)map.TileInfo;
             if (surfaceTile == null) {
-                Log.Error("NPSWeatherEffects Looking for a river on a map that isn't a surface tile");
+                Log.Error("NPSWeatherEffects: Looking for a river on a map that isn't a surface tile");
             }
 
             if (!surfaceTile.Rivers.NullOrEmpty()) {

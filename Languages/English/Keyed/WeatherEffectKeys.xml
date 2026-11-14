@@ -58,8 +58,8 @@
     <NPS_rainIncreaseFertility_text>When it rains, plants will grow faster\n\nRequires restart.</NPS_rainIncreaseFertility_text>
     <NPS_notRecommendedWetFertility>For balancing reasons, it is not recommended to use this with "Show wet terrain" option.</NPS_notRecommendedWetFertility>
     
-    <NPS_makePuddles_title>Make puddles</NPS_makePuddles_title>
-    <NPS_makePuddles_text>Puddles can appear when it rains or when snow melts.</NPS_makePuddles_text>
+    <NPS_makePuddles_title>Puddle effects</NPS_makePuddles_title>
+    <NPS_makePuddles_text>Puddles effects can appear on the map when it rains. This is purely visual.</NPS_makePuddles_text>
     
     <NPS_waterEffects>Water Effects:</NPS_waterEffects>
     <NPS_doFloods_title>River level changes</NPS_doFloods_title>
@@ -137,6 +137,8 @@
     <NPS_DoColdBreath_text>When it gets cold, pawns will occasionally emit cold breath effects. This is more noticeable than base game cold breath.</NPS_DoColdBreath_text>
     <NPS_allowPawnsToGetWet_title>Allow pawns to get wet</NPS_allowPawnsToGetWet_title>
     <NPS_allowPawnsToGetWet_text>Pawns will get a wetness hediff when in water or rain. It will affect their comfortable temperature.\nThis will also slightly increase how long the "Soaking wet" thought is applied.\n\nRequires restart to reset.</NPS_allowPawnsToGetWet_text>
+    <NPS_allowPawnsToDropPuddles_title>Pawns can make puddles</NPS_allowPawnsToDropPuddles_title>
+    <NPS_allowPawnsToDropPuddles_text>When wet, pawns can occasionally drop puddles of water. These are considered filth and need to be cleaned up.</NPS_allowPawnsToDropPuddles_text>
     <NPS_allowPawnsSwim_title>Allow pawns to "swim"</NPS_allowPawnsSwim_title>
     <NPS_allowPawnsToSwim_text>Pawns will have their lower body disappear when in the water. This is purely cosmetic.\n\nRequires restart.</NPS_allowPawnsToSwim_text>
     <NPS_allowPawnsToDrown_title>Allow pawns to drown</NPS_allowPawnsToDrown_title>

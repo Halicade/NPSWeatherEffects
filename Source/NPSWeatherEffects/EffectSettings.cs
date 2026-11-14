@@ -28,6 +28,7 @@ public class EffectSettings : ModSettings
     public static bool pawnEffectsOnlyColonists = true;
     public static bool allowPawnsToGetWet = true;
     public static bool allowPawnsDrowning = true;
+    public static bool allowPawnsPuddles = true;
     public static bool allowPawnsSwim = true;
 
     public static int rainOptionSelector = 1;
@@ -98,6 +99,8 @@ public class EffectSettings : ModSettings
         Scribe_Values.Look(ref allowPawnsToGetWet, "allowPawnsToGetWet", true);
         Scribe_Values.Look(ref allowPawnsDrowning, "allowPawnsDrowning", true);
         Scribe_Values.Look(ref allowPawnsSwim, "allowPawnsSwim", true);
+        Scribe_Values.Look(ref allowPawnsPuddles, "allowPawnsPuddles", true);
+        
         Scribe_Values.Look(ref showDevReadout, "showDevReadout", false);
         Scribe_Values.Look(ref spawnLavaOnlyInBiome, "spawnLavaOnlyInBiome", false);
         Scribe_Values.Look(ref allowLavaEruption, "allowLavaEruption", true);

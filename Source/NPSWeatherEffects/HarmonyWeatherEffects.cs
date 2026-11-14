@@ -53,8 +53,8 @@ public class HarmonyWeatherEffects
         SeasonalWeatherModActive = ModLister.AnyModActiveNoSuffix(["nightmare.weathercontrol", "mlie.seasonalweather"]);
         NPSBiomesActive = ModLister.AnyModActiveNoSuffix(["Hali.NPSBiomes"]);
         CombatExtendedActive = ModLister.AnyModActiveNoSuffix(["CETeam.CombatExtended"]);
-        OceanModifyingModActive = ModLister.AnyModActiveNoSuffix(["patrickschwarzer.waves", "HoloceneHorror.RealisticRivers"]);
-        RiverModifyingModActive =ModLister.AnyModActiveNoSuffix(["patrickschwarzer.rivers", "HoloceneHorror.RealisticRivers"]);
+        OceanModifyingModActive = ModLister.AnyModActiveNoSuffix(["patrickschwarzer.waves"]);
+        RiverModifyingModActive =ModLister.AnyModActiveNoSuffix(["patrickschwarzer.rivers"]);
         
 
         if (ModsConfig.OdysseyActive) {

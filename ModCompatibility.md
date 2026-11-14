@@ -10,7 +10,7 @@ Terraforming mods should be compatible. However, if a wet terrain block is terra
 
 [Better Trees](https://steamcommunity.com/sharedfiles/filedetails/?id=3539609975) is not incompatible. However, any trees retextured by that mod will have different graphics if retextured by this mod. You should turn off settings for those specific (or all) trees.
 
-[RimWorld: Waves](https://steamcommunity.com/sharedfiles/filedetails/?id=3831078430), [RimWorld: Living Waters](https://steamcommunity.com/sharedfiles/filedetails/?id=3834245888), and [Realistic Water](https://steamcommunity.com/sharedfiles/filedetails/?id=3836456822) will not have their graphics render properly with this mods tide/river changes. This is outside my control. I reccomend turning off the tide/river level changes when it's active.
+[RimWorld: Waves](https://steamcommunity.com/sharedfiles/filedetails/?id=3831078430), and [RimWorld: Living Waters](https://steamcommunity.com/sharedfiles/filedetails/?id=3834245888) will not have their graphics render properly with this mods tide/river changes. This is outside my control. I reccomend turning off the tide/river level changes when it's active.
 
 [Combat Extended](https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044) [(dev)](https://steamcommunity.com/sharedfiles/filedetails/?id=3495749827) Due to an incompatibility with how NPS and CE handle graphics, plant effects will be disabled until it can be addressed. 
 

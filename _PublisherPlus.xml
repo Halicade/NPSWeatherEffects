@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Excluded>
+    <exclude>.git</exclude>
+    <exclude>AddingCompatibility</exclude>
+    <exclude>BuildBundle.bat</exclude>
+    <exclude>README.md</exclude>
+    <exclude>Source/.idea</exclude>
+    <exclude>Source/1.jpg</exclude>
+    <exclude>Source/2.jpg</exclude>
+    <exclude>Source/3.jpg</exclude>
+    <exclude>Source/4.jpg</exclude>
+    <exclude>Source/5.jpg</exclude>
+    <exclude>Source/6.jpg</exclude>
+    <exclude>Source/7.jpg</exclude>
+    <exclude>Source/8.jpg</exclude>
+    <exclude>Source/About.xml</exclude>
+    <exclude>Source/Assets/Concepts</exclude>
+    <exclude>Source/NPSWeatherEffects</exclude>
+    <exclude>Source/original_preview.png</exclude>
+    <exclude>Source/preview-p.png</exclude>
+    <exclude>Source/Preview.psd</exclude>
+    <exclude>Source/preview2.png</exclude>
+    <exclude>Source/preview2.psd</exclude>
+    <exclude>Source/PublishedFileId.txt</exclude>
+    <exclude>Source/README.md</exclude>
+    <exclude>Source/settings.png</exclude>
+    <exclude>Source/well.psd</exclude>
+    <exclude>SteamDescription.txt</exclude>
+  </Excluded>
+</Configuration>

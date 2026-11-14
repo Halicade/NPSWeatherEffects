@@ -5,7 +5,7 @@ Then continued by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=35
 When I first found this mod a year ago I fell in love with it. Downloaded it, opened up a quicktest, and watched the terrain slowly transform from the usual dryness to a density that made the dense forest feel like a forest when it rained.
 
 The overall performance of the mod was not great. So I embarked on a multi-month journey to rewrite and optimize the heck out of this mod. Many months and a couple mental breaks later, I think it's ready for release.
-This mod has been split into three parts, Weather Effects, Biomes, Snow textures.
+This mod has been split into three parts, [b]Weather Effects[/b], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3838151757]Biomes[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3838153201]Snow textures[/url].
 [h1]Map features[/h1]These can all be turned off in settings.
 [list][*]Rain effects - Soil and sand will darken when wet. This results in an increase in soil fertility. Other terrain, like mud or river banks, can completely change to shallow water.
 [*]Oceans tides - Realistic tides following a semidiurnal cycle. You can also find tiles that contain diurnal and mixed semidiurnal cycles.
@@ -28,15 +28,15 @@ This mod has been split into three parts, Weather Effects, Biomes, Snow textures
 [*]"swimming" - Pawms can "swim" while in water. This is purely visual.
 [/list][h1]Performance[/h1]My main motivation for making this was improving performance. As such, I did all I could to make this much more performant than previous versions. The default settings are what I found comfortable while testing on my Ryzen 7 2700(RIP). Some settings can be heavier than others. Check the impact and turn off what you don't want on. If you do have issues, measure the performance in the Frame Profiler or Dubs Analyzer and let me know of any excessive slowdowns you observe. Ping me in the general discord, dubs discord, or wherever you find me. Additionally, warnings will pop up if you have any mods patching methods this mod makes heavy use of. More info below.
 [h1]Compatibility[/h1]For mod compatibility please see https://github.com/Halicade/NPSWeatherEffects/blob/Main/ModCompatibility.md If a mod is not listed, it either means that it is compatible, or it was not tested with it.
-This might be save compatible with the original Natures pretty sweet. However, I did not aim to make compatibility. You will require both this and the NPS: Biomes mod if you choose to swap. Make a copy of your save first in case. 
+This might be save compatible with the original Natures pretty sweet. However, I did not aim to make compatibility. You will require both this and the NPS: Biomes mod if you choose to swap. Make a copy of your save first in case. You will also want to turn off/revert all currently active effects. No frozen or wet terrain for example. 
 There are some warnings that pop up in the logs at startup if certain settings might be affected.
 Terraforming mods should be compatible. However, if a wet terrain block is terraformed, it may not be affected until save and reload.
 This might be save compatible. As with any mod that adds items/terrain hash collisions are possible. While I don't recommend removal, there is an option to disable all weather effects and will remove all effects from the current map.
 [h1]Q&A[/h1][list][*][b]I turned off a setting but the effects are still there![/b] Some effects will take a couple seconds to remove themselves. For other effects, there is an option "Reset map" which will reapply all settings on the current map.
-[*][b]Can you add compatibility with x[/b] Send me a link, let me know what needs compatibility with it, and I'll see what I can do
-[*][b]How can I add compatibility with my mod[/b] There is a "AddingCompatibility" folder in the github. That should explain how to add compatibility. You can do it from your side or send me a pull request. If you have questions or something isn't clear, let me know
+[*][b]Can you add compatibility with x[/b] Send me a link, let me know what needs compatibility with it, and I'll see what I can do.
+[*][b]How can I add compatibility with my mod[/b] There is a "AddingCompatibility" folder in the github. That should explain how to add compatibility. You can do it from your side or send me a pull request. If you have questions or something isn't clear, let me know.
 
-[/list][h2]Credits[/h2]tkkntkkn - Original creator of this mod
+[/list]Github: https://github.com/Halicade/NPSWeatherEffects[h2]Credits[/h2]tkkntkkn - Original creator of this mod
 mlie - Continued this mod so I was able to find it
 Paradox, Roque The Rogue, & Feb - Helped with bugs, testing, general balance, and features
 Rimworld discord - Helped with general balance, optimizations, and watched my descent into madness
